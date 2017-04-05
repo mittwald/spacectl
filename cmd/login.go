@@ -15,12 +15,16 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"errors"
-	"golang.org/x/crypto/ssh/terminal"
-	"syscall"
 	"fmt"
 	"github.com/mittwald/spacectl/service/auth"
+	"github.com/spf13/cobra"
+	"golang.org/x/crypto/ssh/terminal"
+	"io/ioutil"
+	"os"
+	"os/user"
+	"path/filepath"
+	"syscall"
 )
 
 // loginCmd represents the login command
@@ -31,6 +35,9 @@ var loginCmd = &cobra.Command{
 
 After logging in, this command will store an API token in ~/.spaces/token. Keep this file secret!`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		var result *auth.AuthenticationResult
+		var err error
+
 		prompt := false
 		username := cmd.Flag("username").Value.String()
 
@@ -63,7 +70,7 @@ After logging in, this command will store an API token in ~/.spaces/token. Keep 
 				AuthServerURL: cmd.Flag("auth-server").Value.String(),
 			}
 
-			_, err := service.Authenticate(username, password)
+			result, err = service.Authenticate(username, password)
 			if err != nil {
 				switch tErr := err.(type) {
 				case auth.InvalidCredentialsErr:
@@ -76,7 +83,30 @@ After logging in, this command will store an API token in ~/.spaces/token. Keep 
 					return tErr
 				}
 			}
+
+			break
 		}
+
+		fmt.Println("successfully authenticated.")
+
+		tokenFile := cmd.Flag("token-file").Value.String()
+
+		if tokenFile[:2] == "~/" {
+			usr, _ := user.Current()
+			dir := usr.HomeDir
+			tokenFile = filepath.Join(dir, tokenFile[2:])
+		}
+
+		tokenFileDir := filepath.Dir(tokenFile)
+
+		_, err = os.Stat(tokenFileDir)
+		if os.IsNotExist(err) {
+			fmt.Printf("creating directory %s\n", tokenFileDir)
+			os.MkdirAll(tokenFileDir, 0700)
+		}
+
+		ioutil.WriteFile(tokenFile, []byte(result.Token), 0600)
+		fmt.Printf("token written to file %s\n", tokenFile)
 
 		return nil
 	},
@@ -88,4 +118,5 @@ func init() {
 	loginCmd.Flags().StringP("username", "u", "", "The username with which to connect")
 	loginCmd.Flags().StringP("password", "p", "", "The password with which to connect")
 	loginCmd.Flags().String("auth-server", "https://signup.dev.spaces.de", "The URL of the SPACES authentication server")
+	loginCmd.Flags().String("token-file", "~/.spaces/token", "The file in which to store the authentication token")
 }

@@ -2,17 +2,16 @@ package auth
 
 import (
 	"errors"
-	"k8s.io/client-go/pkg/util/json"
+	"encoding/json"
 	"net/http"
 	"bytes"
 	"time"
-	"io/ioutil"
 	"fmt"
 )
 
 type authenticationRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	EmailAddress string `json:"email"`
+	Password     string `json:"password"`
 }
 
 type AuthenticationResult struct {
@@ -24,47 +23,56 @@ type AuthenticationService struct {
 	AuthServerURL string
 }
 
-func (a *AuthenticationService) Authenticate(username string, password string) (string, error) {
-	if username == "" {
-		return "", errors.New("empty username")
+func (a *AuthenticationService) Authenticate(emailAddress string, password string) (*AuthenticationResult, error) {
+	if emailAddress == "" {
+		return nil, errors.New("empty username")
 	}
 
 	if password == "" {
-		return "", errors.New("empty password")
+		return nil, errors.New("empty password")
 	}
 
 	body, err := json.Marshal(authenticationRequest{
-		Username: username,
+		EmailAddress: emailAddress,
 		Password: password,
 	})
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", a.AuthServerURL + "/v1/authenticate", bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", a.AuthServerURL + "/v1/auth/local/login", bytes.NewBuffer(body))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
+
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	client := http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	defer res.Body.Close()
 
 	if res.StatusCode == 403 {
-		return "", InvalidCredentialsErr{}
+		return nil, InvalidCredentialsErr{}
 	}
+
+	//resBody, err := ioutil.ReadAll(res.Body)
+	//if err != nil {
+	//	return nil, err
+	//}
+
 	if res.StatusCode >= 400 {
-		return "", AuthErr{fmt.Errorf("unexpected status code: %d", res.StatusCode)}
+		return nil, AuthErr{fmt.Errorf("unexpected status code: %d", res.StatusCode)}
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	authResponse := AuthenticationResult{}
+	err = json.NewDecoder(res.Body).Decode(&authResponse)
 	if err != nil {
-		return "", err
+		return nil, AuthErr{fmt.Errorf("could not JSON-decode response body: %s", err)}
 	}
 
-	return string(resBody), nil
+	return &authResponse, nil
 }
