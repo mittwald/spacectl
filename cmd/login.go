@@ -25,6 +25,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"syscall"
+	"github.com/spf13/viper"
 )
 
 // loginCmd represents the login command
@@ -67,7 +68,7 @@ After logging in, this command will store an API token in ~/.spaces/token. Keep 
 			}
 
 			service := auth.AuthenticationService{
-				AuthServerURL: cmd.Flag("auth-server").Value.String(),
+				AuthServerURL: viper.GetString("authServer"),
 			}
 
 			result, err = service.Authenticate(username, password)
@@ -89,7 +90,7 @@ After logging in, this command will store an API token in ~/.spaces/token. Keep 
 
 		fmt.Println("successfully authenticated.")
 
-		tokenFile := cmd.Flag("token-file").Value.String()
+		tokenFile := viper.GetString("tokenFile")
 
 		if tokenFile[:2] == "~/" {
 			usr, _ := user.Current()
@@ -118,5 +119,7 @@ func init() {
 	loginCmd.Flags().StringP("username", "u", "", "The username with which to connect")
 	loginCmd.Flags().StringP("password", "p", "", "The password with which to connect")
 	loginCmd.Flags().String("auth-server", "https://signup.dev.spaces.de", "The URL of the SPACES authentication server")
-	loginCmd.Flags().String("token-file", "~/.spaces/token", "The file in which to store the authentication token")
+
+	viper.BindPFlag("authServer", loginCmd.Flags().Lookup("auth-server"))
+	viper.BindEnv("authServer", "SPACES_AUTH_SERVER")
 }

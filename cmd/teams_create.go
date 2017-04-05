@@ -15,28 +15,49 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
+	"github.com/kr/pretty"
 )
 
-// organizationsCmd represents the organizations command
-var teamsCmd = &cobra.Command{
-	Use:   "teams",
-	Aliases: []string{"team", "t"},
-	Short: "Manage teams",
-	Long: `This command allows you to manage your teams`,
+// createCmd represents the create command
+var createCmd = &cobra.Command{
+	Use:   "create -n <teamname>",
+	Short: "Create a new team",
+	Long: `Creates a new team. Afterwards, you will have "Owner" access on the newly created team.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		name := cmd.Flag("name").Value.String()
+		if name == "" {
+			return fmt.Errorf("must provide name (--name or -n)")
+		}
+
+		fmt.Printf("creating team '%s'\n", name)
+		team, err := spaces.Teams().Create(name)
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("team successfully created\n")
+
+		pretty.Print(team)
+		return nil
+	},
 }
 
 func init() {
-	RootCmd.AddCommand(teamsCmd)
+	teamsCmd.AddCommand(createCmd)
+
+	createCmd.Flags().StringP("name", "n", "", "The new team's name")
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// organizationsCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// organizationsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 }
