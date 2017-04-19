@@ -16,7 +16,9 @@ type spacesClient struct {
 }
 
 func NewSpacesClientAutoConf() (SpacesClient, error) {
-	lowlevelClient, err := lowlevel.NewSpacesLowlevelClient(viper.GetString("token"), viper.GetString("apiServer"))
+	token := viper.GetString("token")
+
+	lowlevelClient, err := lowlevel.NewSpacesLowlevelClient(token, viper.GetString("apiServer"))
 	if err != nil {
 		return nil, fmt.Errorf("could not create SPACES client: %s", err)
 	}

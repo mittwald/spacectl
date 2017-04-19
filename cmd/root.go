@@ -27,13 +27,6 @@ var RootCmd = &cobra.Command{
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if s, err := client.NewSpacesClientAutoConf(); err != nil {
-		fmt.Println(err)
-		os.Exit(-1)
-	} else {
-		spaces = s
-	}
-
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
@@ -92,5 +85,12 @@ func initConfig() {
 		}
 
 		viper.Set("token", string(c))
+	}
+
+	if s, err := client.NewSpacesClientAutoConf(); err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	} else {
+		spaces = s
 	}
 }

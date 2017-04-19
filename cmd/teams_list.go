@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/gosuri/uitable"
 )
 
 var teamsListCmd = &cobra.Command{
@@ -17,8 +18,15 @@ var teamsListCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Println("list called")
-		fmt.Println(teams)
+		table := uitable.New()
+		table.MaxColWidth = 50
+		table.AddRow("ID", "NAME")
+
+		for _, team := range teams {
+			table.AddRow(team.ID, team.Name)
+		}
+
+		fmt.Println(table)
 
 		return nil
 	},

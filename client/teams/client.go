@@ -4,7 +4,7 @@ import "github.com/mittwald/spacectl/client/lowlevel"
 
 type TeamsClient interface {
 	List() ([]Team, error)
-	Create(string) (*Team, error)
+	Create(string) (Team, error)
 }
 
 func NewTeamsClient(client *lowlevel.SpacesLowlevelClient) (TeamsClient) {

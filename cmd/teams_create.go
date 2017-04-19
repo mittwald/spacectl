@@ -18,7 +18,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/kr/pretty"
+	"github.com/gosuri/uitable"
 )
 
 // createCmd represents the create command
@@ -38,9 +38,17 @@ var createCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Printf("team successfully created\n")
+		fmt.Printf("team successfully created\n\n")
 
-		pretty.Print(team)
+		table := uitable.New()
+		table.MaxColWidth = 80
+		table.Wrap = true
+
+		table.AddRow("ID:", team.ID)
+		table.AddRow("Name:", team.Name)
+
+		fmt.Println(table)
+
 		return nil
 	},
 }

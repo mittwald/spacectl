@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/mittwald/spacectl/service/auth"
 	"bytes"
+	"time"
 )
 
 type SpacesLowlevelClient struct {
@@ -29,14 +30,17 @@ func NewSpacesLowlevelClient(token string, endpoint string) (*SpacesLowlevelClie
 }
 
 func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
-	req, err := http.NewRequest("GET", c.endpoint + "/" + c.version + path, nil)
+	url := c.endpoint + "/" + c.version + path
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
 	}
 
 	req.Header.Set("X-Access-Token", c.token)
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: 2 * time.Second,
+	}
 	res, err := client.Do(req)
 	if err != nil {
 		return err
@@ -66,7 +70,8 @@ func (c *SpacesLowlevelClient) Post(path string, body interface{}, target interf
 		return err
 	}
 
-	req, err := http.NewRequest("POST", c.endpoint + "/" + c.version + path, bytes.NewBuffer(reqBody))
+	url := c.endpoint + "/" + c.version + path
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return err
 	}
