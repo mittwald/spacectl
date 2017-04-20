@@ -1,0 +1,8 @@
+package: github.com/mittwald/spacectl
+import:
+- package: github.com/gosuri/uitable
+- package: github.com/spf13/cobra
+- package: github.com/spf13/viper
+- package: golang.org/x/crypto
+  subpackages:
+  - ssh/terminal
