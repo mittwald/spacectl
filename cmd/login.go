@@ -17,15 +17,16 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/mittwald/spacectl/service/auth"
-	"github.com/spf13/cobra"
-	"golang.org/x/crypto/ssh/terminal"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
 	"syscall"
+
+	"github.com/mittwald/spacectl/service/auth"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // loginCmd represents the login command
