@@ -18,26 +18,46 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"errors"
+	"github.com/gosuri/uitable"
+	"strings"
 )
 
 // membersCmd represents the members command
 var teamsMembersCmd = &cobra.Command{
-	Use:   "members",
+	Use:   "members -t <team-id>",
 	Short: "List team members",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `List users that are members of a given team.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		teamID := cmd.Flag("team-id").Value.String()
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("members called")
+		if teamID == "" {
+			return errors.New("must provide team ID (--team-id or -t)")
+		}
+
+		memberships, err := spaces.Teams().ListMembers(teamID)
+		if err != nil {
+			return err
+		}
+
+		table := uitable.New()
+		table.MaxColWidth = 50
+		table.AddRow("ID", "ROLE", "NAME", "E-MAIL")
+
+		for _, m := range memberships {
+			name := strings.TrimSpace(fmt.Sprintf("%s %s", m.User.FirstName, m.User.LastName))
+			table.AddRow(m.User.ID, m.Role, name, m.User.Email)
+		}
+
+		fmt.Println(table)
+		return nil
 	},
 }
 
 func init() {
 	teamsCmd.AddCommand(teamsMembersCmd)
+
+	teamsMembersCmd.Flags().StringP("team-id", "t", "", "Team ID to list members for")
 
 	// Here you will define your flags and configuration settings.
 

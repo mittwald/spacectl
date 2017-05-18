@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/user"
 
@@ -16,6 +17,7 @@ var cfgFile string
 var apiServer string
 var nonInteractive bool
 var spaces client.SpacesClient
+var verbose bool
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -44,6 +46,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&apiServer, "api-server", "https://api.dev.spaces.de", "API endpoint to connect to")
 	RootCmd.PersistentFlags().BoolVar(&nonInteractive, "non-interactive", false, "Disable interactive prompts")
 	RootCmd.PersistentFlags().String("token-file", "~/.spaces/token", "The file in which to store the authentication token")
+	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Be more chatty")
 
 	viper.BindPFlag("apiServer", RootCmd.PersistentFlags().Lookup("api-server"))
 	viper.BindPFlag("tokenFile", RootCmd.PersistentFlags().Lookup("token-file"))
@@ -80,14 +83,24 @@ func initConfig() {
 		}
 
 		c, err := ioutil.ReadFile(tokenFile)
-		if err != nil {
+		if err != nil && !os.IsNotExist(err) {
 			panic(fmt.Errorf("could not read token file %s: %s", tokenFile, err))
 		}
 
 		viper.Set("token", string(c))
 	}
 
-	if s, err := client.NewSpacesClientAutoConf(); err != nil {
+	clientConfig := client.SpacesClientConfig{
+		Token: viper.GetString("token"),
+		APIServer: viper.GetString("apiServer"),
+		Logger: nil,
+	}
+
+	if verbose {
+		clientConfig.Logger = log.New(os.Stderr, "spaces-client: ", 0)
+	}
+
+	if s, err := client.NewSpacesClient(clientConfig); err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
 	} else {

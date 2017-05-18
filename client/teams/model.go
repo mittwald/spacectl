@@ -1,6 +1,26 @@
 package teams
 
 type Team struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	DNSName string `json:"dnsName"`
+}
+
+type Invite struct {
+	ID      string `json:"id"`
+	Message string `json:"message"`
+	State   string `json:"state"`
+}
+
+type MembershipUser struct {
+	ID              string `json:"id"`
+	FirstName       string `json:"firstName"`
+	LastName        string `json:"lastName"`
+	Email           string `json:"email"`
+	ProfileImageURI string `json:"profileImageURI"`
+}
+
+type Membership struct {
+	User MembershipUser `json:"owner"`
+	Role string         `json:"role"`
 }

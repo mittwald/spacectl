@@ -18,26 +18,71 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"errors"
+	"github.com/mittwald/spacectl/client/teams"
+	"github.com/gosuri/uitable"
 )
 
 // inviteCmd represents the invite command
 var teamInviteCmd = &cobra.Command{
-	Use:   "invite",
+	Use:   "invite -t <team-id> -e <email> -m <message>",
 	Short: "Invite new users to your team",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `Invite a new user into your team`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		var err error
+		var invite teams.Invite
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("invite called")
+		teamID := cmd.Flag("team-id").Value.String()
+		email := cmd.Flag("email").Value.String()
+		userID := cmd.Flag("user-id").Value.String()
+		message := cmd.Flag("message").Value.String()
+		role := cmd.Flag("role").Value.String()
+
+		if teamID == "" {
+			return errors.New("must provide team (--team-id or -t)")
+		}
+
+		if email == "" && userID == "" {
+			return errors.New("must provide user (either --email|-e or --user-id|-u)")
+		}
+
+		if message == "" {
+			return errors.New("must provide message (--message or -m)")
+		}
+
+		if email != "" {
+			fmt.Printf("inviting user \"%s\" into team %s\n", email, teamID)
+			invite, err = spaces.Teams().InviteByEmail(teamID, email, message, role)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("invite %s issued\n", invite.ID)
+
+		table := uitable.New()
+		table.MaxColWidth = 80
+		table.Wrap = true
+
+		table.AddRow("ID:", invite.ID)
+		table.AddRow("Message:", invite.Message)
+		table.AddRow("State:", invite.State)
+
+		fmt.Println(table)
+
+		return nil
 	},
 }
 
 func init() {
 	teamsCmd.AddCommand(teamInviteCmd)
+
+	teamInviteCmd.Flags().StringP("team-id", "t", "", "Team ID into which to invite the user");
+	teamInviteCmd.Flags().StringP("email", "e", "", "Email address of the user to invite");
+	teamInviteCmd.Flags().StringP("user-id", "u", "", "User ID of the user to invite")
+	teamInviteCmd.Flags().StringP("message", "m", "", "Invitation message")
+	teamInviteCmd.Flags().StringP("role", "r", "", "User role")
 
 	// Here you will define your flags and configuration settings.
 

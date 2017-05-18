@@ -4,21 +4,32 @@ import (
 	"fmt"
 	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/teams"
-	"github.com/spf13/viper"
+	"github.com/mittwald/spacectl/client/invites"
+	"log"
+	"io/ioutil"
 )
 
 type SpacesClient interface {
 	Teams() teams.TeamsClient
+	Invites() invites.InvitesClient
+}
+
+type SpacesClientConfig struct {
+	Token string
+	APIServer string
+	Logger *log.Logger
 }
 
 type spacesClient struct {
 	client *lowlevel.SpacesLowlevelClient
 }
 
-func NewSpacesClientAutoConf() (SpacesClient, error) {
-	token := viper.GetString("token")
+func NewSpacesClient(config SpacesClientConfig) (SpacesClient, error) {
+	if config.Logger == nil {
+		config.Logger = log.New(ioutil.Discard, "", 0)
+	}
 
-	lowlevelClient, err := lowlevel.NewSpacesLowlevelClient(token, viper.GetString("apiServer"))
+	lowlevelClient, err := lowlevel.NewSpacesLowlevelClient(config.Token, config.APIServer, config.Logger)
 	if err != nil {
 		return nil, fmt.Errorf("could not create SPACES client: %s", err)
 	}
@@ -30,4 +41,8 @@ func NewSpacesClientAutoConf() (SpacesClient, error) {
 
 func (c *spacesClient) Teams() teams.TeamsClient {
 	return teams.NewTeamsClient(c.client)
+}
+
+func (c *spacesClient) Invites() invites.InvitesClient {
+	return invites.NewInvitesClient(c.client)
 }

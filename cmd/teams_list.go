@@ -20,10 +20,10 @@ var teamsListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("ID", "NAME")
+		table.AddRow("ID", "DNS NAME", "NAME")
 
 		for _, team := range teams {
-			table.AddRow(team.ID, team.Name)
+			table.AddRow(team.ID, team.DNSName, team.Name)
 		}
 
 		fmt.Println(table)
