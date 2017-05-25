@@ -3,13 +3,14 @@ package teams
 import "fmt"
 
 type createTeamRequest struct {
-	Name string `json:"name"`
+	Name    string `json:"name"`
+	DNSName string `json:"dnsName"`
 }
 
-func (t *teamsClient) Create(name string) (Team, error) {
+func (t *teamsClient) Create(name string, dnsLabel string) (Team, error) {
 	var team Team
 
-	req := createTeamRequest{name}
+	req := createTeamRequest{name, dnsLabel}
 
 	err := t.client.Post("/teams", &req, &team)
 	if err != nil {

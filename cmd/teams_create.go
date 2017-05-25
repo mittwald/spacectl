@@ -19,26 +19,32 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/gosuri/uitable"
+	"errors"
 )
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create -n <teamname>",
+	Use:   "create -n <team-name> -d <dns-label>",
 	Short: "Create a new team",
 	Long: `Creates a new team. Afterwards, you will have "Owner" access on the newly created team.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := cmd.Flag("name").Value.String()
+		dnsLabel := cmd.Flag("dns-label").Value.String()
+
 		if name == "" {
-			return fmt.Errorf("must provide name (--name or -n)")
+			return errors.New("must provide name (--name or -n)")
+		}
+		if dnsLabel == "" {
+			return errors.New("must provide DNS label (--dns-label or -d)")
 		}
 
 		fmt.Printf("creating team '%s'\n", name)
-		team, err := spaces.Teams().Create(name)
+		team, err := spaces.Teams().Create(name, dnsLabel)
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("team successfully created\n\n")
+		fmt.Print("team successfully created\n\n")
 
 		table := uitable.New()
 		table.MaxColWidth = 80
@@ -46,6 +52,7 @@ var createCmd = &cobra.Command{
 
 		table.AddRow("ID:", team.ID)
 		table.AddRow("Name:", team.Name)
+		table.AddRow("DNS Label:", team.DNSName)
 
 		fmt.Println(table)
 
@@ -57,6 +64,7 @@ func init() {
 	teamsCmd.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("name", "n", "", "The new team's name")
+	createCmd.Flags().StringP("dns-label", "d", "", "The new team's DNS label")
 
 	// Here you will define your flags and configuration settings.
 

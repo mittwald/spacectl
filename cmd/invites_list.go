@@ -1,24 +1,14 @@
-// Copyright © 2017 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/mittwald/spacectl/client/invites"
+	"github.com/gosuri/uitable"
 )
+
+var inviteListOutgoing bool = false;
 
 // listCmd represents the list command
 var invitesListCmd = &cobra.Command{
@@ -26,16 +16,69 @@ var invitesListCmd = &cobra.Command{
 	Short: "List pending invites",
 	Long: `List pending invites`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		invites, err := spaces.Invites().List()
-		if err != nil {
-			return err
+		var inv []invites.Invite
+		var err error
+
+		table := uitable.New()
+
+		if inviteListOutgoing {
+			inv, err = spaces.Invites().ListOutgoing()
+
+			if err != nil {
+				return err
+			}
+
+			if len(inv) == 0 {
+				fmt.Println("No outgoing invites")
+				return nil
+			}
+
+			table.AddRow("ID", "DATE", "STATE", "TEAM NAME", "INVITEE EMAIL", "MSG")
+
+			for _, i := range inv {
+				table.AddRow(
+					i.ID,
+					i.IssuedAt.String(),
+					i.State,
+					i.Team.Name,
+					i.Invitee.Email,
+					i.Message,
+				)
+			}
+		} else {
+			inv, err = spaces.Invites().ListIncoming()
+
+			if err != nil {
+				return err
+			}
+
+			if len(inv) == 0 {
+				fmt.Println("No incoming invites")
+				return nil
+			}
+
+			table.AddRow("ID", "DATE", "STATE", "TEAM NAME", "INVITER EMAIL", "MSG")
+
+			for _, i := range inv {
+				table.AddRow(
+					i.ID,
+					i.IssuedAt.String(),
+					i.State,
+					i.Team.Name,
+					i.Inviter.Email,
+					i.Message,
+				)
+			}
 		}
 
-		fmt.Println(invites)
+		fmt.Println(table)
+
 		return nil
 	},
 }
 
 func init() {
 	invitesCmd.AddCommand(invitesListCmd)
+
+	invitesListCmd.Flags().BoolVar(&inviteListOutgoing, "out", false, "Set to list outgoing invites")
 }

@@ -21,6 +21,6 @@ type MembershipUser struct {
 }
 
 type Membership struct {
-	User MembershipUser `json:"owner"`
+	User MembershipUser `json:"user"`
 	Role string         `json:"role"`
 }
