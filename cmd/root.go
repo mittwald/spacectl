@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 )
 
 var cfgFile string
@@ -87,7 +88,7 @@ func initConfig() {
 			panic(fmt.Errorf("could not read token file %s: %s", tokenFile, err))
 		}
 
-		viper.Set("token", string(c))
+		viper.Set("token", strings.TrimSpace(string(c)))
 	}
 
 	clientConfig := client.SpacesClientConfig{

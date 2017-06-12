@@ -1,6 +1,9 @@
 package invites
 
-import "time"
+import (
+	"github.com/mittwald/spacectl/client/lowlevel"
+	"time"
+)
 
 type UserRef struct {
 	ID        string `json:"id"`
@@ -15,6 +18,9 @@ type TeamRef struct {
 }
 
 type Invite struct {
+	Links   lowlevel.LinkList `json:"_links"`
+	Actions lowlevel.LinkList `json:"_actions"`
+
 	ID       string    `json:"id"`
 	IssuedAt time.Time `json:"issuedAt"`
 	Message  string    `json:"message"`

@@ -8,7 +8,11 @@ import (
 	"bytes"
 	"time"
 	"log"
+	"regexp"
+	"strings"
 )
+
+var versionRegexp = regexp.MustCompile("^/v[0-9]+/")
 
 type SpacesLowlevelClient struct {
 	token string
@@ -32,8 +36,16 @@ func NewSpacesLowlevelClient(token string, endpoint string, logger *log.Logger) 
 	}, nil
 }
 
+func (c *SpacesLowlevelClient) pathWithVersion(path string) string {
+	if versionRegexp.MatchString(path) {
+		return path
+	}
+
+	return "/" + c.version + "/" + strings.TrimPrefix(path, "/")
+}
+
 func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
-	url := c.endpoint + "/" + c.version + path
+	url := c.endpoint + c.pathWithVersion(path)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
@@ -76,18 +88,26 @@ func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
 }
 
 func (c *SpacesLowlevelClient) Post(path string, body interface{}, target interface{}) error {
-	reqBody, err := json.Marshal(body)
-	if err != nil {
-		return err
+	var reqBody []byte = []byte{}
+	var err error
+
+	if body != nil {
+		reqBody, err = json.Marshal(body)
+		if err != nil {
+			return err
+		}
 	}
 
-	url := c.endpoint + "/" + c.version + path
+	url := c.endpoint + c.pathWithVersion(path)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return err
 	}
 
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json; charset=utf-8")
+	}
+
 	req.Header.Set("X-Access-Token", c.token)
 
 	c.logger.Printf("executing POST on %s: %s", url, string(reqBody))
@@ -112,6 +132,8 @@ func (c *SpacesLowlevelClient) Post(path string, body interface{}, target interf
 		// The error here can safely be ignored since it does not matter much, anyway.
 		// Either the response body contains a "msg" or it doesn't.
 		_ = json.NewDecoder(res.Body).Decode(&msg)
+
+		c.logger.Printf("response: %v", msg)
 
 		return ErrUnexpectedStatusCode{res.StatusCode, msg.String()}
 	}
