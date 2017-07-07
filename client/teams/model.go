@@ -1,6 +1,11 @@
 package teams
 
+import "github.com/mittwald/spacectl/client/lowlevel"
+
 type Team struct {
+	Links   lowlevel.LinkList `json:"_links"`
+	Actions lowlevel.LinkList `json:"_actions"`
+
 	ID      string `json:"id"`
 	Name    string `json:"name"`
 	DNSName string `json:"dnsLabel"`

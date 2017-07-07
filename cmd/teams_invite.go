@@ -52,7 +52,7 @@ var teamInviteCmd = &cobra.Command{
 
 		if email != "" {
 			fmt.Printf("inviting user \"%s\" into team %s\n", email, teamID)
-			invite, err = spaces.Teams().InviteByEmail(teamID, email, message, role)
+			invite, err = api.Teams().InviteByEmail(teamID, email, message, role)
 		}
 
 		if err != nil {

@@ -18,7 +18,7 @@ var invitesAcceptCmd = &cobra.Command{
 			return errors.New("must specify invite ID (--invite or -i)")
 		}
 
-		err := spaces.Invites().Accept(acceptInviteID)
+		err := api.Invites().Accept(acceptInviteID)
 		if err != nil {
 			return err
 		}

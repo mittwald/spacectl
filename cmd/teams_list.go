@@ -13,7 +13,7 @@ var teamsListCmd = &cobra.Command{
 	Long:  `Lists all teams that you have access to.`,
 
 	RunE: func(cmd *cobra.Command, args []string) error {
-		teams, err := spaces.Teams().List()
+		teams, err := api.Teams().List()
 		if err != nil {
 			return err
 		}

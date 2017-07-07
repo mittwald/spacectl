@@ -17,7 +17,7 @@ import (
 var cfgFile string
 var apiServer string
 var nonInteractive bool
-var spaces client.SpacesClient
+var api client.SpacesClient
 var verbose bool
 
 // RootCmd represents the base command when called without any subcommands
@@ -48,12 +48,15 @@ func init() {
 	RootCmd.PersistentFlags().BoolVar(&nonInteractive, "non-interactive", false, "Disable interactive prompts")
 	RootCmd.PersistentFlags().String("token-file", "~/.spaces/token", "The file in which to store the authentication token")
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Be more chatty")
+	RootCmd.PersistentFlags().StringP("team", "t", "", "A team ID or name")
 
 	viper.BindPFlag("apiServer", RootCmd.PersistentFlags().Lookup("api-server"))
 	viper.BindPFlag("tokenFile", RootCmd.PersistentFlags().Lookup("token-file"))
+	viper.BindPFlag("teamID", RootCmd.PersistentFlags().Lookup("team"))
 
 	viper.BindEnv("apiServer", "SPACES_API_SERVER")
 	viper.BindEnv("token", "SPACES_API_TOKEN")
+	viper.BindEnv("teamID", "SPACES_TEAM_ID")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -71,7 +74,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		// fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
 	if token := viper.GetString("token"); token == "" {
@@ -105,6 +108,6 @@ func initConfig() {
 		fmt.Println(err)
 		os.Exit(-1)
 	} else {
-		spaces = s
+		api = s
 	}
 }

@@ -39,7 +39,7 @@ var createCmd = &cobra.Command{
 		}
 
 		fmt.Printf("creating team '%s'\n", name)
-		team, err := spaces.Teams().Create(name, dnsLabel)
+		team, err := api.Teams().Create(name, dnsLabel)
 		if err != nil {
 			return err
 		}

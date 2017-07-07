@@ -7,11 +7,13 @@ import (
 	"github.com/mittwald/spacectl/client/invites"
 	"log"
 	"io/ioutil"
+	"github.com/mittwald/spacectl/client/spaces"
 )
 
 type SpacesClient interface {
 	Teams() teams.TeamsClient
 	Invites() invites.InvitesClient
+	Spaces() spaces.SpacesClient
 }
 
 type SpacesClientConfig struct {
@@ -45,4 +47,8 @@ func (c *spacesClient) Teams() teams.TeamsClient {
 
 func (c *spacesClient) Invites() invites.InvitesClient {
 	return invites.NewInvitesClient(c.client)
+}
+
+func (c *spacesClient) Spaces() spaces.SpacesClient {
+	return spaces.NewSpacesClient(c.client)
 }

@@ -18,7 +18,7 @@ var invitesRevokeCmd = &cobra.Command{
 			return errors.New("must specify invite ID (--invite or -i)")
 		}
 
-		err := spaces.Invites().Revoke(revokeInviteID)
+		err := api.Invites().Revoke(revokeInviteID)
 		if err != nil {
 			return err
 		}

@@ -22,7 +22,7 @@ var invitesListCmd = &cobra.Command{
 		table := uitable.New()
 
 		if inviteListOutgoing {
-			inv, err = spaces.Invites().ListOutgoing()
+			inv, err = api.Invites().ListOutgoing()
 
 			if err != nil {
 				return err
@@ -46,7 +46,7 @@ var invitesListCmd = &cobra.Command{
 				)
 			}
 		} else {
-			inv, err = spaces.Invites().ListIncoming()
+			inv, err = api.Invites().ListIncoming()
 
 			if err != nil {
 				return err
