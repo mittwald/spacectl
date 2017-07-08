@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strings"
 	"github.com/mittwald/spacectl/client/spaces"
+	"time"
 )
 
 // listCmd represents the list command
@@ -36,15 +37,19 @@ var spacesListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES")
+		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "CREATED")
 
 		for _, space := range ownedSpaces {
+			round := time.Second
+			since := time.Now().Round(round).Sub(space.CreatedAt.Round(round)).String()
+
 			table.AddRow(
 				space.ID,
 				space.Name.DNSName,
-				space.Team.DNSLabel,
+				space.Team.Name,
 				space.Name.HumanReadableName,
 				strings.Join(space.StagesNames(), ", "),
+				since + " ago",
 			)
 		}
 

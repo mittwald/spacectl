@@ -1,5 +1,7 @@
 package spaces
 
+import "time"
+
 type SpaceName struct {
 	DNSName           string `json:"dnsName"`
 	HumanReadableName string `json:"humanReadableName"`
@@ -15,6 +17,7 @@ type VersionRef struct {
 }
 
 type TeamRef struct {
+	ID       string `json:"id"`
 	Name     string `json:"name"`
 	DNSLabel string `json:"dnsLabel"`
 }
@@ -36,13 +39,14 @@ type StageDeclaration struct {
 }
 
 type Space struct {
-	ID       string    `json:"id"`
-	HREF     string    `json:"href"`
-	Name     SpaceName `json:"name"`
-	Status   string    `json:"status"`
-	DNSNames []string  `json:"dnsNames"`
-	Stages   []Stage   `json:"stages"`
-	Team     TeamRef   `json:"team"`
+	ID        string    `json:"id"`
+	HREF      string    `json:"href"`
+	Name      SpaceName `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+	Status    string    `json:"status"`
+	DNSNames  []string  `json:"dnsNames"`
+	Stages    []Stage   `json:"stages"`
+	Team      TeamRef   `json:"team"`
 }
 
 type SpaceDeclaration struct {

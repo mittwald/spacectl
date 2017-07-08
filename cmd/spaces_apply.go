@@ -3,7 +3,8 @@ package cmd
 import (
 	"github.com/mittwald/spacectl/spacefile"
 	"github.com/spf13/cobra"
-	"fmt"
+	"github.com/mittwald/spacectl/view"
+	"os"
 )
 
 var spacesApplySpacefile string
@@ -34,7 +35,8 @@ CAUTION: This command can be potentially destructive.`,
 			return err
 		}
 
-		fmt.Println(declaredSpace)
+		v := view.TabularSpaceDetailView{}
+		v.SpaceDetail(declaredSpace, os.Stdout)
 
 		return nil
 	},
