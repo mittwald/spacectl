@@ -19,12 +19,14 @@ var apiServer string
 var nonInteractive bool
 var api client.SpacesClient
 var verbose bool
+var logger *log.Logger = log.New(ioutil.Discard, "spacectl", 0)
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "spacectl",
 	Short: "SPACES command line utility",
 	Long:  `spacectl enables you to manage your SPACES hosting enviroment from the command line.`,
+	
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -102,6 +104,7 @@ func initConfig() {
 
 	if verbose {
 		clientConfig.Logger = log.New(os.Stderr, "spaces-client: ", 0)
+		logger = log.New(os.Stderr, "spacectl: ", 0)
 	}
 
 	if s, err := client.NewSpacesClient(clientConfig); err != nil {

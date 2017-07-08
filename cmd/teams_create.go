@@ -24,7 +24,7 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create -n <team-name> -d <dns-label>",
+	Use:   "create -n <team-name> -l <dns-label>",
 	Short: "Create a new team",
 	Long: `Creates a new team. Afterwards, you will have "Owner" access on the newly created team.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -35,7 +35,7 @@ var createCmd = &cobra.Command{
 			return errors.New("must provide name (--name or -n)")
 		}
 		if dnsLabel == "" {
-			return errors.New("must provide DNS label (--dns-label or -d)")
+			return errors.New("must provide DNS label (--dns-label or -l)")
 		}
 
 		fmt.Printf("creating team '%s'\n", name)
@@ -64,7 +64,7 @@ func init() {
 	teamsCmd.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("name", "n", "", "The new team's name")
-	createCmd.Flags().StringP("dns-label", "d", "", "The new team's DNS label")
+	createCmd.Flags().StringP("dns-label", "l", "", "The new team's DNS label")
 
 	// Here you will define your flags and configuration settings.
 
