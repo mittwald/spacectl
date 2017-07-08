@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+	"github.com/fatih/color"
 )
 
 var cfgFile string
@@ -26,14 +27,33 @@ var RootCmd = &cobra.Command{
 	Use:   "spacectl",
 	Short: "SPACES command line utility",
 	Long:  `spacectl enables you to manage your SPACES hosting enviroment from the command line.`,
-	
+	SilenceErrors: true,
+	SilenceUsage: true,
+
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Println(`
+     *           _______________________________
+      /\        /                               \       *
+     (  )      <  Houston, we have a problem... |
+ *   (  )       \_______________________________/
+    /|/\|\         *                                 *
+   /_||||_\                 *
+`)
+
+		color.Red("")
+		color.Red(err.Error())
+		color.Red("")
+
+		color.Blue("NEED HELP?")
+		color.Blue("  * For support, contact support@spaces.de.")
+		color.Blue("  * Report bugs with this tool at https://github.com/mittwald/spacectl")
+		color.Blue("")
+
 		os.Exit(-1)
 	}
 }

@@ -10,6 +10,8 @@ import (
 	"log"
 	"regexp"
 	"strings"
+	"io"
+	"io/ioutil"
 )
 
 var versionRegexp = regexp.MustCompile("^/v[0-9]+/")
@@ -79,15 +81,32 @@ func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
 		return ErrUnexpectedStatusCode{res.StatusCode, msg.String()}
 	}
 
-	err = json.NewDecoder(res.Body).Decode(target)
+	var buf bytes.Buffer
+	io.Copy(&buf, res.Body)
+
+	reader := bytes.NewReader(buf.Bytes())
+
+	err = json.NewDecoder(reader).Decode(target)
 	if err != nil {
 		return fmt.Errorf("could not JSON-decode response body: %s", err)
 	}
+
+	reader.Seek(0, io.SeekStart)
+	responseBytes, _ := ioutil.ReadAll(reader)
+	c.logger.Println(string(responseBytes))
 
 	return nil
 }
 
 func (c *SpacesLowlevelClient) Post(path string, body interface{}, target interface{}) error {
+	return c.request("POST", path, body, target)
+}
+
+func (c *SpacesLowlevelClient) Put(path string, body interface{}, target interface{}) error {
+	return c.request("PUT", path, body, target)
+}
+
+func (c *SpacesLowlevelClient) request(method string, path string, body interface{}, target interface{}) error {
 	var reqBody []byte = []byte{}
 	var err error
 

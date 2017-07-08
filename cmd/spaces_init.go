@@ -8,6 +8,10 @@ import (
 	"strings"
 	"regexp"
 	"github.com/spf13/viper"
+	"github.com/hashicorp/go-multierror"
+	"os"
+	"github.com/mittwald/spacectl/spacefile"
+	"github.com/fatih/color"
 )
 
 var spaceInitForce bool
@@ -23,20 +27,51 @@ Note that this command does not actually do anything, except creating a new
 Spacefile in your current working directory. You can then use the "spacectl space apply"
 command to actually apply the declaration within the Spacefile.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		var mErr *multierror.Error
 		teamID := viper.GetString("teamID")
 
-		if teamID != "" {
-			return errors.New("must provide team (--team, -t or $SPACES_TEAM_ID)")
+		if teamID == "" {
+			mErr = multierror.Append(mErr, errors.New("must provide team (--team, -t or $SPACES_TEAM_ID)"))
 		}
 
 		if spaceInitName == "" {
-			return errors.New("must provide name (--name or -n)")
+			mErr = multierror.Append(mErr, errors.New("must provide name (--name or -n)"))
+		}
+
+		if mErr != nil {
+			return mErr
 		}
 
 		if spaceInitLabel == "" {
 			spaceInitLabel = regexp.MustCompile("[^a-z0-9-]").ReplaceAllString(strings.ToLower(spaceInitName), "-")
-			fmt.Printf("Using '%s' as auto-generated DNS label\n", spaceInitLabel)
+			fmt.Printf("Using %s as auto-generated DNS label\n", color.YellowString(spaceInitLabel))
 		}
+
+		filePath := "./" + spacefile.DefaultFilename
+
+		_, err := os.Stat(filePath)
+		if !os.IsNotExist(err) {
+			if !spaceInitForce {
+				RootCmd.SilenceUsage = false
+				return fmt.Errorf(`The file '%s' already exists in the current directory.
+Use the --force flag (or -f) to overwrite it.`, filePath)
+			} else {
+				fmt.Printf("Overwriting existing Spacefile at %s\n", color.YellowString(filePath))
+			}
+		}
+
+		fh, err := os.Create(filePath)
+		if err != nil {
+			return fmt.Errorf("Could not open '%s' for writing:\n    %s", filePath, err)
+		}
+
+		err = spacefile.Generate(teamID, spaceInitName, spaceInitLabel, fh)
+		if err != nil {
+			return fmt.Errorf("Could not generate Spacefile:\n    %s", err)
+		}
+
+		fmt.Printf("Spacefile generated at %s.\n", color.YellowString(filePath))
+		fmt.Printf("Edit your Spacefile at will and use the %s command to actually create the new Space\n", color.YellowString("spacectl apply"))
 
 		return nil
 	},

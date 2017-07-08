@@ -1,59 +1,101 @@
 package spacefile
 
 import (
+	"errors"
 	"fmt"
 	"github.com/hashicorp/go-multierror"
-	"bytes"
-	"encoding/gob"
 	"github.com/imdario/mergo"
 )
 
+const DefaultFilename = ".spacefile.hcl"
+
 type SpaceDef struct {
-	DNSLabel string `hcl:",key"`
-	Name string `hcl:"name"`
-	TeamID string `hcl:"team"`
-	Stages []StageDef `hcl:"stage"`
+	DNSLabel string     `hcl:",key"`
+	Name     string     `hcl:"name"`
+	TeamID   string     `hcl:"team"`
+	Stages   []StageDef `hcl:"stage"`
 
 	stagesByName map[string]*StageDef
 }
 
 type SoftwareDef struct {
-	Identifier string `hcl:",key"`
-	Version string `hcl:"version"`
-	UserData interface{}
+	Identifier string      `hcl:",key"`
+	Version    string      `hcl:"version"`
+	UserData   interface{} `hcl:"userData"`
 }
 
 type StageDef struct {
-	Name string `hcl:",key"`
-	Inherit string `hcl:"inherit"`
+	Name         string        `hcl:",key"`
+	Inherit      string        `hcl:"inherit"`
 	Applications []SoftwareDef `hcl:"application"`
-	Databases []SoftwareDef `hcl:"database"`
+	Databases    []SoftwareDef `hcl:"database"`
 
 	inheritStage *StageDef
 }
 
 type Spacefile struct {
-	Spaces []SpaceDef `hcl:"space"`
+	Version string     `hcl:"version"`
+	Spaces  []SpaceDef `hcl:"space"`
+}
+
+func (f *Spacefile) Validate() error {
+	var err *multierror.Error
+
+	if f.Version != "1" {
+		err = multierror.Append(err, fmt.Errorf("Unsupported version: %s", f.Version))
+	}
+
+	if len(f.Spaces) == 0 {
+		err = multierror.Append(err, errors.New("Spacefile does not contain a space definition"))
+	}
+
+	if len(f.Spaces) > 1 {
+		err = multierror.Append(err, errors.New("Spacefile should not contain more than one space definition"))
+	}
+
+	for i := range f.Spaces {
+		err = multierror.Append(err, f.Spaces[i].Validate())
+	}
+
+	return err.ErrorOrNil()
 }
 
 func (f *Spacefile) resolveReferences() error {
 	var err *multierror.Error
 
 	for i := range f.Spaces {
-		err = multierror.Append(err, f.Spaces[i].resolveStageInheritance())
+		err = multierror.Append(err, f.Spaces[i].resolveReferences())
 	}
 
 	return err.ErrorOrNil()
 }
 
-func (d *SpaceDef) resolveStageInheritance() error {
+func (d *SpaceDef) Validate() error {
+	var err *multierror.Error
+
+	if len(d.DNSLabel) == 0 {
+		err = multierror.Append(err, errors.New("Empty Space name"))
+	}
+
+	if len(d.Stages) == 0 {
+		err = multierror.Append(err, fmt.Errorf("Space \"%s\" should contain at least one stage", d.DNSLabel))
+	}
+
+	for i := range d.Stages {
+		err = multierror.Append(err, d.Stages[i].Validate())
+	}
+
+	return err.ErrorOrNil()
+}
+
+func (d *SpaceDef) resolveReferences() error {
 	var err *multierror.Error
 
 	d.stagesByName = make(map[string]*StageDef)
 
 	for i := range d.Stages {
 		if _, ok := d.stagesByName[d.Stages[i].Name]; ok {
-			err = multierror.Append(err, fmt.Errorf("duplicate stage declared: '%s'", d.Stages[i].Name))
+			err = multierror.Append(err, fmt.Errorf("Duplicate stage declared: '%s'", d.Stages[i].Name))
 		}
 
 		d.stagesByName[d.Stages[i].Name] = &d.Stages[i]
@@ -66,7 +108,7 @@ func (d *SpaceDef) resolveStageInheritance() error {
 
 		parent, ok := d.stagesByName[d.Stages[i].Inherit]
 		if !ok {
-			err = multierror.Append(err, fmt.Errorf("stage '%s' inherits non-existent stage '%s'", d.Stages[i].Name, d.Stages[i].Inherit))
+			err = multierror.Append(err, fmt.Errorf("Stage '%s' in Space '%s' inherits non-existent stage '%s'", d.Stages[i].Name, d.DNSLabel, d.Stages[i].Inherit))
 		} else {
 			d.Stages[i].inheritStage = parent
 		}
@@ -74,9 +116,32 @@ func (d *SpaceDef) resolveStageInheritance() error {
 
 	for i := range d.Stages {
 		err = multierror.Append(err, d.Stages[i].resolveInheritance(0))
+		err = multierror.Append(err, d.Stages[i].resolveUserData())
 	}
 
 	return err.ErrorOrNil()
+}
+
+func (d *StageDef) Validate() error {
+	var err *multierror.Error
+
+	if len(d.Applications) > 1 {
+		err = multierror.Append(err, fmt.Errorf("Stage '%s' shoud not contain more than one application", d.Name))
+	}
+
+	return err.ErrorOrNil()
+}
+
+func (d *StageDef) resolveUserData() error {
+	var mErr *multierror.Error
+	var err error
+
+	for i := range d.Applications {
+		d.Applications[i].UserData, err = unfuckHCL(d.Applications[i].UserData, "")
+		mErr = multierror.Append(mErr, err)
+	}
+
+	return mErr.ErrorOrNil()
 }
 
 func (d *StageDef) resolveInheritance(level int) error {
@@ -93,58 +158,15 @@ func (d *StageDef) resolveInheritance(level int) error {
 		return err
 	}
 
-	err = mergo.Merge(d, d.inheritStage)
+	originalName := d.Name
+
+	err = mergo.MergeWithOverwrite(d, d.inheritStage)
 	if err != nil {
 		return err
 	}
 
+	d.Name = originalName
 	d.inheritStage = nil
 
-	/*
-	myAppsByName := make(map[string]SoftwareDef)
-	for k := range d.Applications {
-		myAppsByName[d.Applications[k].Identifier] = d.Applications[k]
-	}
-
-	var err error
-
-	d.Applications = make([]SoftwareDef, 0)
-
-	for k, a := range d.inheritStage.Applications {
-		dataCopy, copyErr := deepCopy(a.UserData)
-		if copyErr != nil {
-			err = multierror.Append(err, copyErr)
-		} else {
-			newApp := SoftwareDef{Identifier: a.Identifier, Version: a.Version, UserData: dataCopy}
-
-			if overwrite, ok := myAppsByName[a.Identifier]; ok {
-				if overwrite.Version != "" {
-					newApp.Version = overwrite.Version
-				}
-			}
-
-			d.Applications = append(d.Applications, newApp)
-		}
-	}*/
-
 	return nil
-}
-
-func deepCopy(obj interface{}) (interface{}, error) {
-	var mod bytes.Buffer
-	enc := gob.NewEncoder(&mod)
-	dec := gob.NewDecoder(&mod)
-
-	err := enc.Encode(obj)
-	if err != nil {
-		return nil, err
-	}
-
-	var cpy interface{}
-	err = dec.Decode(&cpy)
-	if err != nil {
-		return nil, err
-	}
-
-	return cpy, nil
 }

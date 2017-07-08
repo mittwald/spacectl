@@ -1,6 +1,8 @@
-hash: 461960d0cfe74420eb10a9188fb037f7b11613743a9ec238cd71f4f1ca79d90c
-updated: 2017-07-08T11:58:25.497667329+02:00
+hash: 9d173ecbab0378ea0a0b2d48031254216d556681f0be55a2334bd537d6396a97
+updated: 2017-07-08T16:37:14.985293233+02:00
 imports:
+- name: github.com/fatih/color
+  version: 570b54cabe6b8eb0bc2dfce68d964677d63b5260
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/gosuri/uitable
@@ -8,6 +10,10 @@ imports:
   subpackages:
   - util/strutil
   - util/wordwrap
+- name: github.com/hashicorp/errwrap
+  version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
+- name: github.com/hashicorp/go-multierror
+  version: 83588e72410abfbe4df460eeb6f30841ae47d4c4
 - name: github.com/hashicorp/hcl
   version: 392dba7d905ed5d04a5794ba89f558b27e2ba1ca
   subpackages:
@@ -19,10 +25,18 @@ imports:
   - json/parser
   - json/scanner
   - json/token
+- name: github.com/imdario/mergo
+  version: e3000cb3d28c72b837601cac94debd91032d19fe
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/magiconair/properties
   version: 51463bfca2576e06c62a8504b5c0f06d61312647
+- name: github.com/mattn/go-colorable
+  version: 5411d3eea5978e6cdc258b30de592b60df6aba96
+  repo: https://github.com/mattn/go-colorable
+- name: github.com/mattn/go-isatty
+  version: 57fdcb988a5c543893cc61bce354a6e24ab70022
+  repo: https://github.com/mattn/go-isatty
 - name: github.com/mattn/go-runewidth
   version: 97311d9f7767e3d6f422ea06661bc2c7a19e8a5d
 - name: github.com/mitchellh/mapstructure
@@ -48,7 +62,8 @@ imports:
   subpackages:
   - ssh/terminal
 - name: golang.org/x/sys
-  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  version: e24f485414aeafb646f6fca458b0bf869c0880a1
+  repo: https://go.googlesource.com/sys
   subpackages:
   - unix
 - name: golang.org/x/text

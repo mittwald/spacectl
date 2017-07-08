@@ -3,8 +3,8 @@ package lowlevel
 import "fmt"
 
 type Message struct {
-	Message string `json:"msg"`
-	Error   string `json:"err"`
+	Message string      `json:"msg"`
+	Error   interface{} `json:"error"`
 }
 
 func (m Message) String() string {
@@ -16,16 +16,23 @@ func (m Message) String() string {
 		return m.Message
 	}
 
-	if m.Error != "" {
-		return m.Error
+	if m.Error != nil {
+		switch e := m.Error.(type) {
+		case string:
+			if e != "" {
+				return e
+			}
+		default:
+			return fmt.Sprintf("%v", e)
+		}
 	}
 
 	return "Unknown"
 }
 
 type Link struct {
-	Href string `json:"href"`
-	Rel string `json:"rel"`
+	Href   string `json:"href"`
+	Rel    string `json:"rel"`
 	Method string `json:"method"`
 }
 

@@ -8,7 +8,7 @@ space "test-space" {
     application typo3 {
       version = "8.7.2"
       userData {
-        initialUser
+        initialUser {
           username = "admin"
           password = "test123"
         }

@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/spacefile"
+	"github.com/spf13/cobra"
+	"fmt"
 )
 
 var spacesApplySpacefile string
@@ -17,10 +18,23 @@ CAUTION: This command can be potentially destructive.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		logger.Printf("Using Spacefile at %s\n", spacesApplySpacefile)
 
-		_, err := spacefile.ParseSpacefile(spacesApplySpacefile)
+		file, err := spacefile.ParseSpacefile(spacesApplySpacefile)
 		if err != nil {
 			return err
 		}
+
+		spc := file.Spaces[0]
+		decl, err := spc.ToSpaceDeclaration()
+		if err != nil {
+			return err
+		}
+
+		declaredSpace, err := api.Spaces().Declare(spc.TeamID, decl)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(declaredSpace)
 
 		return nil
 	},
@@ -30,7 +44,7 @@ func init() {
 	spacesCmd.AddCommand(spacesApplyCmd)
 	RootCmd.AddCommand(spacesApplyCmd)
 
-	spacesApplyCmd.Flags().StringVarP(&spacesApplySpacefile, "spacefile", "f", "./Spacefile", "Filename of Spacefile to apply")
+	spacesApplyCmd.Flags().StringVarP(&spacesApplySpacefile, "spacefile", "f", "./" + spacefile.DefaultFilename, "Filename of Spacefile to apply")
 
 	// Here you will define your flags and configuration settings.
 

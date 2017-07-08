@@ -24,6 +24,7 @@ type SpacesClientConfig struct {
 
 type spacesClient struct {
 	client *lowlevel.SpacesLowlevelClient
+	logger *log.Logger
 }
 
 func NewSpacesClient(config SpacesClientConfig) (SpacesClient, error) {
@@ -38,6 +39,7 @@ func NewSpacesClient(config SpacesClientConfig) (SpacesClient, error) {
 
 	return &spacesClient{
 		lowlevelClient,
+		config.Logger,
 	}, nil
 }
 
@@ -50,5 +52,5 @@ func (c *spacesClient) Invites() invites.InvitesClient {
 }
 
 func (c *spacesClient) Spaces() spaces.SpacesClient {
-	return spaces.NewSpacesClient(c.client)
+	return spaces.NewSpacesClient(c.client, c.logger)
 }
