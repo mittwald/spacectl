@@ -2,6 +2,14 @@ package spacefile
 
 import "fmt"
 
+type ErrSpacefileNotFound struct {
+	Path string
+}
+
+func (n ErrSpacefileNotFound) Error() string {
+	return fmt.Sprintf("The Spacefile at %s does not exist, yet. Create one using the \"spacectl space init\" command.", n.Path)
+}
+
 type SyntaxError struct {
 	File string
 	Inner error

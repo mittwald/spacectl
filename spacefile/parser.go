@@ -12,7 +12,7 @@ func ParseSpacefile(filename string) (*Spacefile, error) {
 	contents, err := ioutil.ReadFile(filename)
 
 	if os.IsNotExist(err) {
-		return nil, fmt.Errorf("The Spacefile at %s does not exist, yet. Create one using the \"spacectl space init\" command.", filename)
+		return nil, ErrSpacefileNotFound{filename}
 	}
 
 	if err != nil {

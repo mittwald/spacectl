@@ -1,6 +1,9 @@
 package lowlevel
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Message struct {
 	Message string      `json:"msg"`
@@ -34,6 +37,14 @@ type Link struct {
 	Href   string `json:"href"`
 	Rel    string `json:"rel"`
 	Method string `json:"method"`
+}
+
+func (l Link) WithParam(param, value string) Link {
+	return Link {
+		Href: strings.Replace(l.Href, "{" + param + "}", value, 1),
+		Rel: l.Rel,
+		Method: l.Method,
+	}
 }
 
 func (l Link) Get(client *SpacesLowlevelClient, result interface{}) error {

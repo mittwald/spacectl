@@ -9,8 +9,6 @@ func unfuckHCL(in interface{}, path string) (interface{}, error) {
 	var mErr *multierror.Error
 	var err error
 
-	fmt.Printf("%v (type=%T)\n", in, in)
-
 	switch mapped := in.(type) {
 	case map[string]interface{}:
 		for key := range mapped {

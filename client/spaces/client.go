@@ -10,6 +10,8 @@ type SpacesClient interface {
 	ListByTeam(teamID string) ([]Space, error)
 	Declare(teamID string, declaration *SpaceDeclaration) (*Space, error)
 	GetByID(spaceID string) (*Space, error)
+	GetByTeamAndName(teamIDOrName string, spaceIDOrName string) (*Space, error)
+	Delete(spaceID string) (error)
 	//Create(string, string) (Space, error)
 	//InviteByEmail(teamID string, email string, message string, role string) (Invite, error)
 	//ListMembers(teamID string) ([]Membership, error)

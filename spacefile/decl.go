@@ -2,7 +2,6 @@ package spacefile
 
 import (
 	"github.com/mittwald/spacectl/client/spaces"
-	"fmt"
 )
 
 func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
@@ -31,8 +30,6 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 		},
 		Stages: stages,
 	}
-
-	fmt.Println(decl)
 
 	return &decl, nil
 }

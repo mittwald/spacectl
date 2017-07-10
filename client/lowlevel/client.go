@@ -106,6 +106,10 @@ func (c *SpacesLowlevelClient) Put(path string, body interface{}, target interfa
 	return c.request("PUT", path, body, target)
 }
 
+func (c *SpacesLowlevelClient) Delete(path string, target interface{}) error {
+	return c.request("DELETE", path, nil, target)
+}
+
 func (c *SpacesLowlevelClient) request(method string, path string, body interface{}, target interface{}) error {
 	var reqBody []byte = []byte{}
 	var err error
@@ -118,7 +122,7 @@ func (c *SpacesLowlevelClient) request(method string, path string, body interfac
 	}
 
 	url := c.endpoint + c.pathWithVersion(path)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return err
 	}
