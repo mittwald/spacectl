@@ -20,6 +20,7 @@ go-compile:test:
     - mkdir -p $GOPATH/src/github.com/mittwald
     - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
     - cd $GOPATH/src/github.com/mittwald/spacectl
+    - echo -n "package buildinfo\n\nconst Version = \"${CI_BUILD_TAG}\"\nconst Hash = \"${CI_COMMIT_SHA}\"\nconst BuildDate = \"$(date)\"\n" > buildinfo/buildinfo.go
   script:
     - CGO_ENABLED=0 go build -o spacectl-${GOOS}-${GOARCH}-${CI_BUILD_TAG} -ldflags "-s" -a -installsuffix cgo
   artifacts:
