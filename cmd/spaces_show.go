@@ -2,10 +2,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/hashicorp/go-multierror"
-	"errors"
 	"github.com/mittwald/spacectl/view"
 	"os"
+	"github.com/mittwald/spacectl/cmd/helper"
 )
 
 // spacesShowCmd represents the show command
@@ -14,20 +13,9 @@ var spacesShowCmd = &cobra.Command{
 	Short: "Show details regarding a specific space",
 	Long: "Show details regarding a specific space",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var mErr *multierror.Error
-		//teamID := viper.GetString("teamID")
-
-		if len(args) == 0 {
-			mErr = multierror.Append(mErr, errors.New("missing Space identifier (either ID or DNS label)"))
-		}
-
-		if mErr.ErrorOrNil() != nil {
-			RootCmd.SilenceUsage = false
-			return mErr
-		}
-
-		space, err := api.Spaces().GetByID(args[0])
+		space, err := helper.GetSpaceFromContext(args, spaceFile, api)
 		if err != nil {
+			RootCmd.SilenceUsage = false
 			return err
 		}
 
