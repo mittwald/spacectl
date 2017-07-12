@@ -7,8 +7,6 @@ import (
 	"os"
 )
 
-var spacesApplySpacefile string
-
 // applyCmd represents the apply command
 var spacesApplyCmd = &cobra.Command{
 	Use:   "apply",
@@ -17,9 +15,9 @@ var spacesApplyCmd = &cobra.Command{
 
 CAUTION: This command can be potentially destructive.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		logger.Printf("Using Spacefile at %s\n", spacesApplySpacefile)
+		logger.Printf("Using Spacefile at %s\n", spaceFile)
 
-		file, err := spacefile.ParseSpacefile(spacesApplySpacefile)
+		file, err := spacefile.ParseSpacefile(spaceFile)
 		if err != nil {
 			return err
 		}
@@ -45,17 +43,4 @@ CAUTION: This command can be potentially destructive.`,
 func init() {
 	spacesCmd.AddCommand(spacesApplyCmd)
 	RootCmd.AddCommand(spacesApplyCmd)
-
-	spacesApplyCmd.Flags().StringVarP(&spacesApplySpacefile, "spacefile", "f", "./" + spacefile.DefaultFilename, "Filename of Spacefile to apply")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// applyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// applyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }

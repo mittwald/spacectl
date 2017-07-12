@@ -5,8 +5,6 @@ import (
 	"github.com/mittwald/spacectl/spacefile"
 )
 
-var spacesValidateSpacefile string
-
 var spacesValidateCmd = &cobra.Command{
 	Use:   "validate",
 	Short: "Validate a Spacefile for syntactical and semantical correctness",
@@ -15,7 +13,7 @@ var spacesValidateCmd = &cobra.Command{
 For example, it could be used before running "spacectl apply" (although "spacectl apply" will also
 validate your Spacefile), or to check your Spacefile within your CI process.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		_, err := spacefile.ParseSpacefile(spacesApplySpacefile)
+		_, err := spacefile.ParseSpacefile(spaceFile)
 		if err != nil {
 			return err
 		}
@@ -26,6 +24,4 @@ validate your Spacefile), or to check your Spacefile within your CI process.`,
 
 func init() {
 	spacesCmd.AddCommand(spacesValidateCmd)
-
-	spacesValidateCmd.Flags().StringVarP(&spacesValidateSpacefile, "spacefile", "f", "./" + spacefile.DefaultFilename, "Filename of Spacefile to validate")
 }
