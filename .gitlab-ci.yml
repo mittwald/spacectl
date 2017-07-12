@@ -52,4 +52,4 @@ publish:
   before_script:
     - pip install awscli==1.11.117
   script:
-    - aws s3 cp . s3://static.spaces.de/cli/ --recursive --include "spacectl-*"
+    - aws s3 cp . s3://static.spaces.de/cli/ --recursive --exclude "*" --include "spacectl-*"
