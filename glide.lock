@@ -1,5 +1,5 @@
-hash: 9d173ecbab0378ea0a0b2d48031254216d556681f0be55a2334bd537d6396a97
-updated: 2017-07-08T16:37:14.985293233+02:00
+hash: 8d11d44243edd256bb84863b63380a0debfc7f0ecd4dd5c401d63928a062238f
+updated: 2017-07-12T16:26:53.308379613+02:00
 imports:
 - name: github.com/fatih/color
   version: 570b54cabe6b8eb0bc2dfce68d964677d63b5260
@@ -30,7 +30,7 @@ imports:
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/magiconair/properties
-  version: 51463bfca2576e06c62a8504b5c0f06d61312647
+  version: be5ece7dd465ab0765a9682137865547526d1dfb
 - name: github.com/mattn/go-colorable
   version: 5411d3eea5978e6cdc258b30de592b60df6aba96
   repo: https://github.com/mattn/go-colorable
@@ -50,7 +50,7 @@ imports:
 - name: github.com/spf13/cast
   version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
 - name: github.com/spf13/cobra
-  version: 8c6fa02d2225de0f9bdcb7ca912556f68d172d8c
+  version: c46add8a652801b61513ad36c56759f302fbb028
 - name: github.com/spf13/jwalterweatherman
   version: 0efa5202c04663c757d84f90f5219c1250baf94f
 - name: github.com/spf13/pflag

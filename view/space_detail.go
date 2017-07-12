@@ -22,6 +22,8 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, out io.Writer) 
 	table.MaxColWidth = 80
 	table.Wrap = true
 
+	fmt.Printf("%v\n", space)
+
 	round := time.Second
 	since := time.Now().Round(round).Sub(space.CreatedAt.Round(round)).String()
 

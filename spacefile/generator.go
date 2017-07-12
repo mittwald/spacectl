@@ -25,7 +25,7 @@ space "{{ .SpaceDNSLabel }}" {
       version = "~8.7.0"
 
       userData {
-        initialUser {
+        initialAdminUser {
           username = "admin"
           password = "my-password"
         }

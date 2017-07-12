@@ -11,3 +11,4 @@ import:
   version: ^1.5.0
 - package: github.com/imdario/mergo
   version: origin/master
+- package: github.com/hashicorp/go-multierror

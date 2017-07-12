@@ -133,7 +133,7 @@ func (c *SpacesLowlevelClient) request(method string, path string, body interfac
 
 	req.Header.Set("X-Access-Token", c.token)
 
-	c.logger.Printf("executing POST on %s: %s", url, string(reqBody))
+	c.logger.Printf("executing %s on %s: %s", method, url, string(reqBody))
 
 	client := http.Client{}
 	res, err := client.Do(req)

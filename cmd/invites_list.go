@@ -3,18 +3,19 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
-	"github.com/mittwald/spacectl/client/invites"
 	"github.com/gosuri/uitable"
+	"github.com/mittwald/spacectl/client/invites"
+	"github.com/spf13/cobra"
 )
 
-var inviteListOutgoing bool = false;
+var inviteListOutgoing bool = false
 
 // listCmd represents the list command
 var invitesListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List pending invites",
-	Long: `List pending invites`,
+	Use:     "list",
+	Aliases: []string{"ls"},
+	Short:   "List pending invites",
+	Long:    `List pending invites`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var inv []invites.Invite
 		var err error

@@ -3,7 +3,7 @@ stages:
   - compile
 
 go-compile:test:
-  image: golang:1.7.4
+  image: golang:1.8.3
   stage: test
   before_script:
     - mkdir -p $GOPATH/src/github.com/mittwald
@@ -12,32 +12,35 @@ go-compile:test:
   script:
     - go build
 
-go-compile:linux:
-  image: golang:1.7.4
+.compile-template: &compile_template
+  image: golang:1.8.3
   stage: compile
   before_script:
     - mkdir -p $GOPATH/src/github.com/mittwald
     - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
     - cd $GOPATH/src/github.com/mittwald/spacectl
   script:
-    - CGO_ENABLED=0 GOOS=linux go build -o command-watcher-linux-amd64-${CI_BUILD_TAG} -ldflags "-s" -a -installsuffix cgo
+    - CGO_ENABLED=0 go build -o spacectl-${GOOS}-${GOARCH}-${CI_BUILD_TAG} -ldflags "-s" -a -installsuffix cgo
   artifacts:
     paths:
-      - ./command-watcher-linux-amd64-${CI_BUILD_TAG}
+      - ./spacectl-${GOOS}-${GOARCH}-${CI_BUILD_TAG}
   only:
     - tags
 
+go-compile:linux-amd64:
+  <<: *compile_template
+  variables:
+    GOOS: linux
+    GOARCH: amd64
+
 go-compile:darwin:
-  image: golang:1.7.4
-  stage: compile
-  before_script:
-    - mkdir -p $GOPATH/src/github.com/mittwald
-    - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
-    - cd $GOPATH/src/github.com/mittwald/spacectl
-  script:
-    - CGO_ENABLED=0 GOOS=darwin go build -o command-watcher-darwin-amd64-${CI_BUILD_TAG} -ldflags "-s" -a -installsuffix cgo
-  artifacts:
-    paths:
-      - ./command-watcher-darwin-amd64-${CI_BUILD_TAG}
-  only:
-    - tags
+  <<: *compile_template
+  variables:
+    GOOS: darwin
+    GOARCH: amd64
+
+go-compile:windows-amd64:
+  <<: *compile_template
+  variables:
+    GOOS: windows
+    GOARCH: amd64

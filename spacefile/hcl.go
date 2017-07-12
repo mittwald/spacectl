@@ -26,7 +26,8 @@ func unfuckHCL(in interface{}, path string) (interface{}, error) {
 			mErr = multierror.Append(mErr, fmt.Errorf("more than 1 element for %s", path))
 		}
 
-		in = mapped[0]
+		in, err = unfuckHCL(mapped[0], path + ".0")
+		mErr = multierror.Append(mErr, err)
 	}
 
 	return in, mErr.ErrorOrNil()

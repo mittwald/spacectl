@@ -55,6 +55,10 @@ func (l Link) Post(client *SpacesLowlevelClient, body interface{}, result interf
 	return client.Post(l.Href, body, result)
 }
 
+func (l Link) Put(client *SpacesLowlevelClient, body interface{}, result interface{}) error {
+	return client.Put(l.Href, body, result)
+}
+
 type LinkList []Link
 
 func (l LinkList) HasLink(rel string) bool {

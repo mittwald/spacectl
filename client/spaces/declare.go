@@ -59,10 +59,15 @@ func (c *spacesClient) Declare(teamID string, declaration *SpaceDeclaration) (*S
 
 	c.logger.Printf("Space '%s' already exists with ID %s", declaration.Name.DNSName, existing.ID)
 
-	err = c.client.Put(existing.HREF, declaration, &created)
+	link, err := existing.Links.GetLinkByRel("self")
+	if err != nil {
+		return nil, errors.ErrNested{Msg: "Not authorized to access space", Inner: err}
+	}
+
+	err = link.Put(c.client, declaration, &created)
 	if err != nil {
 		return nil, errors.ErrNested{Msg: "Error occurred while updating an existing Space", Inner: err}
 	}
 
-	return nil, nil
+	return &created, nil
 }

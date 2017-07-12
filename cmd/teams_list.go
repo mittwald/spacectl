@@ -3,14 +3,15 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"github.com/gosuri/uitable"
+	"github.com/spf13/cobra"
 )
 
 var teamsListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List teams",
-	Long:  `Lists all teams that you have access to.`,
+	Use:     "list",
+	Aliases: []string{"ls"},
+	Short:   "List teams",
+	Long:    `Lists all teams that you have access to.`,
 
 	RunE: func(cmd *cobra.Command, args []string) error {
 		teams, err := api.Teams().List()

@@ -1,20 +1,21 @@
 package cmd
 
 import (
+	"fmt"
+	"github.com/gosuri/uitable"
+	"github.com/mittwald/spacectl/client/spaces"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/gosuri/uitable"
-	"fmt"
 	"strings"
-	"github.com/mittwald/spacectl/client/spaces"
 	"time"
 )
 
 // listCmd represents the list command
 var spacesListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List Spaces",
-	Long: `Lists spaces`,
+	Use:     "list",
+	Aliases: []string{"ls"},
+	Short:   "List Spaces",
+	Long:    `Lists spaces`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var ownedSpaces []spaces.Space
 		var err error
@@ -49,7 +50,7 @@ var spacesListCmd = &cobra.Command{
 				space.Team.Name,
 				space.Name.HumanReadableName,
 				strings.Join(space.StagesNames(), ", "),
-				since + " ago",
+				since+" ago",
 			)
 		}
 
