@@ -1,6 +1,7 @@
 stages:
   - test
   - compile
+  - publish
 
 go-compile:test:
   image: golang:1.8.3
@@ -44,3 +45,11 @@ go-compile:windows-amd64:
   variables:
     GOOS: windows
     GOARCH: amd64
+
+publish:
+  stage: publish
+  image: python:3.5.3-slim
+  before_script:
+    - pip install awscli==1.11.117
+  script:
+    - aws s3 cp . s3://static.spaces.de/cli/ --recursive --include "spacectl-*"
