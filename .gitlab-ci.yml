@@ -11,6 +11,7 @@ go-compile:test:
     - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
     - cd $GOPATH/src/github.com/mittwald/spacectl
   script:
+    - go generate
     - go build
 
 .compile-template: &compile_template
@@ -20,12 +21,12 @@ go-compile:test:
     - mkdir -p $GOPATH/src/github.com/mittwald
     - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
     - cd $GOPATH/src/github.com/mittwald/spacectl
-    - echo -n "package buildinfo\n\nconst Version = \"${CI_BUILD_TAG}\"\nconst Hash = \"${CI_COMMIT_SHA}\"\nconst BuildDate = \"$(date)\"\n" > buildinfo/buildinfo.go
   script:
-    - CGO_ENABLED=0 go build -o spacectl-${GOOS}-${GOARCH}-${CI_BUILD_TAG} -ldflags "-s" -a -installsuffix cgo
+    - go generate
+    - CGO_ENABLED=0 go build -o spacectl-${GOOS}-${GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
   artifacts:
     paths:
-      - ./spacectl-${GOOS}-${GOARCH}-${CI_BUILD_TAG}
+      - ./spacectl-${GOOS}-${GOARCH}${EXT}
   only:
     - tags
 
@@ -46,6 +47,7 @@ go-compile:windows-amd64:
   variables:
     GOOS: windows
     GOARCH: amd64
+    EXT: .exe
 
 publish:
   stage: publish
@@ -53,4 +55,6 @@ publish:
   before_script:
     - pip install awscli==1.11.117
   script:
-    - aws s3 cp . s3://static.spaces.de/cli/ --recursive --exclude "*" --include "spacectl-*" --acl public-read
+    - echo ${CI_BUILD_TAG} > latest.txt
+    - aws s3 cp . s3://static.spaces.de/cli/${CI_BUILD_TAG}/ --recursive --exclude "*" --include "spacectl-*" --acl public-read
+    - aws s3 cp latest.txt s3://static.spaces.de/cli/latest.txt --acl public-read
