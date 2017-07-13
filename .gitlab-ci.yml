@@ -22,7 +22,7 @@ go-compile:test:
     - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
     - cd $GOPATH/src/github.com/mittwald/spacectl
   script:
-    - go generate
+    - GOOS=linux go generate
     - CGO_ENABLED=0 go build -o spacectl-${GOOS}-${GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
   artifacts:
     paths:
