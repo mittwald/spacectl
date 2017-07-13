@@ -25,8 +25,8 @@ func main() {
 	}
 
 	out.WriteString("package buildinfo\n\nconst (\n")
-	fmt.Fprintf(out, "\tVersion = `%s`,\n", tag)
-	fmt.Fprintf(out, "\tHash = `%s`,\n", hash)
-	fmt.Fprintf(out, "\tBuildDate = `%s`,\n", time.Now().Format(time.RFC1123))
+	fmt.Fprintf(out, "\tVersion = `%s`\n", tag)
+	fmt.Fprintf(out, "\tHash = `%s`\n", hash)
+	fmt.Fprintf(out, "\tBuildDate = `%s`\n", time.Now().Format(time.RFC1123))
 	out.WriteString(")\n")
 }
