@@ -6,6 +6,8 @@ import (
 	"github.com/gosuri/uitable"
 	"github.com/mittwald/spacectl/client/invites"
 	"github.com/spf13/cobra"
+	"github.com/mittwald/spacectl/cmd/helper"
+	"time"
 )
 
 var inviteListOutgoing bool = false
@@ -34,12 +36,12 @@ var invitesListCmd = &cobra.Command{
 				return nil
 			}
 
-			table.AddRow("ID", "DATE", "STATE", "TEAM NAME", "INVITEE EMAIL", "MSG")
+			table.AddRow("ID", "ISSUED", "STATE", "TEAM NAME", "INVITEE EMAIL", "MSG")
 
 			for _, i := range inv {
 				table.AddRow(
 					i.ID,
-					i.IssuedAt.String(),
+					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt) + " ago",
 					i.State,
 					i.Team.Name,
 					i.Invitee.Email,
@@ -58,12 +60,12 @@ var invitesListCmd = &cobra.Command{
 				return nil
 			}
 
-			table.AddRow("ID", "DATE", "STATE", "TEAM NAME", "INVITER EMAIL", "MSG")
+			table.AddRow("ID", "ISSUED", "STATE", "TEAM NAME", "INVITER EMAIL", "MSG")
 
 			for _, i := range inv {
 				table.AddRow(
 					i.ID,
-					i.IssuedAt.String(),
+					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt) + " ago",
 					i.State,
 					i.Team.Name,
 					i.Inviter.Email,

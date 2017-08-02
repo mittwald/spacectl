@@ -8,6 +8,7 @@ import (
 
 var keysDeleteCmd = &cobra.Command{
 	Use:     "delete <key-id>",
+	Aliases: []string{"rm"},
 	Short:   "Delete specific SSH key",
 	Long:    `This command deletes a specific SSH key.`,
 	RunE: func(cmd *cobra.Command, args []string) error {

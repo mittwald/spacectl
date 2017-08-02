@@ -43,7 +43,6 @@ var keysListCmd = &cobra.Command{
 
 		fmt.Println(table)
 
-
 		return nil
 	},
 }

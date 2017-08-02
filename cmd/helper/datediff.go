@@ -37,5 +37,9 @@ func HumanReadableDateDiff(t1, t2 time.Time) string {
 
 	components = append(components, fmt.Sprintf("%ds", diff / time.Second))
 
-	return strings.Join(components[0:2], "")
+	if len(components) > 2 {
+		return strings.Join(components[0:2], "")
+	}
+
+	return strings.Join(components, "")
 }
