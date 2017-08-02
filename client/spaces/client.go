@@ -12,9 +12,6 @@ type SpacesClient interface {
 	GetByID(spaceID string) (*Space, error)
 	GetByTeamAndName(teamIDOrName string, spaceIDOrName string) (*Space, error)
 	Delete(spaceID string) (error)
-	//Create(string, string) (Space, error)
-	//InviteByEmail(teamID string, email string, message string, role string) (Invite, error)
-	//ListMembers(teamID string) ([]Membership, error)
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) (SpacesClient) {

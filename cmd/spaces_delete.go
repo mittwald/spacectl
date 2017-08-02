@@ -3,18 +3,19 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
-	"github.com/mittwald/spacectl/view"
 	"bytes"
 	"github.com/mittwald/spacectl/cmd/helper"
+	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
 )
 
 var spaceDeleteForce bool
 
 var spaceDeleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "Delete a Space",
-	Long: `This commnd deletes a Space.
+	Use:     "delete",
+	Aliases: []string{"rm"},
+	Short:   "Delete a Space",
+	Long: `This command deletes a Space.
 
 CAUTION: This command is destructive. Once you have deleted a Space, you
 will not get it back!`,
@@ -50,5 +51,5 @@ will not get it back!`,
 func init() {
 	spacesCmd.AddCommand(spaceDeleteCmd)
 
-	spaceDeleteCmd.Flags().BoolVar(&spaceDeleteForce, "force", false, "Do not prompt for confirmation")
+	spaceDeleteCmd.Flags().BoolVarP(&spaceDeleteForce, "yes", "y", false, "Do not prompt for confirmation")
 }

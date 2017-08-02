@@ -110,6 +110,38 @@ func (c *SpacesLowlevelClient) Delete(path string, target interface{}) error {
 	return c.request("DELETE", path, nil, target)
 }
 
+func (c *SpacesLowlevelClient) GetCanonicalURL(path string) (string, error) {
+	url := c.endpoint + c.pathWithVersion(path)
+	req, err := http.NewRequest("HEAD", url, nil)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("X-Access-Token", c.token)
+
+	c.logger.Printf("executing HEAD on %s", url)
+
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+
+	defer res.Body.Close()
+
+	if res.StatusCode < 300 {
+		return req.URL.String(), nil
+	} else if res.StatusCode >= 300 && res.StatusCode < 400 {
+		url, err := res.Location()
+		if err != nil {
+			return "", err
+		}
+		return url.String(), nil
+	}
+
+	return "", fmt.Errorf("unexpected status code: %d", res.StatusCode)
+}
+
 func (c *SpacesLowlevelClient) request(method string, path string, body interface{}, target interface{}) error {
 	var reqBody []byte = []byte{}
 	var err error

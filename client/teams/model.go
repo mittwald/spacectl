@@ -1,14 +1,18 @@
 package teams
 
-import "github.com/mittwald/spacectl/client/lowlevel"
+import (
+	"github.com/mittwald/spacectl/client/lowlevel"
+	"time"
+)
 
 type Team struct {
 	Links   lowlevel.LinkList `json:"_links"`
 	Actions lowlevel.LinkList `json:"_actions"`
 
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	DNSName string `json:"dnsLabel"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"createdAt"`
+	Name      string    `json:"name"`
+	DNSName   string    `json:"dnsLabel"`
 }
 
 type Invite struct {

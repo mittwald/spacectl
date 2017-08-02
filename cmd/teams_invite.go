@@ -78,7 +78,6 @@ var teamInviteCmd = &cobra.Command{
 func init() {
 	teamsCmd.AddCommand(teamInviteCmd)
 
-	teamInviteCmd.Flags().StringP("team-id", "t", "", "Team ID into which to invite the user");
 	teamInviteCmd.Flags().StringP("email", "e", "", "Email address of the user to invite");
 	teamInviteCmd.Flags().StringP("user-id", "u", "", "User ID of the user to invite")
 	teamInviteCmd.Flags().StringP("message", "m", "", "Invitation message")

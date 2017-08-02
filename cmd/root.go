@@ -70,7 +70,11 @@ func init() {
 	RootCmd.PersistentFlags().BoolVar(&nonInteractive, "non-interactive", false, "Disable interactive prompts")
 	RootCmd.PersistentFlags().String("token-file", "~/.spaces/token", "The file in which to store the authentication token")
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Be more chatty")
+
 	RootCmd.PersistentFlags().StringP("team", "t", "", "A team ID or name")
+	RootCmd.PersistentFlags().Lookup("team").Annotations = map[string][]string{
+		cobra.BashCompCustom: {"__spacectl_get_teams"},
+	}
 
 	viper.BindPFlag("apiServer", RootCmd.PersistentFlags().Lookup("api-server"))
 	viper.BindPFlag("tokenFile", RootCmd.PersistentFlags().Lookup("token-file"))

@@ -80,10 +80,11 @@ Use the --force flag (or -f) to overwrite it.`, filePath)
 func init() {
 	spacesCmd.AddCommand(spacesInitCmd)
 
-	spacesInitCmd.Flags().BoolVarP(&spaceInitForce, "force", "f", false, "Override existing Spacefile without asking")
+	spacesInitCmd.Flags().BoolVar(&spaceInitForce, "force", false, "Override existing Spacefile without asking")
 	spacesInitCmd.Flags().StringVarP(&spaceInitName, "name", "n", "", "Name of the new Space")
 	spacesInitCmd.Flags().StringVarP(&spaceInitLabel, "dns-label", "l", "", "DNS label of the new Space. Must be unique within the team.")
 
+	spacesInitCmd.MarkFlagRequired("name")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

@@ -40,9 +40,9 @@ type Link struct {
 }
 
 func (l Link) WithParam(param, value string) Link {
-	return Link {
-		Href: strings.Replace(l.Href, "{" + param + "}", value, 1),
-		Rel: l.Rel,
+	return Link{
+		Href:   strings.Replace(l.Href, "{"+param+"}", value, 1),
+		Rel:    l.Rel,
 		Method: l.Method,
 	}
 }
@@ -57,6 +57,10 @@ func (l Link) Post(client *SpacesLowlevelClient, body interface{}, result interf
 
 func (l Link) Put(client *SpacesLowlevelClient, body interface{}, result interface{}) error {
 	return client.Put(l.Href, body, result)
+}
+
+func (l Link) Delete(client *SpacesLowlevelClient, result interface{}) error {
+	return client.Delete(l.Href, result)
 }
 
 type LinkList []Link
@@ -79,4 +83,9 @@ func (l LinkList) GetLinkByRel(rel string) (*Link, error) {
 	}
 
 	return nil, ErrLinkNotFound{rel}
+}
+
+type Linkeable struct {
+	Links   LinkList `json:"_links"`
+	Actions LinkList `json:"_actions"`
 }

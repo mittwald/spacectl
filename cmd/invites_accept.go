@@ -33,4 +33,5 @@ func init() {
 	invitesCmd.AddCommand(invitesAcceptCmd)
 
 	invitesAcceptCmd.Flags().StringVarP(&acceptInviteID, "invite", "i", "", "ID of the invite to accept")
+	invitesAcceptCmd.MarkFlagRequired("invite")
 }

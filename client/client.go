@@ -8,12 +8,14 @@ import (
 	"log"
 	"io/ioutil"
 	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/client/sshkeys"
 )
 
 type SpacesClient interface {
 	Teams() teams.TeamsClient
 	Invites() invites.InvitesClient
 	Spaces() spaces.SpacesClient
+	SSHKeys() sshkeys.SSHKeyClient
 }
 
 type SpacesClientConfig struct {
@@ -53,4 +55,8 @@ func (c *spacesClient) Invites() invites.InvitesClient {
 
 func (c *spacesClient) Spaces() spaces.SpacesClient {
 	return spaces.NewSpacesClient(c.client, c.logger)
+}
+
+func (c *spacesClient) SSHKeys() sshkeys.SSHKeyClient {
+	return sshkeys.NewSSHKeyClient(c.client, c.logger)
 }

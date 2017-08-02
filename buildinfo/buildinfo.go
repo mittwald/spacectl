@@ -3,5 +3,5 @@ package buildinfo
 const (
 	Version = `nightly`
 	Hash = `<local>`
-	BuildDate = `Wed, 12 Jul 2017 21:49:00 CEST`,
+	BuildDate = `Tue, 18 Jul 2017 07:59:25 CEST`
 )
