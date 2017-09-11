@@ -4,6 +4,7 @@ import "github.com/mittwald/spacectl/client/lowlevel"
 
 type TeamsClient interface {
 	List() ([]Team, error)
+	Delete(teamIDOrName string) (error)
 	Create(string, string) (Team, error)
 	InviteByEmail(teamID string, email string, message string, role string) (Invite, error)
 	ListMembers(teamID string) ([]Membership, error)
