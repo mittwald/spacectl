@@ -6,6 +6,7 @@ import (
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
 	"errors"
+	"bytes"
 )
 
 var teamDeleteFlags struct {
@@ -28,11 +29,16 @@ will not get it back!`,
 			return errors.New("Missing argument: Team ID or DNS label")
 		}
 
-		if !teamDeleteFlags.Force {
-			//buf := bytes.Buffer{}
-			//view.TabularSpaceDetailView{}.SpaceDetail(space, &buf)
+		team, err := api.Teams().Get(args[0])
+		if err != nil {
+			return err
+		}
 
-			ok, _ := view.Confirm("Once this Team is deleted, you will NOT be able to get it back.", "")
+		if !teamDeleteFlags.Force {
+			buf := bytes.Buffer{}
+			view.TabularTeamDetailView{}.TeamDetail(team, nil, &buf)
+
+			ok, _ := view.Confirm("Once this Team is deleted, you will NOT be able to get it back.", buf.String())
 			if !ok {
 				fmt.Println("Aborting team deletion.")
 				return nil
