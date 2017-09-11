@@ -4,7 +4,7 @@ import "fmt"
 
 type createTeamRequest struct {
 	Name    string `json:"name"`
-	DNSName string `json:"dnsName"`
+	DNSName string `json:"dnsLabel"`
 }
 
 func (t *teamsClient) Create(name string, dnsLabel string) (Team, error) {
