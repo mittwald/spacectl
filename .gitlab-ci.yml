@@ -58,3 +58,5 @@ publish:
     - echo ${CI_BUILD_TAG} > latest.txt
     - aws s3 cp . s3://static.spaces.de/cli/${CI_BUILD_TAG}/ --recursive --exclude "*" --include "spacectl-*" --acl public-read
     - aws s3 cp latest.txt s3://static.spaces.de/cli/latest.txt --acl public-read
+  only:
+    - tags
