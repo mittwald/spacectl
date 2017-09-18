@@ -1,17 +1,3 @@
-// Copyright © 2017 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
@@ -21,7 +7,15 @@ import (
 	"errors"
 	"github.com/mittwald/spacectl/client/teams"
 	"github.com/gosuri/uitable"
+	"github.com/spf13/viper"
 )
+
+var teamInviteFlags struct {
+	Email string
+	UserID string
+	Message string
+	Role string
+}
 
 // inviteCmd represents the invite command
 var teamInviteCmd = &cobra.Command{
@@ -32,27 +26,28 @@ var teamInviteCmd = &cobra.Command{
 		var err error
 		var invite teams.Invite
 
-		teamID := cmd.Flag("team-id").Value.String()
-		email := cmd.Flag("email").Value.String()
-		userID := cmd.Flag("user-id").Value.String()
-		message := cmd.Flag("message").Value.String()
-		role := cmd.Flag("role").Value.String()
+		teamID := viper.GetString("teamID")
 
 		if teamID == "" {
 			return errors.New("must provide team (--team-id or -t)")
 		}
 
-		if email == "" && userID == "" {
+		if teamInviteFlags.Email == "" && teamInviteFlags.UserID == "" {
 			return errors.New("must provide user (either --email|-e or --user-id|-u)")
 		}
 
-		if message == "" {
+		if teamInviteFlags.Message == "" {
 			return errors.New("must provide message (--message or -m)")
 		}
 
-		if email != "" {
-			fmt.Printf("inviting user \"%s\" into team %s\n", email, teamID)
-			invite, err = api.Teams().InviteByEmail(teamID, email, message, role)
+		if teamInviteFlags.Email != "" {
+			fmt.Printf("inviting user \"%s\" into team %s\n", teamInviteFlags.Email, teamID)
+			invite, err = api.Teams().InviteByEmail(
+				teamID,
+				teamInviteFlags.Email,
+				teamInviteFlags.Message,
+				teamInviteFlags.Role,
+			)
 		}
 
 		if err != nil {
@@ -78,19 +73,8 @@ var teamInviteCmd = &cobra.Command{
 func init() {
 	teamsCmd.AddCommand(teamInviteCmd)
 
-	teamInviteCmd.Flags().StringP("email", "e", "", "Email address of the user to invite");
-	teamInviteCmd.Flags().StringP("user-id", "u", "", "User ID of the user to invite")
-	teamInviteCmd.Flags().StringP("message", "m", "", "Invitation message")
-	teamInviteCmd.Flags().StringP("role", "r", "", "User role")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// inviteCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// inviteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
+	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Email, "email", "e", "", "Email address of the user to invite");
+	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.UserID, "user-id", "u", "", "User ID of the user to invite")
+	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Message, "message", "m", "", "Invitation message")
+	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Role, "role", "r", "", "User role")
 }
