@@ -119,7 +119,7 @@ func init() {
 
 	loginCmd.Flags().StringP("username", "u", "", "The username with which to connect")
 	loginCmd.Flags().StringP("password", "p", "", "The password with which to connect")
-	loginCmd.Flags().String("auth-server", "https://signup.dev.spaces.de", "The URL of the SPACES authentication server")
+	loginCmd.Flags().String("auth-server", "https://signup.spaces.de", "The URL of the SPACES authentication server")
 
 	viper.BindPFlag("authServer", loginCmd.Flags().Lookup("auth-server"))
 	viper.BindEnv("authServer", "SPACES_AUTH_SERVER")

@@ -66,7 +66,7 @@ func init() {
 	// will be global for your application.
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spaces/spaceconfig.yaml)")
-	RootCmd.PersistentFlags().StringVar(&apiServer, "api-server", "https://api.dev.spaces.de", "API endpoint to connect to")
+	RootCmd.PersistentFlags().StringVar(&apiServer, "api-server", "https://api.spaces.de", "API endpoint to connect to")
 	RootCmd.PersistentFlags().BoolVar(&nonInteractive, "non-interactive", false, "Disable interactive prompts")
 	RootCmd.PersistentFlags().String("token-file", "~/.spaces/token", "The file in which to store the authentication token")
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Be more chatty")
