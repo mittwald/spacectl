@@ -14,7 +14,7 @@ var teamDeleteFlags struct {
 }
 
 var teamDeleteCmd = &cobra.Command{
-	Use:     "delete",
+	Use:     "delete <dns-label|id>",
 	Aliases: []string{"rm"},
 	Short:   "Delete a team",
 	Long: `This command deletes a team.
