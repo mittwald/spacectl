@@ -4,7 +4,7 @@ stages:
   - publish
 
 go-compile:test:
-  image: golang:1.8.3
+  image: golang:1.8.4
   stage: test
   before_script:
     - mkdir -p $GOPATH/src/github.com/mittwald
@@ -15,7 +15,7 @@ go-compile:test:
     - go build
 
 .compile-template: &compile_template
-  image: golang:1.8.3
+  image: golang:1.8.4
   stage: compile
   before_script:
     - mkdir -p $GOPATH/src/github.com/mittwald
