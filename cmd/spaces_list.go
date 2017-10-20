@@ -38,7 +38,7 @@ var spacesListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "CREATED")
+		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "STATUS", "CREATED")
 
 		for _, space := range ownedSpaces {
 			round := time.Second
@@ -50,6 +50,7 @@ var spacesListCmd = &cobra.Command{
 				space.Team.Name,
 				space.Name.HumanReadableName,
 				strings.Join(space.StagesNames(), ", "),
+				space.Status,
 				since+" ago",
 			)
 		}

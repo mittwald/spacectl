@@ -28,6 +28,7 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, out io.Writer) 
 	table.AddRow("  ID:", space.ID)
 	table.AddRow("  Created:", since + " ago")
 	table.AddRow("  Created At:", space.CreatedAt.String())
+	table.AddRow("  Status:", space.Status)
 	table.AddRow("  Name:")
 	table.AddRow("    Human-readable:", space.Name.HumanReadableName)
 	table.AddRow("    DNS label:", space.Name.DNSName)
@@ -43,14 +44,21 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, out io.Writer) 
 
 	stageTable := uitable.New()
 	stageTable.Wrap = true
-	stageTable.AddRow("  NAME", "APPLICATION", "VERSION SPEC", "ACTUAL VERSION", "DNS NAMES")
+	stageTable.AddRow("  NAME", "APPLICATION", "VERSION SPEC", "ACTUAL VERSION", "RUNNING", "DNS NAMES")
 
 	for _, s := range space.Stages {
+		running := "no"
+
+		if s.Running {
+			running = "yes"
+		}
+
 		stageTable.AddRow(
 			"  " + s.Name,
 			s.Application.ID,
 			s.VersionConstraint,
 			s.Version.Number,
+			running,
 			strings.Join(s.DNSNames, "\n"),
 		)
 	}
