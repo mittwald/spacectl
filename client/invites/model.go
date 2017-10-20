@@ -21,11 +21,12 @@ type Invite struct {
 	Links   lowlevel.LinkList `json:"_links"`
 	Actions lowlevel.LinkList `json:"_actions"`
 
-	ID       string    `json:"id"`
-	IssuedAt time.Time `json:"issuedAt"`
-	Message  string    `json:"message"`
-	State    string    `json:"state"`
-	Inviter  *UserRef  `json:"inviter"`
-	Invitee  *UserRef  `json:"invitee"`
-	Team     *TeamRef  `json:"team"`
+	ID           string    `json:"id"`
+	IssuedAt     time.Time `json:"issuedAt"`
+	Message      string    `json:"message"`
+	State        string    `json:"state"`
+	Inviter      *UserRef  `json:"inviter"`
+	Invitee      *UserRef  `json:"invitee"`
+	InviteeEmail string    `json:"inviteeEmail"`
+	Team         *TeamRef  `json:"team"`
 }
