@@ -11,7 +11,7 @@ type Message struct {
 }
 
 func (m Message) String() string {
-	if m.Message != "" && m.Error != "" {
+	if m.Message != "" && m.Error != "" && m.Error != nil {
 		return fmt.Sprintf("%s (%s)", m.Message, m.Error)
 	}
 

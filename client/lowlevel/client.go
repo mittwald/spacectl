@@ -184,9 +184,19 @@ func (c *SpacesLowlevelClient) request(method string, path string, body interfac
 	if res.StatusCode >= 400 {
 		msg := Message{}
 
+		var buf bytes.Buffer
+		io.Copy(&buf, res.Body)
+
+		reader := bytes.NewReader(buf.Bytes())
+
 		// The error here can safely be ignored since it does not matter much, anyway.
 		// Either the response body contains a "msg" or it doesn't.
-		_ = json.NewDecoder(res.Body).Decode(&msg)
+		//_ = json.NewDecoder(res.Body).Decode(&msg)
+		json.Unmarshal(buf.Bytes(), &msg)
+
+		reader.Seek(0, io.SeekStart)
+		responseBytes, _ := ioutil.ReadAll(reader)
+		c.logger.Println(string(responseBytes))
 
 		c.logger.Printf("response: %v", msg)
 
