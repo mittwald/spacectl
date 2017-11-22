@@ -191,7 +191,6 @@ func (c *SpacesLowlevelClient) request(method string, path string, body interfac
 
 		// The error here can safely be ignored since it does not matter much, anyway.
 		// Either the response body contains a "msg" or it doesn't.
-		//_ = json.NewDecoder(res.Body).Decode(&msg)
 		json.Unmarshal(buf.Bytes(), &msg)
 
 		reader.Seek(0, io.SeekStart)
