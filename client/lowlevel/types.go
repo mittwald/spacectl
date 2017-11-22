@@ -3,6 +3,7 @@ package lowlevel
 import (
 	"fmt"
 	"strings"
+	"net/url"
 )
 
 type Message struct {
@@ -49,6 +50,15 @@ func (l Link) WithParam(param, value string) Link {
 
 func (l Link) Get(client *SpacesLowlevelClient, result interface{}) error {
 	return client.Get(l.Href, result)
+}
+
+func (l Link) GetWithQuery(q url.Values, client *SpacesLowlevelClient, result interface{}) error {
+	if len(q) == 0{
+		return l.Get(client, result)
+	}
+
+	u := fmt.Sprintf("%s?%s", l.Href, q.Encode())
+	return client.Get(u, result)
 }
 
 func (l Link) Post(client *SpacesLowlevelClient, body interface{}, result interface{}) error {

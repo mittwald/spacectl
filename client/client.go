@@ -9,12 +9,14 @@ import (
 	"io/ioutil"
 	"github.com/mittwald/spacectl/client/spaces"
 	"github.com/mittwald/spacectl/client/sshkeys"
+	"github.com/mittwald/spacectl/client/backups"
 )
 
 type SpacesClient interface {
 	Teams() teams.TeamsClient
 	Invites() invites.InvitesClient
 	Spaces() spaces.SpacesClient
+	Backups() backups.BackupClient
 	SSHKeys() sshkeys.SSHKeyClient
 }
 
@@ -55,6 +57,10 @@ func (c *spacesClient) Invites() invites.InvitesClient {
 
 func (c *spacesClient) Spaces() spaces.SpacesClient {
 	return spaces.NewSpacesClient(c.client, c.logger)
+}
+
+func (c *spacesClient) Backups() backups.BackupClient {
+	return backups.NewBackupClient(c.client, c.logger)
 }
 
 func (c *spacesClient) SSHKeys() sshkeys.SSHKeyClient {
