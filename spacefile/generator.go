@@ -1,7 +1,7 @@
 package spacefile
 
 import (
-	"html/template"
+	"text/template"
 	"io"
 )
 
