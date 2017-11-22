@@ -39,10 +39,12 @@ type Recovery struct {
 	Links   lowlevel.LinkList `json:"_links"`
 	Actions lowlevel.LinkList `json:"_actions"`
 
-	ID          string    `json:"id"`
-	StartedAt   time.Time `json:"startedAt"`
-	CompletedAt time.Time `json:"completedAt"`
-	Status      string    `json:"status"`
+	ID          string      `json:"id"`
+	StartedAt   time.Time   `json:"startedAt"`
+	CompletedAt time.Time   `json:"completedAt"`
+	Status      string      `json:"status"`
+	Files       interface{} `json:"files"`
+	Databases   interface{} `json:"databases"`
 
 	Backup *BackupRef `json:"backup,omitempty"`
 	Stage  *StageRef  `json:"stage,omitempty"`

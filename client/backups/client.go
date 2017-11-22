@@ -35,14 +35,24 @@ type BackupClient interface {
 
 type RecoveryClient interface {
 	ListForSpace(spaceID string) ([]Recovery, error)
-	ListForBackup(backupID string) ([]Recovery, error)
+	ListForBackupID(backupID string) ([]Recovery, error)
+	ListForBackup(backup *Backup) ([]Recovery, error)
 }
 
 func NewBackupClient(c *lowlevel.SpacesLowlevelClient, l *log.Logger) BackupClient {
 	return &backupClient{c, l}
 }
 
+func NewRecoveryClient(c *lowlevel.SpacesLowlevelClient, l *log.Logger) RecoveryClient {
+	return &recoveryClient{c, l}
+}
+
 type backupClient struct {
+	client *lowlevel.SpacesLowlevelClient
+	logger *log.Logger
+}
+
+type recoveryClient struct {
 	client *lowlevel.SpacesLowlevelClient
 	logger *log.Logger
 }

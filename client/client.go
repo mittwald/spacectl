@@ -17,6 +17,7 @@ type SpacesClient interface {
 	Invites() invites.InvitesClient
 	Spaces() spaces.SpacesClient
 	Backups() backups.BackupClient
+	Recoveries() backups.RecoveryClient
 	SSHKeys() sshkeys.SSHKeyClient
 }
 
@@ -61,6 +62,10 @@ func (c *spacesClient) Spaces() spaces.SpacesClient {
 
 func (c *spacesClient) Backups() backups.BackupClient {
 	return backups.NewBackupClient(c.client, c.logger)
+}
+
+func (c *spacesClient) Recoveries() backups.RecoveryClient {
+	return backups.NewRecoveryClient(c.client, c.logger)
 }
 
 func (c *spacesClient) SSHKeys() sshkeys.SSHKeyClient {

@@ -1,8 +1,46 @@
 package backups
 
-import "errors"
+import "github.com/mittwald/spacectl/client/errors"
+
+type recoveryRequest struct {
+	Files interface{} `json:"files"`
+	Databases interface{} `json:"databases"`
+}
+
+func (r *RecoverySpec) buildRequest() interface{} {
+	switch r.Type {
+	case RecoverAll:
+		return "all"
+	case RecoverNone:
+		return "none"
+	case RecoverSpecific:
+		return r.Items
+	}
+
+	return "all"
+}
 
 func (c *backupClient) Recover(backupID string, files RecoverySpec, databases RecoverySpec) (*Recovery, error) {
-	// TODO
-	return nil, errors.New("not implemented")
+	backup, err := c.Get(backupID)
+	if err != nil {
+		return nil, err
+	}
+
+	recoverLink, err := backup.Actions.GetLinkByRel("recover")
+	if err != nil {
+		return nil, errors.ErrUnauthorized{Inner: err, Msg: "recovery is not available for this backup"}
+	}
+
+	res := Recovery{}
+	req := recoveryRequest{
+		Files: files.buildRequest(),
+		Databases: databases.buildRequest(),
+	}
+
+	err = recoverLink.Execute(c.client, req, res)
+	if err != nil {
+		return nil, errors.ErrNested{Inner: err, Msg: "could not start backup recovery"}
+	}
+
+	return &res, nil
 }

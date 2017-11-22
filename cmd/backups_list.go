@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
-	"time"
 	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/mittwald/spacectl/client/backups"
+	"github.com/mittwald/spacectl/view"
+	"os"
 )
 
 var backupsListFlags struct {
@@ -16,7 +15,7 @@ var backupsListFlags struct {
 }
 
 var backupsListCmd = &cobra.Command{
-	Use:     "list",
+	Use:     "list --space <space-id> [--stage <stage>] [--keep|-k]",
 	Aliases: []string{"ls"},
 	Short:   "List backups",
 	Long:    `Lists backups`,
@@ -31,50 +30,19 @@ var backupsListCmd = &cobra.Command{
 			OnlyKeep: backupsListFlags.Keep,
 		}
 
-		var b []backups.Backup
+		var backupList []backups.Backup
 		if backupsListFlags.StageName != "" {
-			b, err = api.Backups().ListForStage(space.ID, backupsListFlags.StageName, &opts)
+			backupList, err = api.Backups().ListForStage(space.ID, backupsListFlags.StageName, &opts)
 		} else {
-			b, err = api.Backups().ListForSpace(space.ID, &opts)
+			backupList, err = api.Backups().ListForSpace(space.ID, &opts)
 		}
 
 		if err != nil {
 			return err
 		}
 
-		if len(b) == 0 {
-			fmt.Println("No backups found.")
-			return nil
-		}
-
-		table := uitable.New()
-		table.MaxColWidth = 50
-		table.AddRow("ID", "STAGE", "STATUS", "KEEP", "DESCRIPTION", "CREATED")
-
-		for _, backup := range b {
-			since := helper.HumanReadableDateDiff(time.Now(), backup.StartedAt)
-			stage := backupsListFlags.StageName
-
-			keep := "no"
-			if backup.Keep {
-				keep = "yes"
-			}
-
-			if stage == "" && backup.Stage != nil {
-				stage = backup.Stage.Name
-			}
-
-			table.AddRow(
-				backup.ID,
-				stage,
-				backup.Status,
-				keep,
-				backup.Description,
-				since+" ago",
-			)
-		}
-
-		fmt.Println(table)
+		v := view.TabularBackupView{}
+		v.List(backupList, backupsListFlags.StageName, os.Stdout)
 
 		return nil
 	},

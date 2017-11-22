@@ -1,8 +1,10 @@
 package backups
 
-import "errors"
+import (
+	"fmt"
+)
 
 func (c *backupClient) Delete(backupID string) error {
-	// TODO
-	return errors.New("not implemented")
+	backupURL := fmt.Sprintf("/backups/%s", backupID)
+	return c.client.Delete(backupURL, nil)
 }

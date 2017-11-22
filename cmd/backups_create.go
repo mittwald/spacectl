@@ -16,11 +16,11 @@ var backupsCreateFlags struct {
 }
 
 var backupsCreateCmd = &cobra.Command{
-	Use:   "create",
+	Use:   "create --space <space-id> --stage <stage> [--keep|-k] [--description|-d <description>]",
 	Short: "Create new backup",
 	Long:  `Creates a new backup.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(args, spaceFile, &backupsListFlags.SpaceID, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &backupsCreateFlags.SpaceID, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err
@@ -38,8 +38,8 @@ var backupsCreateCmd = &cobra.Command{
 			return err
 		}
 
-		v := view.TabularBackupDetailView{}
-		v.BackupDetail(backup, []backups.Recovery{}, os.Stdout)
+		v := view.TabularBackupView{}
+		v.Detail(backup, []backups.Recovery{}, space, os.Stdout)
 
 		return nil
 	},

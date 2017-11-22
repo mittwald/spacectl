@@ -16,7 +16,7 @@ var spacesShowCmd = &cobra.Command{
 	Short: "Show details regarding a specific space",
 	Long: "Show details regarding a specific space",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(nil, spaceFile, &spacesShowFlags.SpaceID, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &spacesShowFlags.SpaceID, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err

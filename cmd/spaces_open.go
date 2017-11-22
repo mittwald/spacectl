@@ -27,7 +27,7 @@ Alternatively, use the -t and -s flags to specify team and space ID/name.
 By default, this command will open the Space's first defined stage
 (typically, "production"). To change this, supply the --stage or -e flag.'`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(nil, spaceFile, &spaceOpenFlags.SpaceIDOrName, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &spaceOpenFlags.SpaceIDOrName, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err

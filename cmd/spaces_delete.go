@@ -23,7 +23,7 @@ var spaceDeleteCmd = &cobra.Command{
 CAUTION: This command is destructive. Once you have deleted a Space, you
 will not get it back!`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(nil, spaceFile, &spaceDeleteFlags.SpaceID, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &spaceDeleteFlags.SpaceID, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err
