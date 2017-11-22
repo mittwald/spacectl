@@ -23,10 +23,6 @@ func (t *teamsClient) InviteByEmail(teamID string, email string, message string,
 		return invite, errors.New("email must not be empty")
 	}
 
-	if message == "" {
-		return invite, errors.New("message must not be empty")
-	}
-
 	if role != "" && role != "member" && role != "owner" {
 		return invite, errors.New("role must be either \"member\" or \"owner\"")
 	}
