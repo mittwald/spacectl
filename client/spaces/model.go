@@ -32,6 +32,7 @@ type Stage struct {
 	VersionConstraint string      `json:"versionConstraint"`
 	UserData          interface{} `json:"userData"`
 	DNSNames          []string    `json:"dnsNames"`
+	Running           bool        `json:"running"`
 }
 
 type StageDeclaration struct {
@@ -50,6 +51,7 @@ type Space struct {
 	DNSNames  []string          `json:"dnsNames"`
 	Stages    []Stage           `json:"stages"`
 	Team      TeamRef           `json:"team"`
+	Running   bool              `json:"running"`
 }
 
 type SpaceDeclaration struct {

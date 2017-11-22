@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 	"strings"
 	"time"
+	"github.com/mittwald/spacectl/cmd/helper"
 )
 
 // listCmd represents the list command
@@ -38,11 +39,15 @@ var spacesListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "CREATED")
+		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "RUNNING", "CREATED")
 
 		for _, space := range ownedSpaces {
-			round := time.Second
-			since := time.Now().Round(round).Sub(space.CreatedAt.Round(round)).String()
+			since := helper.HumanReadableDateDiff(time.Now(), space.CreatedAt)
+
+			running := "no"
+			if space.Running {
+				running = "yes"
+			}
 
 			table.AddRow(
 				space.ID,
@@ -50,6 +55,7 @@ var spacesListCmd = &cobra.Command{
 				space.Team.Name,
 				space.Name.HumanReadableName,
 				strings.Join(space.StagesNames(), ", "),
+				running,
 				since+" ago",
 			)
 		}
