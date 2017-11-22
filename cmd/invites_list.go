@@ -39,12 +39,17 @@ var invitesListCmd = &cobra.Command{
 			table.AddRow("ID", "ISSUED", "STATE", "TEAM NAME", "INVITEE EMAIL", "MSG")
 
 			for _, i := range inv {
+				email := i.InviteeEmail
+				if i.Invitee != nil {
+					email = i.Invitee.Email
+				}
+
 				table.AddRow(
 					i.ID,
 					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt) + " ago",
 					i.State,
 					i.Team.Name,
-					i.Invitee.Email,
+					email,
 					i.Message,
 				)
 			}
