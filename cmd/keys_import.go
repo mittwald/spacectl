@@ -9,6 +9,10 @@ import (
 	"os"
 )
 
+var keyImportFlags struct {
+	Comment string
+}
+
 var keyImportCmd = &cobra.Command{
 	Use:   "import <key-file>",
 	Short: "Import an existing SSH public key",
@@ -30,6 +34,10 @@ var keyImportCmd = &cobra.Command{
 			return err
 		}
 
+		if keyImportFlags.Comment != "" {
+			comment = keyImportFlags.Comment
+		}
+
 		createdKey, err := api.SSHKeys().Add(key.Marshal(), key.Type(), comment)
 		if err != nil {
 			return err
@@ -44,4 +52,6 @@ var keyImportCmd = &cobra.Command{
 
 func init() {
 	keysCmd.AddCommand(keyImportCmd)
+
+	keyImportCmd.Flags().StringVarP(&keyImportFlags.Comment, "comment", "c", "", "Public key comment (if left out, the comment from the public key file will be used)")
 }
