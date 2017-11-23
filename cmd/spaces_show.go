@@ -7,13 +7,16 @@ import (
 	"github.com/mittwald/spacectl/cmd/helper"
 )
 
-// spacesShowCmd represents the show command
+var spacesShowFlags struct {
+	SpaceID string
+}
+
 var spacesShowCmd = &cobra.Command{
 	Use:   "show -t <team> <space-name>",
 	Short: "Show details regarding a specific space",
 	Long: "Show details regarding a specific space",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(args, spaceFile, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &spacesShowFlags.SpaceID, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err
@@ -28,4 +31,5 @@ var spacesShowCmd = &cobra.Command{
 
 func init() {
 	spacesCmd.AddCommand(spacesShowCmd)
+	spacesShowCmd.Flags().StringVarP(&spacesShowFlags.SpaceID, "space", "s", "", "Space ID or name")
 }

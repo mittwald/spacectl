@@ -10,7 +10,10 @@ import (
 	"strings"
 )
 
-var spaceOpenStage string = "production"
+var spaceOpenFlags struct {
+	SpaceIDOrName string
+	Stage string
+}
 
 // openCmd represents the open command
 var spaceOpenCmd = &cobra.Command{
@@ -24,7 +27,7 @@ Alternatively, use the -t and -s flags to specify team and space ID/name.
 By default, this command will open the Space's first defined stage
 (typically, "production"). To change this, supply the --stage or -e flag.'`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(args, spaceFile, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &spaceOpenFlags.SpaceIDOrName, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err
@@ -34,7 +37,7 @@ By default, this command will open the Space's first defined stage
 		var existingStageNames []string = make([]string, len(space.Stages))
 
 		for i := range space.Stages {
-			if space.Stages[i].Name == spaceOpenStage {
+			if space.Stages[i].Name == spaceOpenFlags.Stage {
 				stage = &space.Stages[i]
 			}
 			existingStageNames[i] = space.Stages[i].Name
@@ -45,7 +48,7 @@ By default, this command will open the Space's first defined stage
 			return fmt.Errorf(
 				"The Space '%s' does not have a stage '%s'. Existing stages are: '%s'.",
 				space.ID,
-				spaceOpenStage,
+				spaceOpenFlags.Stage,
 				strings.Join(existingStageNames, "', '"),
 			)
 		}
@@ -66,5 +69,6 @@ By default, this command will open the Space's first defined stage
 func init() {
 	spacesCmd.AddCommand(spaceOpenCmd)
 
-	spaceOpenCmd.Flags().StringVarP(&spaceOpenStage, "stage", "e", "production", "The stage to open")
+	spaceOpenCmd.Flags().StringVarP(&spaceOpenFlags.Stage, "stage", "e", "production", "The stage to open")
+	spaceOpenCmd.Flags().StringVarP(&spaceOpenFlags.SpaceIDOrName, "space", "s", "", "The space to open")
 }

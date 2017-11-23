@@ -10,13 +10,20 @@ import (
 	"github.com/mittwald/spacectl/client"
 )
 
-func GetSpaceFromContext(args []string, spaceFileName string, api client.SpacesClient) (*spaces.Space, error) {
-	if len(args) >= 1 {
+func GetSpaceFromContext(args []string, spaceFileName string, flagValue *string, api client.SpacesClient) (*spaces.Space, error) {
+	providedSpaceID := ""
+	if flagValue != nil {
+		providedSpaceID = *flagValue
+	} else if args != nil && len(args) >= 1 {
+		providedSpaceID = args[0]
+	}
+
+	if providedSpaceID != "" {
 		teamID := viper.GetString("teamID")
 		if teamID != "" {
-			return api.Spaces().GetByTeamAndName(teamID, args[0])
+			return api.Spaces().GetByTeamAndName(teamID, providedSpaceID)
 		} else {
-			return api.Spaces().GetByID(args[0])
+			return api.Spaces().GetByID(providedSpaceID)
 		}
 	}
 
@@ -34,8 +41,8 @@ func GetSpaceFromContext(args []string, spaceFileName string, api client.SpacesC
 
 	if _, ok := err.(spacefile.ErrSpacefileNotFound); ok {
 		err := multierror.Append(nil,
-			fmt.Errorf("No spacefile found at %s", spaceFileName),
-			errors.New("Missing team ID (--team, -t or $SPACES_TEAM_ID)"),
+			fmt.Errorf("no spacefile found at %s", spaceFileName),
+			errors.New("missing team ID (--team, -t or $SPACES_TEAM_ID)"),
 		)
 		return nil, err
 	}

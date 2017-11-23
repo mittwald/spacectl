@@ -9,7 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var spaceDeleteForce bool
+var spaceDeleteFlags struct {
+	SpaceID string
+	Force bool
+}
 
 var spaceDeleteCmd = &cobra.Command{
 	Use:     "delete",
@@ -20,13 +23,13 @@ var spaceDeleteCmd = &cobra.Command{
 CAUTION: This command is destructive. Once you have deleted a Space, you
 will not get it back!`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		space, err := helper.GetSpaceFromContext(args, spaceFile, api)
+		space, err := helper.GetSpaceFromContext(args, spaceFile, &spaceDeleteFlags.SpaceID, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
 			return err
 		}
 
-		if !spaceDeleteForce {
+		if !spaceDeleteFlags.Force {
 			buf := bytes.Buffer{}
 			view.TabularSpaceDetailView{}.SpaceDetail(space, &buf)
 
@@ -51,5 +54,6 @@ will not get it back!`,
 func init() {
 	spacesCmd.AddCommand(spaceDeleteCmd)
 
-	spaceDeleteCmd.Flags().BoolVarP(&spaceDeleteForce, "yes", "y", false, "Do not prompt for confirmation")
+	spaceDeleteCmd.Flags().BoolVarP(&spaceDeleteFlags.Force, "yes", "y", false, "Do not prompt for confirmation")
+	spaceDeleteCmd.Flags().StringVarP(&spaceDeleteFlags.SpaceID, "space", "s", "", "Space ID or name")
 }
