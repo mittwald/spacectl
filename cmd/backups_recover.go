@@ -16,8 +16,8 @@ var backupsRecoverFlags struct {
 
 var backupsRecoverCmd = &cobra.Command{
 	Use:     "recover <backup-id> [--without-databases] [--without-files|--file=<file>...]",
-	Short:   "Delete a specific backup",
-	Long:    `This command deletes a specific backup.`,
+	Short:   "Recover a specific backup",
+	Long:    `This command recovers a specific backup.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			cmd.SilenceUsage = false
