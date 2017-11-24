@@ -2,6 +2,7 @@ package backups
 
 import (
 	"github.com/mittwald/spacectl/client/lowlevel"
+	"github.com/mittwald/spacectl/client/spaces"
 	"time"
 )
 
@@ -9,12 +10,14 @@ type Backup struct {
 	Links   lowlevel.LinkList `json:"_links"`
 	Actions lowlevel.LinkList `json:"_actions"`
 
-	ID          string    `json:"id"`
-	StartedAt   time.Time `json:"startedAt"`
-	CompletedAt time.Time `json:"completedAt"`
-	Status      string    `json:"status"`
-	Keep        bool      `json:"keep"`
-	Description string    `json:"description"`
+	ID          string             `json:"id"`
+	StartedAt   time.Time          `json:"startedAt"`
+	CompletedAt time.Time          `json:"completedAt"`
+	Status      string             `json:"status"`
+	Keep        bool               `json:"keep"`
+	Description string             `json:"description"`
+	Software    spaces.SoftwareRef `json:"software"`
+	Version     spaces.VersionRef  `json:"version"`
 
 	Stage *StageRef `json:"stage"`
 	Space *SpaceRef `json:"space"`
@@ -45,6 +48,7 @@ type Recovery struct {
 	Status      string      `json:"status"`
 	Files       interface{} `json:"files"`
 	Databases   interface{} `json:"databases"`
+	Metadata    interface{} `json:"metadata"`
 
 	Backup *BackupRef `json:"backup,omitempty"`
 	Stage  *StageRef  `json:"stage,omitempty"`
