@@ -25,7 +25,7 @@ func (t TabularBackupView) List(backupList []backups.Backup, stage string, out i
 
 	table := uitable.New()
 	table.MaxColWidth = 50
-	table.AddRow("ID", "STAGE", "STATUS", "KEEP", "DESCRIPTION", "CREATED")
+	table.AddRow("ID", "STAGE", "STATUS", "KEEP", "DESCRIPTION", "SOFTWARE", "CREATED")
 
 	for _, backup := range backupList {
 		since := helper.HumanReadableDateDiff(time.Now(), backup.StartedAt)
@@ -45,6 +45,7 @@ func (t TabularBackupView) List(backupList []backups.Backup, stage string, out i
 			backup.Status,
 			keep,
 			backup.Description,
+			fmt.Sprintf("%s %s", backup.Software.ID, backup.Version.Number),
 			since+" ago",
 		)
 	}
@@ -74,6 +75,7 @@ func (t TabularBackupView) Detail(backup *backups.Backup, recoveries []backups.R
 
 	table.AddRow("  Status:", backup.Status)
 	table.AddRow("  Description:", backup.Description)
+	table.AddRow("  Application:", fmt.Sprintf("%s %s", backup.Software.ID, backup.Version.Number))
 
 	if space != nil {
 		table.AddRow("  Space:")
