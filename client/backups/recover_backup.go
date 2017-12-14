@@ -3,6 +3,7 @@ package backups
 import "github.com/mittwald/spacectl/client/errors"
 
 type recoveryRequest struct {
+	Stage string `json:"stage"`
 	Files interface{} `json:"files"`
 	Databases interface{} `json:"databases"`
 	Metadata interface{} `json:"metadata"`
@@ -21,7 +22,7 @@ func (r *RecoverySpec) buildRequest() interface{} {
 	return "all"
 }
 
-func (c *backupClient) Recover(backupID string, files RecoverySpec, databases RecoverySpec, metadata RecoverySpec) (*Recovery, error) {
+func (c *backupClient) Recover(backupID string, stage string, files RecoverySpec, databases RecoverySpec, metadata RecoverySpec) (*Recovery, error) {
 	backup, err := c.Get(backupID)
 	if err != nil {
 		return nil, err
@@ -34,6 +35,7 @@ func (c *backupClient) Recover(backupID string, files RecoverySpec, databases Re
 
 	res := Recovery{}
 	req := recoveryRequest{
+		Stage: stage,
 		Files: files.buildRequest(),
 		Databases: databases.buildRequest(),
 		Metadata: metadata.buildRequest(),
