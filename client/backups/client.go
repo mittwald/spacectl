@@ -30,7 +30,7 @@ type BackupClient interface {
 	Get(backupID string) (*Backup, error)
 	Create(spaceID string, stage string, keep bool, description string) (*Backup, error)
 	Delete(backupID string) error
-	Recover(backupID string, files RecoverySpec, databases RecoverySpec, metadata RecoverySpec) (*Recovery, error)
+	Recover(backupID string, stage string, files RecoverySpec, databases RecoverySpec, metadata RecoverySpec) (*Recovery, error)
 }
 
 type RecoveryClient interface {
