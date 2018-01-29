@@ -3,8 +3,18 @@ stages:
   - compile
   - publish
 
+go-test:
+  image: golang:1.9.3-alpine
+  stage: test
+  before_script:
+    - mkdir -p $GOPATH/src/github.com/mittwald
+    - ln -nfs $PWD $GOPATH/src/github.com/mittwald/spacectl
+    - cd $GOPATH/src/github.com/mittwald/spacectl
+  script:
+    - go test ./...
+
 go-compile:test:
-  image: golang:1.8.4
+  image: golang:1.9.3-alpine
   stage: test
   before_script:
     - mkdir -p $GOPATH/src/github.com/mittwald
@@ -15,7 +25,7 @@ go-compile:test:
     - go build
 
 .compile-template: &compile_template
-  image: golang:1.8.4
+  image: golang:1.9.3-alpine
   stage: compile
   before_script:
     - mkdir -p $GOPATH/src/github.com/mittwald
