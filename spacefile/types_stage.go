@@ -6,10 +6,11 @@ import (
 )
 
 type StageDef struct {
-	Name         string        `hcl:",key"`
-	Inherit      string        `hcl:"inherit"`
+	Name         string          `hcl:",key"`
+	Inherit      string          `hcl:"inherit"`
 	Applications SoftwareDefList `hcl:"application"`
 	Databases    SoftwareDefList `hcl:"database"`
+	Cronjobs     CronjobDefList  `hcl:"cron"`
 
 	inheritStage *StageDef
 }
