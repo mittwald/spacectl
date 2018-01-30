@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"github.com/mittwald/spacectl/client/lowlevel"
+	"github.com/mittwald/spacectl/client/software"
 	"github.com/mittwald/spacectl/client/teams"
 	"github.com/mittwald/spacectl/client/invites"
 	"log"
@@ -19,6 +20,8 @@ type SpacesClient interface {
 	Backups() backups.BackupClient
 	Recoveries() backups.RecoveryClient
 	SSHKeys() sshkeys.SSHKeyClient
+	Applications() software.SoftwareClient
+	Databases() software.SoftwareClient
 }
 
 type SpacesClientConfig struct {
@@ -70,4 +73,12 @@ func (c *spacesClient) Recoveries() backups.RecoveryClient {
 
 func (c *spacesClient) SSHKeys() sshkeys.SSHKeyClient {
 	return sshkeys.NewSSHKeyClient(c.client, c.logger)
+}
+
+func (c *spacesClient) Applications() software.SoftwareClient {
+	return software.NewSoftwareClient(c.client, "applications")
+}
+
+func (c *spacesClient) Databases() software.SoftwareClient {
+	return software.NewSoftwareClient(c.client, "databases")
 }

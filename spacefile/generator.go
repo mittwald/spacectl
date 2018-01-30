@@ -1,8 +1,9 @@
 package spacefile
 
 import (
-	"text/template"
+	"github.com/mittwald/spacectl/client/software"
 	"io"
+	"text/template"
 )
 
 const SpacefileTemplate = `version = "1"
@@ -15,14 +16,14 @@ space "{{ .SpaceDNSLabel }}" {
   team = "{{ .TeamName }}"
 
   stage production {
-    application typo3 {
+    application {{ .Software.Identifier }} {
 
       // The "version" field supports semantic version ranges. Valid
       // examples might be "8.7.0", "~8.7.0", ">=7.0.0, <7.3".
       // We will always pick the latest available version that matches
       // this constraint and update them regularly, so do not specify
       // your version range too loosly for a production environment.
-      version = "~8.7.0"
+      version = "~{{ .Software.LatestVersion.Number }}"
 
       userData {
         initialAdminUser {
@@ -47,13 +48,15 @@ type templateData struct {
 	TeamName string
 	SpaceName string
 	SpaceDNSLabel string
+	Software *software.Software
 }
 
-func Generate(teamName string, spaceName string, spaceDNSLabel string, out io.Writer) (error) {
+func Generate(teamName string, spaceName string, spaceDNSLabel string, software *software.Software, out io.Writer) (error) {
 	t := template.Must(template.New("spacefile").Parse(SpacefileTemplate))
 	return t.Execute(out, templateData{
 		teamName,
 		spaceName,
 		spaceDNSLabel,
+		software,
 	})
 }

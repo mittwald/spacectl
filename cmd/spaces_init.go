@@ -3,20 +3,23 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"errors"
-	"strings"
-	"regexp"
-	"github.com/spf13/viper"
-	"github.com/hashicorp/go-multierror"
-	"os"
-	"github.com/mittwald/spacectl/spacefile"
 	"github.com/fatih/color"
+	"github.com/hashicorp/go-multierror"
+	"github.com/mittwald/spacectl/spacefile"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"os"
+	"regexp"
+	"strings"
 )
 
-var spaceInitForce bool
-var spaceInitName string
-var spaceInitLabel string
+var spaceInitFlags struct {
+	Force    bool
+	Name     string
+	Label    string
+	Software string
+}
 
 var spacesInitCmd = &cobra.Command{
 	Use:   "init -t <team-name>",
@@ -34,7 +37,7 @@ command to actually apply the declaration within the Spacefile.`,
 			mErr = multierror.Append(mErr, errors.New("must provide team (--team, -t or $SPACES_TEAM_ID)"))
 		}
 
-		if spaceInitName == "" {
+		if spaceInitFlags.Name == "" {
 			mErr = multierror.Append(mErr, errors.New("must provide name (--name or -n)"))
 		}
 
@@ -42,16 +45,16 @@ command to actually apply the declaration within the Spacefile.`,
 			return mErr
 		}
 
-		if spaceInitLabel == "" {
-			spaceInitLabel = regexp.MustCompile("[^a-z0-9-]").ReplaceAllString(strings.ToLower(spaceInitName), "-")
-			fmt.Printf("Using %s as auto-generated DNS label\n", color.YellowString(spaceInitLabel))
+		if spaceInitFlags.Label == "" {
+			spaceInitFlags.Label = regexp.MustCompile("[^a-z0-9-]").ReplaceAllString(strings.ToLower(spaceInitFlags.Name), "-")
+			fmt.Printf("Using %s as auto-generated DNS label\n", color.YellowString(spaceInitFlags.Label))
 		}
 
 		filePath := "./" + spacefile.DefaultFilename
 
 		_, err := os.Stat(filePath)
 		if !os.IsNotExist(err) {
-			if !spaceInitForce {
+			if !spaceInitFlags.Force {
 				RootCmd.SilenceUsage = false
 				return fmt.Errorf(`The file '%s' already exists in the current directory.
 Use the --force flag (or -f) to overwrite it.`, filePath)
@@ -60,12 +63,17 @@ Use the --force flag (or -f) to overwrite it.`, filePath)
 			}
 		}
 
+		sw, err := api.Applications().Get(spaceInitFlags.Software)
+		if err != nil {
+			return fmt.Errorf("Could not load software '%s':\n    %s", spaceInitFlags.Software, err)
+		}
+
 		fh, err := os.Create(filePath)
 		if err != nil {
 			return fmt.Errorf("Could not open '%s' for writing:\n    %s", filePath, err)
 		}
 
-		err = spacefile.Generate(teamID, spaceInitName, spaceInitLabel, fh)
+		err = spacefile.Generate(teamID, spaceInitFlags.Name, spaceInitFlags.Label, sw, fh)
 		if err != nil {
 			return fmt.Errorf("Could not generate Spacefile:\n    %s", err)
 		}
@@ -80,19 +88,10 @@ Use the --force flag (or -f) to overwrite it.`, filePath)
 func init() {
 	spacesCmd.AddCommand(spacesInitCmd)
 
-	spacesInitCmd.Flags().BoolVar(&spaceInitForce, "force", false, "Override existing Spacefile without asking")
-	spacesInitCmd.Flags().StringVarP(&spaceInitName, "name", "n", "", "Name of the new Space")
-	spacesInitCmd.Flags().StringVarP(&spaceInitLabel, "dns-label", "l", "", "DNS label of the new Space. Must be unique within the team.")
+	spacesInitCmd.Flags().BoolVar(&spaceInitFlags.Force, "force", false, "Override existing Spacefile without asking")
+	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.Name, "name", "n", "", "Name of the new Space")
+	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.Label, "dns-label", "l", "", "DNS label of the new Space. Must be unique within the team.")
+	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.Software, "software", "s", "typo3", "Software to initialize this Space with")
 
 	spacesInitCmd.MarkFlagRequired("name")
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// spacesInitCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// spacesInitCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }
