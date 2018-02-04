@@ -9,10 +9,16 @@ import (
 	"golang.org/x/oauth2"
 	"html/template"
 	"net/http"
+	"time"
 )
 
 type OAuthAuthenticationService struct {
 	AuthServerURL string
+}
+
+type AuthenticationResult struct {
+	Token string
+	ValidUntil time.Time
 }
 
 func (a *OAuthAuthenticationService) Authenticate() (*AuthenticationResult, error) {
