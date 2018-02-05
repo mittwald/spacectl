@@ -31,6 +31,15 @@ space "{{ .SpaceDNSLabel }}" {
         }
       }
     }
+
+    // cron helloworld {
+    //   schedule = "30 * * * *"
+    //   command {
+    //     command = "echo"
+    //     arguments = ["Hello World"]
+    //     workingDirectory = "/var/www"
+    //   }
+    // }
   }
 
   // You can add additional stages to your Space definition

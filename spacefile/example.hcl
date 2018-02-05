@@ -18,6 +18,16 @@ space "test-space" {
     database mysql {
       version = "5.7.*"
     }
+
+    cron typo3 {
+      schedule = "*/5 * * * *"
+      allowParallel = true
+      command {
+        command = "vendor/bin/typo3cmd"
+        arguments = ["typo3:scheduler"]
+        workingDirectory = "/var/www/typo3"
+      }
+    }
   }
 
   stage development {

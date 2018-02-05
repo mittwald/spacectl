@@ -26,21 +26,23 @@ type TeamRef struct {
 }
 
 type Stage struct {
-	Links             lowlevel.LinkList `json:"_links"`
-	Actions           lowlevel.LinkList `json:"_actions"`
+	Links   lowlevel.LinkList `json:"_links"`
+	Actions lowlevel.LinkList `json:"_actions"`
 
-	Name              string            `json:"name"`
-	Application       SoftwareRef       `json:"application"`
-	Version           VersionRef        `json:"version"`
-	VersionConstraint string            `json:"versionConstraint"`
-	UserData          interface{}       `json:"userData"`
-	DNSNames          []string          `json:"dnsNames"`
-	Running           bool              `json:"running"`
+	Name              string      `json:"name"`
+	Application       SoftwareRef `json:"application"`
+	Cronjobs          []Cronjob   `json:"cronjobs"`
+	Version           VersionRef  `json:"version"`
+	VersionConstraint string      `json:"versionConstraint"`
+	UserData          interface{} `json:"userData"`
+	DNSNames          []string    `json:"dnsNames"`
+	Running           bool        `json:"running"`
 }
 
 type StageDeclaration struct {
 	Name              string      `json:"name"`
 	Application       SoftwareRef `json:"application"`
+	Cronjobs          []Cronjob   `json:"cronjobs"`
 	VersionConstraint string      `json:"versionConstraint"`
 	UserData          interface{} `json:"userData"`
 }
