@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mittwald/spacectl/system/browser"
 
-	"github.com/spf13/cobra"
-	"github.com/mittwald/spacectl/spacefile"
-	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/cmd/helper"
+	"github.com/mittwald/spacectl/spacefile"
+	"github.com/spf13/cobra"
 	"strings"
 )
 
@@ -60,7 +61,7 @@ By default, this command will open the Space's first defined stage
 		url := "http://" + stage.DNSNames[0]
 		fmt.Printf("Opening %s\n", url)
 
-		helper.OpenURL(url)
+		browser.OpenURL(url)
 
 		return nil
 	},
