@@ -2,6 +2,7 @@ package spacefile
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -40,8 +41,7 @@ func (d *StageDef) resolveUserData() error {
 	var err error
 
 	for i := range d.Applications {
-		app := d.Applications[i]
-		app.UserData, err = unfuckHCL(d.Applications[i].UserData, "")
+		d.Applications[i].UserData, err = unfuckHCL(d.Applications[i].UserData, "")
 		mErr = multierror.Append(mErr, err)
 	}
 
