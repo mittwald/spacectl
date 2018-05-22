@@ -12,6 +12,9 @@ type SpacesClient interface {
 	GetByID(spaceID string) (*Space, error)
 	GetByTeamAndName(teamIDOrName string, spaceIDOrName string) (*Space, error)
 	Delete(spaceID string) (error)
+	UpdateApplication(spaceID, stage, targetStage, version string) (*ApplicationUpdate, error)
+	ListApplicationUpdatesByStage(spaceID, stage string) ([]ApplicationUpdate, error)
+	ListApplicationUpdatesBySpace(spaceID string) ([]ApplicationUpdate, error)
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) (SpacesClient) {

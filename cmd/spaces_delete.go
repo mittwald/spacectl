@@ -30,8 +30,13 @@ will not get it back!`,
 		}
 
 		if !spaceDeleteFlags.Force {
+			updates, err := api.Spaces().ListApplicationUpdatesBySpace(space.ID)
+			if err != nil {
+				return err
+			}
+
 			buf := bytes.Buffer{}
-			view.TabularSpaceDetailView{}.SpaceDetail(space, &buf)
+			view.TabularSpaceDetailView{}.SpaceDetail(space, updates, &buf)
 
 			ok, _ := view.Confirm("Once this Space is deleted, you will NOT be able to get it back.", buf.String())
 			if !ok {
