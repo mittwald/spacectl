@@ -7,6 +7,7 @@ type Cronjob struct {
 	Schedule      string     `json:"schedule"`
 	AllowParallel bool       `json:"allowParallel"`
 	Job           CronjobJob `json:"job"`
+	Timezone	  string	 `json:"timezone"`
 }
 
 type CronjobJob struct {
@@ -14,8 +15,8 @@ type CronjobJob struct {
 	Command          string                  `json:"command,omitempty"`
 	Arguments        []string                `json:"arguments,omitempty"`
 	WorkingDirectory string                  `json:"workingDirectory,omitempty"`
-	NextExecution    CommandCronjobExecution `json:"nextExecution,omitempty"`
-	LastExecution    CommandCronjobExecution `json:"lastExecution,omitempty"`
+	NextExecution    *CommandCronjobExecution `json:"nextExecution,omitempty"`
+	LastExecution    *CommandCronjobExecution `json:"lastExecution,omitempty"`
 }
 
 type CommandCronjobExecution struct {
