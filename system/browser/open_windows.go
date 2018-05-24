@@ -1,13 +1,25 @@
 package browser
 
-import "errors"
+import (
+	"os"
+	"os/exec"
+	"path/filepath"
+)
+
+var (
+	cmd      = "url.dll,FileProtocolHandler"
+	runDll32 = filepath.Join(os.Getenv("SYSTEMROOT"), "System32", "rundll32.exe")
+)
 
 func OpenURL(url string) error {
-	// TODO: implement this
-	return errors.New("This feature is not yet supported on Windows")
+	return WinOpen(url)
 }
 
 func OpenURLFork(url string) error {
-	// TODO: implement this
-	return errors.New("This feature is not yet supported on Windows")
+	return OpenURL(url)
+}
+
+func WinOpen(input string) *exec.Cmd {
+	cmd := exec.Command(runDll32, cmd, input)
+	return cmd.Run()
 }
