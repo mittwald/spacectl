@@ -7,6 +7,7 @@ type CronjobDef struct {
 	Schedule      string             `hcl:"schedule"`
 	AllowParallel bool               `hcl:"allowParallel"`
 	Command       *CommandCronjobDef `hcl:"command"`
+	Timezone      string             `hcl:"timezone"`
 }
 
 type CommandCronjobDef struct {
@@ -22,6 +23,7 @@ func (c CronjobDef) ToDeclaration() (spaces.Cronjob, error) {
 		ID:            c.Identifier,
 		AllowParallel: c.AllowParallel,
 		Schedule:      c.Schedule,
+		Timezone:      c.Timezone,
 	}
 
 	if c.Command != nil {

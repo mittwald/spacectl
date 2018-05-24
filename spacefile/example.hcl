@@ -27,6 +27,7 @@ space "test-space" {
         arguments = ["typo3:scheduler"]
         workingDirectory = "/var/www/typo3"
       }
+      timezone = "Europe/Berlin"
     }
   }
 
