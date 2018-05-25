@@ -40,7 +40,7 @@ space "{{ .SpaceDNSLabel }}" {
     //     arguments = ["Hello World"]
     //     workingDirectory = "/var/www"
     //   }
-	//   timezone: "Europe/Berlin"
+    //   timezone = "Europe/Berlin"
     // }
   }
 
