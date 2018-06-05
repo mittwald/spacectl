@@ -11,12 +11,12 @@ import (
 )
 
 type SpaceDetailView interface {
-	SpaceDetail(space *spaces.Space, out io.Writer)
+	SpaceDetail(space *spaces.Space, updates []spaces.ApplicationUpdate, out io.Writer)
 }
 
 type TabularSpaceDetailView struct {}
 
-func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, out io.Writer) {
+func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []spaces.ApplicationUpdate, out io.Writer) {
 	fmt.Fprintln(out, "GENERAL INFO")
 
 	table := uitable.New()
@@ -64,4 +64,38 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, out io.Writer) 
 	}
 
 	fmt.Fprintln(out, stageTable)
+	fmt.Fprintln(out, "")
+	fmt.Fprintln(out, "APPLICATION UPDATES")
+
+	if len(updates) == 0 {
+		fmt.Fprintln(out, "  No application updates found")
+	} else {
+		updateTable := uitable.New()
+		updateTable.Wrap = true
+		updateTable.AddRow("  ID", "STARTED", "COMPLETED", "VERSION", "SOURCE STAGE", "TARGET STAGE", "PROGRESS")
+
+		for _, u := range updates {
+			started := helper.HumanReadableDateDiff(time.Now(), u.StartedAt) + " ago"
+			completed := "(pending)"
+			progress := "(pending)"
+
+			if !u.CompletedAt.IsZero() {
+				completed = helper.HumanReadableDateDiff(time.Now(), u.CompletedAt) + " ago"
+			}
+
+			if u.Progress.TotalSteps > 0 {
+				progress = fmt.Sprintf("%d/%d (%s)", u.Progress.CurrentStep, u.Progress.TotalSteps, u.Progress.Status)
+			}
+
+			updateTable.AddRow(
+				"  "+u.ID,
+				started,
+				completed,
+				u.ExactVersion.Number+" ("+u.VersionConstraint+")",
+				u.SourceStage.Name,
+				u.TargetStage.Name,
+				progress,
+			)
+		}
+	}
 }

@@ -22,8 +22,13 @@ var spacesShowCmd = &cobra.Command{
 			return err
 		}
 
+		updates, err := api.Spaces().ListApplicationUpdatesBySpace(space.ID)
+		if err != nil {
+			return err
+		}
+
 		v := view.TabularSpaceDetailView{}
-		v.SpaceDetail(space, os.Stdout)
+		v.SpaceDetail(space, updates, os.Stdout)
 
 		return nil
 	},

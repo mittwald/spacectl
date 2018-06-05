@@ -33,8 +33,13 @@ CAUTION: This command can be potentially destructive.`,
 			return err
 		}
 
+		updates, err := api.Spaces().ListApplicationUpdatesBySpace(declaredSpace.ID)
+		if err != nil {
+			return err
+		}
+
 		v := view.TabularSpaceDetailView{}
-		v.SpaceDetail(declaredSpace, os.Stdout)
+		v.SpaceDetail(declaredSpace, updates, os.Stdout)
 
 		return nil
 	},
