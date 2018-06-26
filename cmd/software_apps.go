@@ -6,7 +6,7 @@ import (
 
 var appsCmd = &cobra.Command{
 	Use:     "applications",
-	Aliases: []string{"apps"},
+	Aliases: []string{"apps", "app"},
 	Short:   "View available managed applications",
 	Long:    `This command allows you to view applications that are offered as a managed service`,
 }
