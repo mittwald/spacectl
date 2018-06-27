@@ -15,6 +15,12 @@ type SoftwareRef struct {
 	HREF string `json:"href,omitempty"`
 }
 
+type SoftwareVersionRef struct {
+	Software          SoftwareRef `json:"software"`
+	VersionConstraint string      `json:"versionConstraint"`
+	UserData          interface{} `json:"userData,omitempty"`
+}
+
 type VersionRef struct {
 	Number string `json:"number"`
 }
@@ -45,11 +51,12 @@ type StageRef struct {
 }
 
 type StageDeclaration struct {
-	Name              string      `json:"name"`
-	Application       SoftwareRef `json:"application"`
-	Cronjobs          []Cronjob   `json:"cronjobs"`
-	VersionConstraint string      `json:"versionConstraint"`
-	UserData          interface{} `json:"userData"`
+	Name              string               `json:"name"`
+	Application       SoftwareRef          `json:"application"`
+	Databases         []SoftwareVersionRef `json:"databases"`
+	Cronjobs          []Cronjob            `json:"cronjobs"`
+	VersionConstraint string               `json:"versionConstraint"`
+	UserData          interface{}          `json:"userData"`
 }
 
 type Space struct {

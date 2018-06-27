@@ -26,10 +26,20 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 			}
 		}
 
+		databaseDecls := make([]spaces.SoftwareVersionRef, len(st.Databases))
+		for i := range st.Databases {
+			databaseDecls[i] = spaces.SoftwareVersionRef{
+				Software:          spaces.SoftwareRef{ID: st.Databases[i].Identifier},
+				VersionConstraint: st.Databases[i].Version,
+				UserData:          st.Databases[i].UserData,
+			}
+		}
+
 		stageDecl := spaces.StageDeclaration{
 			Name:              st.Name,
 			VersionConstraint: app.Version,
 			Application:       appDecl,
+			Databases:         databaseDecls,
 			UserData:          app.UserData,
 			Cronjobs:          cronjobDecls,
 		}
