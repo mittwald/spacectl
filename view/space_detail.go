@@ -97,5 +97,7 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 				progress,
 			)
 		}
+
+		fmt.Fprintln(out, updateTable)
 	}
 }

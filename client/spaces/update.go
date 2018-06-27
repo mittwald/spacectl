@@ -16,7 +16,7 @@ func (c *spacesClient) ListApplicationUpdatesByStage(spaceID, stageName string) 
 		return nil, fmt.Errorf("could not access updates: %s", err)
 	}
 
-	err = link.Get(c.client, updates)
+	err = link.Get(c.client, &updates)
 	if err != nil {
 		return nil, fmt.Errorf("could not load application updates: %s", err)
 	}
@@ -38,7 +38,7 @@ func (c *spacesClient) ListApplicationUpdatesBySpace(spaceID string) ([]Applicat
 		return nil, fmt.Errorf("could not access updates: %s", err)
 	}
 
-	err = link.Get(c.client, updates)
+	err = link.Get(c.client, &updates)
 	if err != nil {
 		return nil, fmt.Errorf("could not load application updates: %s", err)
 	}

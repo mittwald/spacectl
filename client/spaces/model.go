@@ -90,7 +90,7 @@ type ApplicationUpdate struct {
 
 type ApplicationUpdateInput struct {
 	VersionConstraint string    `json:"versionConstraint"`
-	TargetStage       *StageRef `json:"targetStage"`
+	TargetStage       *StageRef `json:"targetStage,omitempty"`
 }
 
 type ApplicationUpdateExactVersion struct {
@@ -98,9 +98,9 @@ type ApplicationUpdateExactVersion struct {
 }
 
 type ApplicationUpdateProgress struct {
-	CurrentStep int `json:"currentStep"`
-	TotalSteps  int `json:"totalSteps"`
-	Status      int `json:"status"`
+	CurrentStep int    `json:"currentStep"`
+	TotalSteps  int    `json:"totalSteps"`
+	Status      string `json:"status"`
 }
 
 func (s Space) StagesCount() int {
