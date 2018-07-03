@@ -39,15 +39,10 @@ var spacesListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "RUNNING", "CREATED")
+		table.AddRow("ID", "DNS LABEL", "TEAM", "NAME", "STAGES", "CREATED")
 
 		for _, space := range ownedSpaces {
 			since := helper.HumanReadableDateDiff(time.Now(), space.CreatedAt)
-
-			running := "no"
-			if space.Running {
-				running = "yes"
-			}
 
 			table.AddRow(
 				space.ID,
@@ -55,7 +50,6 @@ var spacesListCmd = &cobra.Command{
 				space.Team.Name,
 				space.Name.HumanReadableName,
 				strings.Join(space.StagesNames(), ", "),
-				running,
 				since+" ago",
 			)
 		}
@@ -68,15 +62,4 @@ var spacesListCmd = &cobra.Command{
 
 func init() {
 	spacesCmd.AddCommand(spacesListCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }

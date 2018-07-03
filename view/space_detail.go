@@ -28,7 +28,6 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 	table.AddRow("  ID:", space.ID)
 	table.AddRow("  Created:", since + " ago")
 	table.AddRow("  Created At:", space.CreatedAt.String())
-	table.AddRow("  Status:", space.Status)
 	table.AddRow("  Name:")
 	table.AddRow("    Human-readable:", space.Name.HumanReadableName)
 	table.AddRow("    DNS label:", space.Name.DNSName)
