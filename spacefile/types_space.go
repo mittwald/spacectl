@@ -3,6 +3,9 @@ package spacefile
 import (
 	"errors"
 	"fmt"
+
+	"github.com/spf13/viper"
+
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -22,8 +25,20 @@ func (d *SpaceDef) Validate() error {
 		err = multierror.Append(err, errors.New("Empty Space name"))
 	}
 
+	if len(d.Name) == 0 {
+		d.Name = d.DNSLabel
+	}
+
 	if len(d.Stages) == 0 {
 		err = multierror.Append(err, fmt.Errorf("Space \"%s\" should contain at least one stage", d.DNSLabel))
+	}
+
+	if len(d.TeamID) == 0 {
+		if len(viper.GetString("teamID")) > 0 {
+			d.TeamID = viper.GetString("teamID")
+		} else {
+			err = multierror.Append(err, errors.New("Empty Team name"))
+		}
 	}
 
 	for i := range d.Stages {
