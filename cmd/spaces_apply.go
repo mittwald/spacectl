@@ -47,5 +47,4 @@ CAUTION: This command can be potentially destructive.`,
 
 func init() {
 	spacesCmd.AddCommand(spacesApplyCmd)
-	RootCmd.AddCommand(spacesApplyCmd)
 }

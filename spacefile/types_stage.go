@@ -3,6 +3,7 @@ package spacefile
 import (
 	"fmt"
 
+	"github.com/coreos/go-semver/semver"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -20,7 +21,13 @@ func (d *StageDef) Validate() error {
 	var err *multierror.Error
 
 	if len(d.Applications) > 1 {
-		err = multierror.Append(err, fmt.Errorf("Stage '%s' shoud not contain more than one application", d.Name))
+		err = multierror.Append(err, fmt.Errorf("Stage '%s' should not contain more than one application", d.Name))
+	}
+
+	if d.Application() != nil {
+		if _, errSem := semver.NewVersion(d.Application().Version); errSem != nil {
+			err = multierror.Append(err, fmt.Errorf("version: %s", errSem.Error()))
+		}
 	}
 
 	return err.ErrorOrNil()
