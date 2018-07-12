@@ -1,13 +1,14 @@
 package helper
 
 import (
-	"github.com/mittwald/spacectl/client/spaces"
-	"github.com/spf13/viper"
-	"github.com/mittwald/spacectl/spacefile"
-	"fmt"
-	"github.com/hashicorp/go-multierror"
 	"errors"
+	"fmt"
+
+	"github.com/hashicorp/go-multierror"
 	"github.com/mittwald/spacectl/client"
+	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/spacefile"
+	"github.com/spf13/viper"
 )
 
 func GetSpaceFromContext(args []string, spaceFileName string, flagValue *string, api client.SpacesClient) (*spaces.Space, error) {
@@ -41,7 +42,8 @@ func GetSpaceFromContext(args []string, spaceFileName string, flagValue *string,
 
 	if _, ok := err.(spacefile.ErrSpacefileNotFound); ok {
 		err := multierror.Append(nil,
-			fmt.Errorf("no spacefile found at %s", spaceFileName),
+			errors.New("missing space ID (--space, -s) or"),
+			fmt.Errorf("no spacefile found at %s or", spaceFileName),
 			errors.New("missing team ID (--team, -t or $SPACES_TEAM_ID)"),
 		)
 		return nil, err
