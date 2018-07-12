@@ -14,7 +14,7 @@ func (c *spacesClient) Declare(teamID string, declaration *SpaceDeclaration) (*S
 
 	err := c.client.Get("/teams/"+teamID, &team)
 	if err != nil {
-		return nil, fmt.Errorf("team ID \"%s\" not found", teamID)
+		return nil, fmt.Errorf("team ID \"%s\" not found: %s", teamID, err)
 	}
 
 	c.logger.Printf("Space '%s' is declared in team %s", declaration.Name.DNSName, team.ID)
