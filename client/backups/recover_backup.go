@@ -3,10 +3,10 @@ package backups
 import "github.com/mittwald/spacectl/client/errors"
 
 type recoveryRequest struct {
-	Stage string `json:"stage"`
-	Files interface{} `json:"files"`
+	Stage     string      `json:"stage"`
+	Files     interface{} `json:"files"`
 	Databases interface{} `json:"databases"`
-	Metadata interface{} `json:"metadata"`
+	Metadata  interface{} `json:"metadata"`
 }
 
 func (r *RecoverySpec) buildRequest() interface{} {
@@ -35,13 +35,13 @@ func (c *backupClient) Recover(backupID string, stage string, files RecoverySpec
 
 	res := Recovery{}
 	req := recoveryRequest{
-		Stage: stage,
-		Files: files.buildRequest(),
+		Stage:     stage,
+		Files:     files.buildRequest(),
 		Databases: databases.buildRequest(),
-		Metadata: metadata.buildRequest(),
+		Metadata:  metadata.buildRequest(),
 	}
 
-	err = recoverLink.Execute(c.client, req, res)
+	err = recoverLink.Execute(c.client, req, &res)
 	if err != nil {
 		return nil, errors.ErrNested{Inner: err, Msg: "could not start backup recovery"}
 	}
