@@ -1,9 +1,10 @@
 package sshkeys
 
 import (
-	"github.com/mittwald/spacectl/client/lowlevel"
-	"fmt"
 	"errors"
+	"fmt"
+
+	"github.com/mittwald/spacectl/client/lowlevel"
 )
 
 func (c *sshKeyClient) Get(keyID string) (*SSHKey, error) {
@@ -20,7 +21,7 @@ func (c *sshKeyClient) Get(keyID string) (*SSHKey, error) {
 	}
 
 	key := SSHKey{}
-	err = link.WithParam("id", keyID).Get(c.client, &key)
+	err = link.WithParam("keyID", keyID).Get(c.client, &key)
 
 	if err != nil {
 		return nil, err

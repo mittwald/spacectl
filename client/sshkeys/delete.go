@@ -1,9 +1,10 @@
 package sshkeys
 
 import (
-	"github.com/mittwald/spacectl/client/lowlevel"
-	"fmt"
 	"errors"
+	"fmt"
+
+	"github.com/mittwald/spacectl/client/lowlevel"
 )
 
 func (c *sshKeyClient) Delete(keyID string) error {
@@ -20,7 +21,7 @@ func (c *sshKeyClient) Delete(keyID string) error {
 		return errors.New("You are not authorized to manage SSH public keys")
 	}
 
-	err = link.WithParam("id", keyID).Delete(c.client, &response)
+	err = link.WithParam("keyID", keyID).Delete(c.client, &response)
 	if err != nil {
 		return err
 	}
