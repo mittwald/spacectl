@@ -1,18 +1,20 @@
 package spaces
 
 import (
-	"github.com/mittwald/spacectl/client/teams"
-	"github.com/mittwald/spacectl/client/lowlevel"
+	"fmt"
+
 	"github.com/mittwald/spacectl/client/errors"
+	"github.com/mittwald/spacectl/client/lowlevel"
+	"github.com/mittwald/spacectl/client/teams"
 )
 
 func (c *spacesClient) Declare(teamID string, declaration *SpaceDeclaration) (*Space, error) {
 	var team teams.Team
 	var existingSpaces []Space
 
-	err := c.client.Get("/teams/" + teamID, &team)
+	err := c.client.Get("/teams/"+teamID, &team)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("team ID \"%s\" not found", teamID)
 	}
 
 	c.logger.Printf("Space '%s' is declared in team %s", declaration.Name.DNSName, team.ID)
