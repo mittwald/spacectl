@@ -86,14 +86,14 @@ func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
 
 	reader := bytes.NewReader(buf.Bytes())
 
+	reader.Seek(0, io.SeekStart)
+	responseBytes, _ := ioutil.ReadAll(reader)
+	c.logger.Println(string(responseBytes))
+
 	err = json.NewDecoder(reader).Decode(target)
 	if err != nil {
 		return fmt.Errorf("could not JSON-decode response body: %s", err)
 	}
-
-	reader.Seek(0, io.SeekStart)
-	responseBytes, _ := ioutil.ReadAll(reader)
-	c.logger.Println(string(responseBytes))
 
 	return nil
 }
