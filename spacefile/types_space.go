@@ -13,6 +13,7 @@ type SpaceDef struct {
 	DNSLabel string     `hcl:",key"`
 	Name     string     `hcl:"name"`
 	TeamID   string     `hcl:"team"`
+	Plan     string     `hcl:"plan"`
 	Stages   []StageDef `hcl:"stage"`
 
 	stagesByName map[string]*StageDef

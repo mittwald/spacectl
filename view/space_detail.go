@@ -16,7 +16,7 @@ type SpaceDetailView interface {
 
 type TabularSpaceDetailView struct {}
 
-func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []spaces.ApplicationUpdate, out io.Writer) {
+func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []spaces.ApplicationUpdate, paymentLink *spaces.SpacePaymentLink, out io.Writer) {
 	fmt.Fprintln(out, "GENERAL INFO")
 
 	table := uitable.New()
@@ -35,6 +35,23 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 	table.AddRow("    ID:", space.Team.ID)
 	table.AddRow("    Name:", space.Team.Name)
 	table.AddRow("    DNS label:", space.Team.DNSLabel)
+	table.AddRow("  Payment settings:")
+
+	if paymentLink == nil {
+		table.AddRow("    (not configured yet)")
+	} else {
+		p := &paymentLink.Plan
+		pr := &paymentLink.PaymentProfile
+		table.AddRow("    Plan:", fmt.Sprintf("%s (%s): %.2f %s/%s", p.Name, p.ID, p.BasePrice.Value, p.BasePrice.Currency, p.BasePrice.Unit))
+		table.AddRow("    Payment profile:")
+		table.AddRow("      ID:", pr.ID)
+
+		if pr.ContractPartner.Company != "" {
+			table.AddRow("      Contract Partner:", pr.ContractPartner.Company + ", " + pr.ContractPartner.FirstName+" "+pr.ContractPartner.LastName)
+		} else {
+			table.AddRow("      Contract Partner:", pr.ContractPartner.FirstName+" "+pr.ContractPartner.LastName)
+		}
+	}
 
 	fmt.Fprintln(out, table)
 

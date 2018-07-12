@@ -11,6 +11,7 @@ import (
 	"github.com/mittwald/spacectl/client/spaces"
 	"github.com/mittwald/spacectl/client/sshkeys"
 	"github.com/mittwald/spacectl/client/backups"
+	"github.com/mittwald/spacectl/client/payment"
 )
 
 type SpacesClient interface {
@@ -22,6 +23,7 @@ type SpacesClient interface {
 	SSHKeys() sshkeys.SSHKeyClient
 	Applications() software.SoftwareClient
 	Databases() software.SoftwareClient
+	Payment() payment.PaymentClient
 }
 
 type SpacesClientConfig struct {
@@ -81,4 +83,8 @@ func (c *spacesClient) Applications() software.SoftwareClient {
 
 func (c *spacesClient) Databases() software.SoftwareClient {
 	return software.NewSoftwareClient(c.client, "databases")
+}
+
+func (c *spacesClient) Payment() payment.PaymentClient {
+	return payment.NewPaymentClient(c.client)
 }

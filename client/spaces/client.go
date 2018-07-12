@@ -15,6 +15,8 @@ type SpacesClient interface {
 	UpdateApplication(spaceID, stage, targetStage, version string) (*ApplicationUpdate, error)
 	ListApplicationUpdatesByStage(spaceID, stage string) ([]ApplicationUpdate, error)
 	ListApplicationUpdatesBySpace(spaceID string) ([]ApplicationUpdate, error)
+	GetPaymentLink(spaceID string) (*SpacePaymentLink, error)
+	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error)
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) (SpacesClient) {

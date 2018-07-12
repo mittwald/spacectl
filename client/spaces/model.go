@@ -3,6 +3,7 @@ package spaces
 import (
 	"github.com/mittwald/spacectl/client/lowlevel"
 	"time"
+	"github.com/mittwald/spacectl/client/payment"
 )
 
 type SpaceName struct {
@@ -101,6 +102,16 @@ type ApplicationUpdateProgress struct {
 	CurrentStep int    `json:"currentStep"`
 	TotalSteps  int    `json:"totalSteps"`
 	Status      string `json:"status"`
+}
+
+type SpacePaymentLink struct {
+	Plan           payment.Plan           `json:"plan"`
+	PaymentProfile payment.PaymentProfile `json:"paymentProfile"`
+}
+
+type SpacePaymentLinkInput struct {
+	Plan           payment.PlanReferenceInput           `json:"plan"`
+	PaymentProfile payment.PaymentProfileReferenceInput `json:"paymentProfile"`
 }
 
 func (s Space) StagesCount() int {
