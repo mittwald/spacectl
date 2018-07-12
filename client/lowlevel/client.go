@@ -11,8 +11,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-
-	"github.com/mittwald/spacectl/service/auth"
 )
 
 var versionRegexp = regexp.MustCompile("^/v[0-9]+/")
@@ -66,10 +64,6 @@ func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
 	}
 
 	defer res.Body.Close()
-
-	if res.StatusCode == 403 {
-		return auth.InvalidCredentialsErr{}
-	}
 
 	if res.StatusCode >= 400 {
 		msg := Message{}
