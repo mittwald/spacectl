@@ -43,3 +43,31 @@ func (t *teamsClient) InviteByEmail(teamID string, email string, message string,
 
 	return invite, nil
 }
+
+func (t *teamsClient) InviteByUID(teamID string, uid string, message string, role string) (Invite, error) {
+	var invite Invite
+
+	if uid == "" {
+		return invite, errors.New("UID must not be empty")
+	}
+
+	if role != "" && role != "member" && role != "owner" {
+		return invite, errors.New("role must be either \"member\" or \"owner\"")
+	}
+
+	req := inviteRequest{
+		Invitee: inviteRequestInvitee{
+			ID: uid,
+		},
+		Message: message,
+		Role:    role,
+	}
+
+	url := fmt.Sprintf("/teams/%s/invites", teamID)
+	err := t.client.Post(url, &req, &invite)
+	if err != nil {
+		return invite, fmt.Errorf("could not invite user: %s", err)
+	}
+
+	return invite, nil
+}

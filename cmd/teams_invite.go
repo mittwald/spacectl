@@ -36,8 +36,17 @@ var teamInviteCmd = &cobra.Command{
 			return errors.New("must provide user (either --email|-e or --user-id|-u)")
 		}
 
-		if teamInviteFlags.Email != "" {
-			fmt.Printf("inviting user \"%s\" into team %s\n", teamInviteFlags.Email, teamID)
+		userTemplate := "inviting user \"%s\" into team %s\n"
+		if teamInviteFlags.UserID != "" {
+			fmt.Printf(userTemplate, teamInviteFlags.UserID, teamID)
+			invite, err = api.Teams().InviteByUID(
+				teamID,
+				teamInviteFlags.UserID,
+				teamInviteFlags.Message,
+				teamInviteFlags.Role,
+			)
+		} else if teamInviteFlags.Email != "" {
+			fmt.Printf(userTemplate, teamInviteFlags.Email, teamID)
 			invite, err = api.Teams().InviteByEmail(
 				teamID,
 				teamInviteFlags.Email,
