@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"os"
 
 	"github.com/mittwald/spacectl/client/backups"
@@ -21,6 +22,10 @@ var backupsCreateCmd = &cobra.Command{
 	Short: "Create new backup",
 	Long:  `Creates a new backup.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if backupsCreateFlags.StageName == "" {
+			return errors.New("no stage name (--stage|-e) given")
+		}
+
 		space, err := helper.GetSpaceFromContext(args, spaceFile, &backupsCreateFlags.SpaceID, api)
 		if err != nil {
 			RootCmd.SilenceUsage = false
