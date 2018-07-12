@@ -1,33 +1,33 @@
 package lowlevel
 
 import (
-	"net/http"
-	"fmt"
-	"encoding/json"
-	"github.com/mittwald/spacectl/service/auth"
 	"bytes"
-	"time"
-	"log"
-	"regexp"
-	"strings"
+	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/mittwald/spacectl/service/auth"
 )
 
 var versionRegexp = regexp.MustCompile("^/v[0-9]+/")
 
 type SpacesLowlevelClient struct {
-	token string
+	token    string
 	endpoint string
-	version string
+	version  string
 
 	client *http.Client
 	logger *log.Logger
 }
 
 func NewSpacesLowlevelClient(token string, endpoint string, logger *log.Logger) (*SpacesLowlevelClient, error) {
-	client := &http.Client{
-	}
+	client := &http.Client{}
 
 	return &SpacesLowlevelClient{
 		token,
@@ -176,10 +176,6 @@ func (c *SpacesLowlevelClient) request(method string, path string, body interfac
 	defer res.Body.Close()
 
 	c.logger.Printf("response code: %d", res.StatusCode)
-
-	if res.StatusCode == 403 {
-		return auth.InvalidCredentialsErr{}
-	}
 
 	if res.StatusCode >= 400 {
 		msg := Message{}
