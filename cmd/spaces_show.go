@@ -27,8 +27,13 @@ var spacesShowCmd = &cobra.Command{
 			return err
 		}
 
+		payment, err := api.Spaces().GetPaymentLink(space.ID)
+		if err != nil {
+			return err
+		}
+
 		v := view.TabularSpaceDetailView{}
-		v.SpaceDetail(space, updates, os.Stdout)
+		v.SpaceDetail(space, updates, payment, os.Stdout)
 
 		return nil
 	},

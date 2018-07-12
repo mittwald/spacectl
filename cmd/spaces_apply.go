@@ -38,8 +38,13 @@ CAUTION: This command can be potentially destructive.`,
 			return err
 		}
 
+		payment, err := api.Spaces().GetPaymentLink(declaredSpace.ID)
+		if err != nil {
+			return err
+		}
+
 		v := view.TabularSpaceDetailView{}
-		v.SpaceDetail(declaredSpace, updates, os.Stdout)
+		v.SpaceDetail(declaredSpace, updates, payment, os.Stdout)
 
 		return nil
 	},

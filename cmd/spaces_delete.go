@@ -35,8 +35,13 @@ will not get it back!`,
 				return err
 			}
 
+			payment, err := api.Spaces().GetPaymentLink(space.ID)
+			if err != nil {
+				return err
+			}
+
 			buf := bytes.Buffer{}
-			view.TabularSpaceDetailView{}.SpaceDetail(space, updates, &buf)
+			view.TabularSpaceDetailView{}.SpaceDetail(space, updates, payment, &buf)
 
 			ok, _ := view.Confirm("Once this Space is deleted, you will NOT be able to get it back.", buf.String())
 			if !ok {
