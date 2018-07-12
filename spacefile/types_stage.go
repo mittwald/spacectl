@@ -3,7 +3,7 @@ package spacefile
 import (
 	"fmt"
 
-	"github.com/coreos/go-semver/semver"
+	"github.com/Masterminds/semver"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -25,7 +25,7 @@ func (d *StageDef) Validate() error {
 	}
 
 	if d.Application() != nil {
-		if _, errSem := semver.NewVersion(d.Application().Version); errSem != nil {
+		if _, errSem := semver.NewConstraint(d.Application().Version); errSem != nil {
 			err = multierror.Append(err, fmt.Errorf("version: %s", errSem.Error()))
 		}
 	}

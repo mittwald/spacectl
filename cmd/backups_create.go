@@ -1,11 +1,12 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/mittwald/spacectl/client/backups"
 	"github.com/mittwald/spacectl/cmd/helper"
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/view"
-	"os"
+	"github.com/spf13/cobra"
 )
 
 var backupsCreateFlags struct {
