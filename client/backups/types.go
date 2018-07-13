@@ -1,9 +1,10 @@
 package backups
 
 import (
+	"time"
+
 	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/spaces"
-	"time"
 )
 
 type Backup struct {
@@ -51,5 +52,5 @@ type Recovery struct {
 	Metadata    interface{} `json:"metadata"`
 
 	Backup *BackupRef `json:"backup,omitempty"`
-	Stage  *StageRef  `json:"stage,omitempty"`
+	Stage  string     `json:"stage,omitempty"`
 }
