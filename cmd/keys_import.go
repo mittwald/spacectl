@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"fmt"
 	"errors"
+	"io/ioutil"
+	"os"
+
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh"
-	"io/ioutil"
-	"os"
 )
 
 var keyImportFlags struct {
@@ -31,7 +33,7 @@ var keyImportCmd = &cobra.Command{
 
 		key, comment, _, _, err := ssh.ParseAuthorizedKey(keyBytes)
 		if err != nil {
-			return err
+			return fmt.Errorf("only OpenSSH keys are supported: %s", err)
 		}
 
 		if keyImportFlags.Comment != "" {
