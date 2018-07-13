@@ -1,23 +1,30 @@
 package cmd
 
 import (
-	"github.com/mittwald/spacectl/view"
-	"github.com/spf13/cobra"
 	"errors"
 	"os"
+
+	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var teamShowCmd = &cobra.Command{
-	Use:     "show",
-	Short:   "Show details regarding a specific team",
-	Long: `Show details regarding a specific team`,
+	Use:   "show",
+	Short: "Show details regarding a specific team",
+	Long:  `Show details regarding a specific team`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
+		teamArg := viper.GetString("teamID")
+		if teamArg == "" && len(args) >= 1 {
+			teamArg = args[0]
+		}
+
+		if teamArg == "" {
 			RootCmd.SilenceUsage = false
 			return errors.New("Missing argument: Team ID or DNS label")
 		}
 
-		team, err := api.Teams().Get(args[0])
+		team, err := api.Teams().Get(teamArg)
 		if err != nil {
 			return err
 		}
