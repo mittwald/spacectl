@@ -4,14 +4,15 @@ import (
 	"fmt"
 
 	"errors"
+	"os"
+	"regexp"
+	"strings"
+
 	"github.com/fatih/color"
 	"github.com/hashicorp/go-multierror"
 	"github.com/mittwald/spacectl/spacefile"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
-	"regexp"
-	"strings"
 )
 
 var spaceInitFlags struct {
@@ -79,7 +80,7 @@ Use the --force flag (or -f) to overwrite it.`, filePath)
 		}
 
 		fmt.Printf("Spacefile generated at %s.\n", color.YellowString(filePath))
-		fmt.Printf("Edit your Spacefile at will and use the %s command to actually create the new Space\n", color.YellowString("spacectl apply"))
+		fmt.Printf("Edit your Spacefile at will and use the %s command to actually create the new Space\n", color.YellowString("spacectl spaces apply"))
 
 		return nil
 	},
