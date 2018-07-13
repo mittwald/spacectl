@@ -11,7 +11,7 @@ import (
 
 var spaceDeleteFlags struct {
 	SpaceID string
-	Force bool
+	Force   bool
 }
 
 var spaceDeleteCmd = &cobra.Command{

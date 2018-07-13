@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
+	"crypto/md5"
 	"github.com/gosuri/uitable"
 	"github.com/mittwald/spacectl/cmd/helper"
+	"github.com/spf13/cobra"
 	"time"
-	"crypto/md5"
 )
 
 var keysListCmd = &cobra.Command{
@@ -37,7 +37,7 @@ var keysListCmd = &cobra.Command{
 				key.ID,
 				key.CipherAlgorithm,
 				fmt.Sprintf("%x", fp),
-				helper.HumanReadableDateDiff(time.Now(), key.CreatedAt) + " ago",
+				helper.HumanReadableDateDiff(time.Now(), key.CreatedAt)+" ago",
 			)
 		}
 

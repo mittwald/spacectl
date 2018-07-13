@@ -1,16 +1,16 @@
 package cmd
 
 import (
+	"errors"
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
-	"errors"
 	"os"
 )
 
 var teamShowCmd = &cobra.Command{
-	Use:     "show",
-	Short:   "Show details regarding a specific team",
-	Long: `Show details regarding a specific team`,
+	Use:   "show",
+	Short: "Show details regarding a specific team",
+	Long:  `Show details regarding a specific team`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			RootCmd.SilenceUsage = false

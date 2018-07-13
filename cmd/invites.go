@@ -20,10 +20,10 @@ import (
 
 // invitesCmd represents the invites command
 var invitesCmd = &cobra.Command{
-	Use:   "invites",
+	Use:     "invites",
 	Aliases: []string{"invite", "i"},
-	Short: "Manage invitations",
-	Long: `This command allows you to manage pending invitations into teams`,
+	Short:   "Manage invitations",
+	Long:    `This command allows you to manage pending invitations into teams`,
 }
 
 func init() {

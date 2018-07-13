@@ -11,7 +11,7 @@ type AppsView interface {
 	List(softwareList []software.Software, out io.Writer)
 }
 
-type TabularAppsView struct {}
+type TabularAppsView struct{}
 
 func (t TabularAppsView) List(softwareList []software.Software, out io.Writer) {
 	if len(softwareList) == 0 {
@@ -26,7 +26,7 @@ func (t TabularAppsView) List(softwareList []software.Software, out io.Writer) {
 	for _, sw := range softwareList {
 		latest := "None"
 		if len(sw.Versions) > 0 {
-			latest = sw.Versions[len(sw.Versions) - 1].Number
+			latest = sw.Versions[len(sw.Versions)-1].Number
 		}
 
 		table.AddRow(

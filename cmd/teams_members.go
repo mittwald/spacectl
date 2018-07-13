@@ -3,18 +3,18 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"errors"
 	"github.com/gosuri/uitable"
-	"strings"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"strings"
 )
 
 // membersCmd represents the members command
 var teamsMembersCmd = &cobra.Command{
 	Use:   "members -t <team-id>",
 	Short: "List team members",
-	Long: `List users that are members of a given team.`,
+	Long:  `List users that are members of a given team.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		teamID := viper.GetString("teamID")
 		if teamID == "" {

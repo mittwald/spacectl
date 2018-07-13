@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/spacefile"
+	"github.com/spf13/cobra"
 )
 
 var backupsCmd = &cobra.Command{
@@ -15,5 +15,5 @@ var backupsCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(backupsCmd)
 
-	backupsCmd.PersistentFlags().StringVarP(&spaceFile, "spacefile", "f", "./" + spacefile.DefaultFilename, "Use Space defined in this file")
+	backupsCmd.PersistentFlags().StringVarP(&spaceFile, "spacefile", "f", "./"+spacefile.DefaultFilename, "Use Space defined in this file")
 }

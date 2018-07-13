@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"bytes"
 	"github.com/spf13/cobra"
 	"os"
-	"bytes"
 )
 
 // Taken from the "kubectl" source code [1]
@@ -13,7 +13,7 @@ import (
 var completionZshCmd = &cobra.Command{
 	Use:   "zsh",
 	Short: "Generates auto-complete definitions for zsh",
-	Long: "Generates auto-complete definitions for zsh",
+	Long:  "Generates auto-complete definitions for zsh",
 	Run: func(cmd *cobra.Command, args []string) {
 		out := os.Stdout
 		zsh_initialization := `

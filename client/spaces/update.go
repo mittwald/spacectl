@@ -6,7 +6,7 @@ func (c *spacesClient) ListApplicationUpdatesByStage(spaceID, stageName string) 
 	var stage Stage
 	var updates []ApplicationUpdate
 
-	err := c.client.Get("/spaces/" + spaceID + "/stages/" + stageName, &stage)
+	err := c.client.Get("/spaces/"+spaceID+"/stages/"+stageName, &stage)
 	if err != nil {
 		return nil, fmt.Errorf("could not load stage: %s", err)
 	}
@@ -28,7 +28,7 @@ func (c *spacesClient) ListApplicationUpdatesBySpace(spaceID string) ([]Applicat
 	var space Space
 	var updates []ApplicationUpdate
 
-	err := c.client.Get("/spaces/" + spaceID, &space)
+	err := c.client.Get("/spaces/"+spaceID, &space)
 	if err != nil {
 		return nil, fmt.Errorf("could not load stage: %s", err)
 	}
@@ -60,7 +60,7 @@ func (c *spacesClient) UpdateApplication(spaceID, stageName, targetStageName, ve
 		}
 	}
 
-	err := c.client.Get("/spaces/" + spaceID + "/stages/" + stageName, &stage)
+	err := c.client.Get("/spaces/"+spaceID+"/stages/"+stageName, &stage)
 	if err != nil {
 		return nil, fmt.Errorf("could not load stage: %s", err)
 	}

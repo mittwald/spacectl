@@ -3,17 +3,17 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
-	"github.com/gosuri/uitable"
 	"errors"
+	"github.com/gosuri/uitable"
 	"github.com/hashicorp/go-multierror"
+	"github.com/spf13/cobra"
 )
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create -n <team-name> -l <dns-label>",
 	Short: "Create a new team",
-	Long: `Creates a new team. Afterwards, you will have "Owner" access on the newly created team.`,
+	Long:  `Creates a new team. Afterwards, you will have "Owner" access on the newly created team.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var merr *multierror.Error
 

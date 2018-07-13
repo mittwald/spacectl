@@ -55,13 +55,13 @@ space "{{ .SpaceDNSLabel }}" {
 `
 
 type templateData struct {
-	TeamName string
-	SpaceName string
+	TeamName      string
+	SpaceName     string
 	SpaceDNSLabel string
-	Software *software.Software
+	Software      *software.Software
 }
 
-func Generate(teamName string, spaceName string, spaceDNSLabel string, software *software.Software, out io.Writer) (error) {
+func Generate(teamName string, spaceName string, spaceDNSLabel string, software *software.Software, out io.Writer) error {
 	t := template.Must(template.New("spacefile").Parse(SpacefileTemplate))
 	return t.Execute(out, templateData{
 		teamName,

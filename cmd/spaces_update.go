@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/mittwald/spacectl/cmd/helper"
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
 	"os"
 )
 
@@ -11,7 +11,7 @@ var spaceUpdateFlags struct {
 	SpaceIDOrName string
 	SourceStage   string
 	TargetStage   string
-	Version string
+	Version       string
 }
 
 var spaceUpdateCmd = &cobra.Command{
