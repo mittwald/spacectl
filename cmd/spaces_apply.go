@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/mittwald/spacectl/spacefile"
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
 	"os"
 )
 

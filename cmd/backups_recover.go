@@ -2,29 +2,29 @@ package cmd
 
 import (
 	"errors"
-	"github.com/spf13/cobra"
 	"fmt"
 	"github.com/mittwald/spacectl/client/backups"
+	"github.com/spf13/cobra"
 )
 
 var backupsRecoverFlags struct {
-	Force bool
-	Files []string
-	Stage string
-	NoFiles bool
+	Force       bool
+	Files       []string
+	Stage       string
+	NoFiles     bool
 	NoDatabases bool
-	NoMetadata bool
+	NoMetadata  bool
 }
 
 var backupsRecoverCmd = &cobra.Command{
-	Use:     "recover <backup-id> [--stage=<stage>] [--without-databases] [--without-metadata] [--without-files|--file=<file>...]",
-	Short:   "Recover a specific backup",
+	Use:   "recover <backup-id> [--stage=<stage>] [--without-databases] [--without-metadata] [--without-files|--file=<file>...]",
+	Short: "Recover a specific backup",
 	Example: `  Recover one specific file:
     spacectl backup recover ae46198c-7d69-44c8-8670-1968703f4aaf --without-databases --without-metadata --file=/path/to/file.foo
 
   Full recovery:
     spacectl backup recover ae46198c-7d69-44c8-8670-1968703f4aaf`,
-	Long:    `This command recovers a specific backup.
+	Long: `This command recovers a specific backup.
 
 You can use several command line switches to control what should be recovered.
 By default, this command will trigger a recovery process that recovers

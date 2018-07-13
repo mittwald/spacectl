@@ -6,7 +6,7 @@ type PaymentClient interface {
 	ListPlans() ([]Plan, error)
 }
 
-func NewPaymentClient(client *lowlevel.SpacesLowlevelClient) (PaymentClient) {
+func NewPaymentClient(client *lowlevel.SpacesLowlevelClient) PaymentClient {
 	return &paymentClient{client}
 }
 

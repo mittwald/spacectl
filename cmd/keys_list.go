@@ -3,11 +3,12 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
+	"crypto/md5"
+	"time"
+
 	"github.com/gosuri/uitable"
 	"github.com/mittwald/spacectl/cmd/helper"
-	"time"
-	"crypto/md5"
+	"github.com/spf13/cobra"
 )
 
 var keysListCmd = &cobra.Command{
@@ -28,16 +29,17 @@ var keysListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("ID", "TYPE", "FINGERPRINT", "CREATED")
+		table.AddRow("ID", "COMMENT", "TYPE", "FINGERPRINT", "CREATED")
 
 		for _, key := range keys {
 			fp := md5.Sum(key.Key)
 
 			table.AddRow(
 				key.ID,
+				key.Comment,
 				key.CipherAlgorithm,
 				fmt.Sprintf("%x", fp),
-				helper.HumanReadableDateDiff(time.Now(), key.CreatedAt) + " ago",
+				helper.HumanReadableDateDiff(time.Now(), key.CreatedAt)+" ago",
 			)
 		}
 

@@ -11,7 +11,7 @@ func (n ErrSpacefileNotFound) Error() string {
 }
 
 type SyntaxError struct {
-	File string
+	File  string
 	Inner error
 }
 

@@ -1,12 +1,14 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
+	"fmt"
 	"errors"
 	"io/ioutil"
-	"golang.org/x/crypto/ssh"
-	"github.com/mittwald/spacectl/view"
 	"os"
+
+	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
+	"golang.org/x/crypto/ssh"
 )
 
 var keyImportFlags struct {
@@ -16,7 +18,7 @@ var keyImportFlags struct {
 var keyImportCmd = &cobra.Command{
 	Use:   "import <key-file>",
 	Short: "Import an existing SSH public key",
-	Long: `This command imports an existing SSH public key`,
+	Long:  `This command imports an existing SSH public key`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			RootCmd.SilenceUsage = false
@@ -31,7 +33,7 @@ var keyImportCmd = &cobra.Command{
 
 		key, comment, _, _, err := ssh.ParseAuthorizedKey(keyBytes)
 		if err != nil {
-			return err
+			return fmt.Errorf("only OpenSSH keys are supported: %s", err)
 		}
 
 		if keyImportFlags.Comment != "" {

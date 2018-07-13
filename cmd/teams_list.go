@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gosuri/uitable"
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/cmd/helper"
+	"github.com/spf13/cobra"
 	"time"
 )
 
@@ -26,7 +26,7 @@ var teamsListCmd = &cobra.Command{
 		table.AddRow("ID", "DNS LABEL", "NAME", "CREATED")
 
 		for _, team := range teams {
-			table.AddRow(team.ID, team.DNSName, team.Name, helper.HumanReadableDateDiff(time.Now(), team.CreatedAt) + " ago")
+			table.AddRow(team.ID, team.DNSName, team.Name, helper.HumanReadableDateDiff(time.Now(), team.CreatedAt)+" ago")
 		}
 
 		fmt.Println(table)

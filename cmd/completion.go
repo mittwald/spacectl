@@ -8,7 +8,7 @@ import (
 var completionCmd = &cobra.Command{
 	Use:   "completion",
 	Short: "Generates a Bash completion script",
-	Long: "Generates a Bash completion script",
+	Long:  "Generates a Bash completion script",
 }
 
 func init() {

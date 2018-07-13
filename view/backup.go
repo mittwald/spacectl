@@ -1,13 +1,13 @@
 package view
 
 import (
-	"io"
 	"fmt"
 	"github.com/gosuri/uitable"
-	"time"
-	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/mittwald/spacectl/client/backups"
 	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/cmd/helper"
+	"io"
+	"time"
 )
 
 type BackupView interface {
@@ -15,7 +15,7 @@ type BackupView interface {
 	Detail(backup *backups.Backup, recoveries []backups.Recovery, space *spaces.Space, out io.Writer)
 }
 
-type TabularBackupView struct {}
+type TabularBackupView struct{}
 
 func (t TabularBackupView) List(backupList []backups.Backup, stage string, out io.Writer) {
 	if len(backupList) == 0 {
@@ -63,12 +63,12 @@ func (t TabularBackupView) Detail(backup *backups.Backup, recoveries []backups.R
 	sinceStarted := helper.HumanReadableDateDiff(time.Now(), backup.StartedAt)
 
 	table.AddRow("  ID:", backup.ID)
-	table.AddRow("  Started:", sinceStarted + " ago (" + backup.StartedAt.Format(time.RFC1123) + ")")
+	table.AddRow("  Started:", sinceStarted+" ago ("+backup.StartedAt.Format(time.RFC1123)+")")
 
 	if !backup.CompletedAt.IsZero() {
 		sinceCompleted := helper.HumanReadableDateDiff(time.Now(), backup.CompletedAt)
 
-		table.AddRow("  Completed:", sinceCompleted + " ago (" + backup.CompletedAt.Format(time.RFC1123) + ")")
+		table.AddRow("  Completed:", sinceCompleted+" ago ("+backup.CompletedAt.Format(time.RFC1123)+")")
 	} else {
 		table.AddRow("  Completed:", "<pending>")
 	}
@@ -106,14 +106,13 @@ func (t TabularBackupView) Detail(backup *backups.Backup, recoveries []backups.R
 		started := fmt.Sprintf("%s ago (%s)", sinceStarted, s.StartedAt.Format(format))
 		completed := "<pending>"
 
-
 		if !s.CompletedAt.IsZero() {
 			sinceCompleted := helper.HumanReadableDateDiff(time.Now(), s.CompletedAt)
 			completed = fmt.Sprintf("%s ago (%s)", sinceCompleted, s.CompletedAt.Format(format))
 		}
 
 		recoveryTable.AddRow(
-			"  " + s.ID,
+			"  "+s.ID,
 			s.Status,
 			started,
 			completed,

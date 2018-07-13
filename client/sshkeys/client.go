@@ -12,7 +12,7 @@ type SSHKeyClient interface {
 	Delete(keyID string) error
 }
 
-func NewSSHKeyClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) (SSHKeyClient) {
+func NewSSHKeyClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SSHKeyClient {
 	return &sshKeyClient{client, logger}
 }
 

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gosuri/uitable"
 	"github.com/mittwald/spacectl/client/invites"
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/cmd/helper"
+	"github.com/spf13/cobra"
 	"time"
 )
 
@@ -46,7 +46,7 @@ var invitesListCmd = &cobra.Command{
 
 				table.AddRow(
 					i.ID,
-					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt) + " ago",
+					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt)+" ago",
 					i.State,
 					i.Team.Name,
 					email,
@@ -70,7 +70,7 @@ var invitesListCmd = &cobra.Command{
 			for _, i := range inv {
 				table.AddRow(
 					i.ID,
-					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt) + " ago",
+					helper.HumanReadableDateDiff(time.Now(), i.IssuedAt)+" ago",
 					i.State,
 					i.Team.Name,
 					i.Inviter.Email,

@@ -1,25 +1,23 @@
 package view
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/fatih/color"
-	"bufio"
 	"os"
 	"strings"
 )
 
 var st = color.BlueString("*")
-var prompt =
-"                                      "+color.YellowString(";   :   ;")+"\n" +
-"            " + st + "              " + st + "       "+color.YellowString(".   \\_,!,_/   ,")+"\n" +
-"       __            " + st + "              "+color.YellowString("`.,'     `.,'")+"\n" +
-`  ---  \ \______          ` + st + `          `+color.YellowString(`/         \`) + "\n" +
-"--- "+color.RedString("#")+color.YellowString("#")+color.HiYellowString("#")+"[==______>               "+color.YellowString("~ -- :         : -- ~")+"\n" +
-"  ---  /_/                           "+color.YellowString(`\         /`)+ "\n" +
-"                    " + st + "               "+color.YellowString(",'`._   _.'`.")+"\n" +
-"         " + st + "                         "+color.YellowString("'   / `!` \\   `")+"\n" +
-"     " + st + "                     " + st + "          "+color.YellowString(";   :   ;")+"  \n"
-
+var prompt = "                                      " + color.YellowString(";   :   ;") + "\n" +
+	"            " + st + "              " + st + "       " + color.YellowString(".   \\_,!,_/   ,") + "\n" +
+	"       __            " + st + "              " + color.YellowString("`.,'     `.,'") + "\n" +
+	`  ---  \ \______          ` + st + `          ` + color.YellowString(`/         \`) + "\n" +
+	"--- " + color.RedString("#") + color.YellowString("#") + color.HiYellowString("#") + "[==______>               " + color.YellowString("~ -- :         : -- ~") + "\n" +
+	"  ---  /_/                           " + color.YellowString(`\         /`) + "\n" +
+	"                    " + st + "               " + color.YellowString(",'`._   _.'`.") + "\n" +
+	"         " + st + "                         " + color.YellowString("'   / `!` \\   `") + "\n" +
+	"     " + st + "                     " + st + "          " + color.YellowString(";   :   ;") + "  \n"
 
 func Confirm(msg string, body string) (bool, error) {
 	if msg == "" {
@@ -39,7 +37,7 @@ func Confirm(msg string, body string) (bool, error) {
 	}
 
 	for {
-		fmt.Fprint(color.Output, "Enter " + color.YellowString("y") + " or " + color.YellowString("n") + ": ")
+		fmt.Fprint(color.Output, "Enter "+color.YellowString("y")+" or "+color.YellowString("n")+": ")
 
 		reader := bufio.NewReader(os.Stdin)
 		input, _ := reader.ReadString('\n')
@@ -53,5 +51,3 @@ func Confirm(msg string, body string) (bool, error) {
 		}
 	}
 }
-
-

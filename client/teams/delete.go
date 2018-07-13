@@ -2,11 +2,11 @@ package teams
 
 import (
 	"fmt"
-	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/errors"
+	"github.com/mittwald/spacectl/client/lowlevel"
 )
 
-func (t *teamsClient) Delete(idOrLabel string) (error) {
+func (t *teamsClient) Delete(idOrLabel string) error {
 	var team Team
 	var result lowlevel.Message
 
