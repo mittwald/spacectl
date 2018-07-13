@@ -6,13 +6,14 @@ import (
 	"os"
 	"os/user"
 
+	"io/ioutil"
+	"path/filepath"
+	"strings"
+
 	"github.com/fatih/color"
 	"github.com/mittwald/spacectl/client"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"io/ioutil"
-	"path/filepath"
-	"strings"
 )
 
 var cfgFile string
@@ -92,10 +93,10 @@ func init() {
 func initConfig() {
 	if cfgFile != "" { // enable ability to specify config file via flag
 		viper.SetConfigFile(cfgFile)
+	} else {
+		viper.SetConfigName("spaceconfig")   // name of config file (without extension)
+		viper.AddConfigPath("$HOME/.spaces") // adding home directory as first search path
 	}
-
-	viper.SetConfigName("spaceconfig")   // name of config file (without extension)
-	viper.AddConfigPath("$HOME/.spaces") // adding home directory as first search path
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
