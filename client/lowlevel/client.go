@@ -1,33 +1,33 @@
 package lowlevel
 
 import (
-	"net/http"
-	"fmt"
-	"encoding/json"
-	"github.com/mittwald/spacectl/service/auth"
 	"bytes"
-	"time"
-	"log"
-	"regexp"
-	"strings"
+	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/mittwald/spacectl/service/auth"
 )
 
 var versionRegexp = regexp.MustCompile("^/v[0-9]+/")
 
 type SpacesLowlevelClient struct {
-	token string
+	token    string
 	endpoint string
-	version string
+	version  string
 
 	client *http.Client
 	logger *log.Logger
 }
 
 func NewSpacesLowlevelClient(token string, endpoint string, logger *log.Logger) (*SpacesLowlevelClient, error) {
-	client := &http.Client{
-	}
+	client := &http.Client{}
 
 	return &SpacesLowlevelClient{
 		token,
@@ -86,14 +86,16 @@ func (c *SpacesLowlevelClient) Get(path string, target interface{}) error {
 
 	reader := bytes.NewReader(buf.Bytes())
 
-	err = json.NewDecoder(reader).Decode(target)
-	if err != nil {
-		return fmt.Errorf("could not JSON-decode response body: %s", err)
-	}
-
 	reader.Seek(0, io.SeekStart)
 	responseBytes, _ := ioutil.ReadAll(reader)
 	c.logger.Println(string(responseBytes))
+
+	if target != nil {
+		err = json.Unmarshal(responseBytes, target)
+		if err != nil {
+			return fmt.Errorf("could not JSON-decode response body: %s", err)
+		}
+	}
 
 	return nil
 }
@@ -202,9 +204,11 @@ func (c *SpacesLowlevelClient) request(method string, path string, body interfac
 		return ErrUnexpectedStatusCode{res.StatusCode, msg.String()}
 	}
 
-	err = json.NewDecoder(res.Body).Decode(target)
-	if err != nil {
-		return fmt.Errorf("could not JSON-decode response body: %s", err)
+	if target != nil {
+		err = json.NewDecoder(res.Body).Decode(target)
+		if err != nil {
+			return fmt.Errorf("could not JSON-decode response body: %s", err)
+		}
 	}
 
 	c.logger.Printf("response: %s", target)
