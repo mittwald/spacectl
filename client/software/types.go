@@ -25,5 +25,5 @@ func (s *Software) LatestVersion() *Version {
 		return nil
 	}
 
-	return &s.Versions[len(s.Versions) - 1]
+	return &s.Versions[len(s.Versions)-1]
 }

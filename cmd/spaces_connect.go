@@ -3,13 +3,13 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/cmd/helper"
+	"github.com/spf13/cobra"
 )
 
 var spaceConnectFlags struct {
-	SpaceID string
-	PlanID string
+	SpaceID          string
+	PlanID           string
 	PaymentProfileID string
 }
 

@@ -1,17 +1,17 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/mittwald/spacectl/client/backups"
+	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
 	"os"
 )
 
 var backupsListFlags struct {
-	SpaceID string
+	SpaceID   string
 	StageName string
-	Keep bool
+	Keep      bool
 }
 
 var backupsListCmd = &cobra.Command{

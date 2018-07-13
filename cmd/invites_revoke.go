@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"errors"
 	"fmt"
+	"github.com/spf13/cobra"
 )
 
 var revokeInviteID string
@@ -12,7 +12,7 @@ var revokeInviteID string
 var invitesRevokeCmd = &cobra.Command{
 	Use:   "revoke",
 	Short: "Revokes a pending invitation",
-	Long: `This command revokes a pending invitation, stopping the invited user from becoming a member of the team`,
+	Long:  `This command revokes a pending invitation, stopping the invited user from becoming a member of the team`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if revokeInviteID == "" {
 			return errors.New("must specify invite ID (--invite or -i)")

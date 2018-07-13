@@ -1,17 +1,17 @@
 package sshkeys
 
 import (
-	"github.com/mittwald/spacectl/client/lowlevel"
-	"fmt"
 	"errors"
+	"fmt"
+	"github.com/mittwald/spacectl/client/lowlevel"
 )
 
 func (c *sshKeyClient) Add(keyBytes []byte, algorithm, comment string) (*SSHKey, error) {
 	resultkey := SSHKey{}
 	key := sshKeyInput{
 		CipherAlgorithm: algorithm,
-		Comment: comment,
-		Key: keyBytes,
+		Comment:         comment,
+		Key:             keyBytes,
 	}
 
 	profile := lowlevel.Linkeable{}

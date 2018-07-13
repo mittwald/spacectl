@@ -5,7 +5,7 @@ import "fmt"
 func (t *softwareClient) List() ([]Software, error) {
 	var software []Software
 
-	err := t.client.Get("/softwares/" + t.group, &software)
+	err := t.client.Get("/softwares/"+t.group, &software)
 	if err != nil {
 		return nil, fmt.Errorf("could not load software: %s", err)
 	}

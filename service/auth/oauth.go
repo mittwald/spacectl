@@ -17,18 +17,18 @@ type OAuthAuthenticationService struct {
 }
 
 type AuthenticationResult struct {
-	Token string
+	Token      string
 	ValidUntil time.Time
 }
 
 func (a *OAuthAuthenticationService) Authenticate() (*AuthenticationResult, error) {
 	ctx := context.Background()
 	conf := &oauth2.Config{
-		ClientID: "spaces.de/oauth/spacectl",
+		ClientID:     "spaces.de/oauth/spacectl",
 		ClientSecret: "",
-		Scopes: []string{"all"},
+		Scopes:       []string{"all"},
 		Endpoint: oauth2.Endpoint{
-			AuthURL: fmt.Sprintf("%s/o/oauth2/auth", a.AuthServerURL),
+			AuthURL:  fmt.Sprintf("%s/o/oauth2/auth", a.AuthServerURL),
 			TokenURL: fmt.Sprintf("%s/o/oauth2/token", a.AuthServerURL),
 		},
 		RedirectURL: "http://localhost:6241/oauth-redir",
@@ -64,7 +64,7 @@ func (a *OAuthAuthenticationService) Authenticate() (*AuthenticationResult, erro
 			}
 
 			result := &AuthenticationResult{
-				Token: token.AccessToken,
+				Token:      token.AccessToken,
 				ValidUntil: token.Expiry,
 			}
 

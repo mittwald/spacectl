@@ -3,25 +3,25 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"errors"
-	"github.com/mittwald/spacectl/client/teams"
 	"github.com/gosuri/uitable"
+	"github.com/mittwald/spacectl/client/teams"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var teamInviteFlags struct {
-	Email string
-	UserID string
+	Email   string
+	UserID  string
 	Message string
-	Role string
+	Role    string
 }
 
 // inviteCmd represents the invite command
 var teamInviteCmd = &cobra.Command{
 	Use:   "invite -t <team-id> -e <email> -m <message>",
 	Short: "Invite new users to your team",
-	Long: `Invite a new user into your team`,
+	Long:  `Invite a new user into your team`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 		var invite teams.Invite
@@ -78,7 +78,7 @@ var teamInviteCmd = &cobra.Command{
 func init() {
 	teamsCmd.AddCommand(teamInviteCmd)
 
-	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Email, "email", "e", "", "Email address of the user to invite");
+	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Email, "email", "e", "", "Email address of the user to invite")
 	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.UserID, "user-id", "u", "", "User ID of the user to invite")
 	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Message, "message", "m", "", "Invitation message")
 	teamInviteCmd.Flags().StringVarP(&teamInviteFlags.Role, "role", "r", "", "User role")

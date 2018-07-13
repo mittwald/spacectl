@@ -1,21 +1,21 @@
 package view
 
 import (
-	"github.com/mittwald/spacectl/client/sshkeys"
-	"io"
+	"crypto/md5"
+	"encoding/base64"
 	"fmt"
 	"github.com/gosuri/uitable"
-	"time"
-	"encoding/base64"
+	"github.com/mittwald/spacectl/client/sshkeys"
 	"github.com/mittwald/spacectl/cmd/helper"
-	"crypto/md5"
+	"io"
+	"time"
 )
 
 type KeyDetailView interface {
 	KeyDetail(key *sshkeys.SSHKey, out io.Writer)
 }
 
-type TabularKeyDetailView struct {}
+type TabularKeyDetailView struct{}
 
 func (t TabularKeyDetailView) KeyDetail(key *sshkeys.SSHKey, out io.Writer) {
 	fmt.Fprintln(out, "GENERAL INFO")
@@ -29,7 +29,7 @@ func (t TabularKeyDetailView) KeyDetail(key *sshkeys.SSHKey, out io.Writer) {
 	keyStr := base64.StdEncoding.EncodeToString(key.Key)
 
 	table.AddRow("  ID:", key.ID)
-	table.AddRow("  Created:", since + " ago")
+	table.AddRow("  Created:", since+" ago")
 	table.AddRow("  Created At:", key.CreatedAt.String())
 	table.AddRow("  Key:")
 	table.AddRow("    Algorithm:", key.CipherAlgorithm)
@@ -59,7 +59,7 @@ func (t TabularKeyDetailView) KeyDetail(key *sshkeys.SSHKey, out io.Writer) {
 			fmt.Fprint(out, " ")
 		}
 
-		i ++
+		i++
 	}
 
 	fmt.Fprintln(out, "")

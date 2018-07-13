@@ -5,10 +5,10 @@ import (
 )
 
 var plansCmd = &cobra.Command{
-	Use:   "plans",
+	Use:     "plans",
 	Aliases: []string{"plans"},
-	Short: "View available plans",
-	Long: `This command allows you to view available plans`,
+	Short:   "View available plans",
+	Long:    `This command allows you to view available plans`,
 }
 
 func init() {

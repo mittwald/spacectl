@@ -1,9 +1,9 @@
 package backups
 
 import (
-	"github.com/mittwald/spacectl/client/spaces"
 	"fmt"
 	"github.com/mittwald/spacectl/client/errors"
+	"github.com/mittwald/spacectl/client/spaces"
 	"net/url"
 	"time"
 )
@@ -48,7 +48,6 @@ func (c *backupClient) ListForSpace(spaceID string, opts *BackupListOptions) ([]
 
 	return backups, nil
 }
-
 
 func (c *backupClient) ListForStage(spaceID string, stageName string, opts *BackupListOptions) ([]Backup, error) {
 	stage := spaces.Stage{}
