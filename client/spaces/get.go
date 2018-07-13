@@ -2,14 +2,14 @@ package spaces
 
 import (
 	"fmt"
-	"github.com/mittwald/spacectl/client/teams"
 	"github.com/mittwald/spacectl/client/errors"
+	"github.com/mittwald/spacectl/client/teams"
 )
 
 func (c *spacesClient) GetByID(spaceID string) (*Space, error) {
 	var space Space
 
-	err := c.client.Get("/spaces/" + spaceID, &space)
+	err := c.client.Get("/spaces/"+spaceID, &space)
 	if err != nil {
 		return nil, fmt.Errorf("could not load space %s: %s", spaceID, err)
 	}
@@ -21,7 +21,7 @@ func (c *spacesClient) GetByTeamAndName(teamIDOrName string, spaceIDOrName strin
 	var team teams.Team
 	var space Space
 
-	err := c.client.Get("/teams/" + teamIDOrName, &team)
+	err := c.client.Get("/teams/"+teamIDOrName, &team)
 	if err != nil {
 		return nil, fmt.Errorf("could not load team %s: %s", teamIDOrName, err)
 	}

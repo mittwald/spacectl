@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/mittwald/spacectl/view"
-	"os"
 	"errors"
 	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
+	"os"
 )
 
 var backupsShowCmd = &cobra.Command{

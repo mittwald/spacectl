@@ -1,13 +1,13 @@
 package view
 
 import (
-	"io"
 	"fmt"
 	"github.com/gosuri/uitable"
-	"time"
-	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/mittwald/spacectl/client/teams"
+	"github.com/mittwald/spacectl/cmd/helper"
+	"io"
 	"strings"
+	"time"
 )
 
 type TeamDetailView interface {
@@ -28,7 +28,7 @@ func (t TabularTeamDetailView) TeamDetail(team *teams.Team, members []teams.Memb
 	since := helper.HumanReadableDateDiff(time.Now(), team.CreatedAt)
 
 	table.AddRow("  ID:", team.ID)
-	table.AddRow("  Created:", since + " ago")
+	table.AddRow("  Created:", since+" ago")
 	table.AddRow("  Created At:", team.CreatedAt.String())
 	table.AddRow("  Name:")
 	table.AddRow("    Human-readable:", team.Name)

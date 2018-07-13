@@ -6,13 +6,13 @@ import (
 	"os"
 	"os/user"
 
+	"github.com/fatih/color"
 	"github.com/mittwald/spacectl/client"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
-	"github.com/fatih/color"
 )
 
 var cfgFile string
@@ -24,12 +24,11 @@ var logger *log.Logger = log.New(ioutil.Discard, "spacectl", 0)
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "spacectl",
-	Short: "SPACES command line utility",
-	Long:  `spacectl enables you to manage your SPACES hosting enviroment from the command line.`,
+	Use:           "spacectl",
+	Short:         "SPACES command line utility",
+	Long:          `spacectl enables you to manage your SPACES hosting enviroment from the command line.`,
 	SilenceErrors: true,
-	SilenceUsage: true,
-
+	SilenceUsage:  true,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -121,9 +120,9 @@ func initConfig() {
 	}
 
 	clientConfig := client.SpacesClientConfig{
-		Token: viper.GetString("token"),
+		Token:     viper.GetString("token"),
 		APIServer: viper.GetString("apiServer"),
-		Logger: nil,
+		Logger:    nil,
 	}
 
 	if verbose {

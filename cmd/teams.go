@@ -20,10 +20,10 @@ import (
 
 // organizationsCmd represents the organizations command
 var teamsCmd = &cobra.Command{
-	Use:   "teams",
+	Use:     "teams",
 	Aliases: []string{"team", "t"},
-	Short: "Manage teams",
-	Long: `This command allows you to manage your teams`,
+	Short:   "Manage teams",
+	Long:    `This command allows you to manage your teams`,
 }
 
 func init() {

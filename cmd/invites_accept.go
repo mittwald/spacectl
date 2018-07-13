@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"errors"
 	"fmt"
+	"github.com/spf13/cobra"
 )
 
 var acceptInviteID string
@@ -12,7 +12,7 @@ var acceptInviteID string
 var invitesAcceptCmd = &cobra.Command{
 	Use:   "accept",
 	Short: "Accepts a pending invitation",
-	Long: `This command accepts a pending invitation and makes you a member of the team you were invited into.`,
+	Long:  `This command accepts a pending invitation and makes you a member of the team you were invited into.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if acceptInviteID == "" {
 			return errors.New("must specify invite ID (--invite or -i)")

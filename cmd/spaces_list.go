@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/gosuri/uitable"
 	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/cmd/helper"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"strings"
 	"time"
-	"github.com/mittwald/spacectl/cmd/helper"
 )
 
 // listCmd represents the list command

@@ -2,8 +2,8 @@ package lowlevel
 
 import (
 	"fmt"
-	"strings"
 	"net/url"
+	"strings"
 )
 
 type Message struct {
@@ -68,7 +68,7 @@ func (l Link) Get(client *SpacesLowlevelClient, result interface{}) error {
 }
 
 func (l Link) GetWithQuery(q url.Values, client *SpacesLowlevelClient, result interface{}) error {
-	if len(q) == 0{
+	if len(q) == 0 {
 		return l.Get(client, result)
 	}
 

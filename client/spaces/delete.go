@@ -1,8 +1,8 @@
 package spaces
 
-type Empty struct {}
+type Empty struct{}
 
-func (c *spacesClient) Delete(spaceID string) (error) {
+func (c *spacesClient) Delete(spaceID string) error {
 	var target Empty
-	return c.client.Delete("/spaces/" + spaceID, &target)
+	return c.client.Delete("/spaces/"+spaceID, &target)
 }

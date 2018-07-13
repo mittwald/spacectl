@@ -3,12 +3,12 @@ package errors
 import "fmt"
 
 type ErrUnauthorized struct {
-	Msg string
+	Msg   string
 	Inner error
 }
 
 type ErrNested struct {
-	Msg string
+	Msg   string
 	Inner error
 }
 

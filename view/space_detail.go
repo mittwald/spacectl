@@ -1,12 +1,13 @@
 package view
 
 import (
-	"github.com/mittwald/spacectl/client/spaces"
-	"io"
 	"fmt"
-	"github.com/gosuri/uitable"
+	"io"
 	"strings"
 	"time"
+
+	"github.com/gosuri/uitable"
+	"github.com/mittwald/spacectl/client/spaces"
 	"github.com/mittwald/spacectl/cmd/helper"
 )
 
@@ -14,7 +15,7 @@ type SpaceDetailView interface {
 	SpaceDetail(space *spaces.Space, updates []spaces.ApplicationUpdate, out io.Writer)
 }
 
-type TabularSpaceDetailView struct {}
+type TabularSpaceDetailView struct{}
 
 func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []spaces.ApplicationUpdate, paymentLink *spaces.SpacePaymentLink, out io.Writer) {
 	fmt.Fprintln(out, "GENERAL INFO")
@@ -26,7 +27,7 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 	since := helper.HumanReadableDateDiff(time.Now(), space.CreatedAt)
 
 	table.AddRow("  ID:", space.ID)
-	table.AddRow("  Created:", since + " ago")
+	table.AddRow("  Created:", since+" ago")
 	table.AddRow("  Created At:", space.CreatedAt.String())
 	table.AddRow("  Name:")
 	table.AddRow("    Human-readable:", space.Name.HumanReadableName)
@@ -47,7 +48,7 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 		table.AddRow("      ID:", pr.ID)
 
 		if pr.ContractPartner.Company != "" {
-			table.AddRow("      Contract Partner:", pr.ContractPartner.Company + ", " + pr.ContractPartner.FirstName+" "+pr.ContractPartner.LastName)
+			table.AddRow("      Contract Partner:", pr.ContractPartner.Company+", "+pr.ContractPartner.FirstName+" "+pr.ContractPartner.LastName)
 		} else {
 			table.AddRow("      Contract Partner:", pr.ContractPartner.FirstName+" "+pr.ContractPartner.LastName)
 		}
@@ -60,21 +61,15 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 
 	stageTable := uitable.New()
 	stageTable.Wrap = true
-	stageTable.AddRow("  NAME", "APPLICATION", "VERSION SPEC", "ACTUAL VERSION", "RUNNING", "DNS NAMES")
+	stageTable.AddRow("  NAME", "APPLICATION", "VERSION SPEC", "ACTUAL VERSION", "STATUS", "DNS NAMES")
 
 	for _, s := range space.Stages {
-		running := "no"
-
-		if s.Running {
-			running = "yes"
-		}
-
 		stageTable.AddRow(
-			"  " + s.Name,
+			"  "+s.Name,
 			s.Application.ID,
 			s.VersionConstraint,
 			s.Version.Number,
-			running,
+			s.Status,
 			strings.Join(s.DNSNames, "\n"),
 		)
 	}

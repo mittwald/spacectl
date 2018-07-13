@@ -3,9 +3,9 @@ package sshkeys
 import "time"
 
 type sshKeyInput struct {
-	CipherAlgorithm string    `json:"cipherAlgorithm"`
-	Comment         string    `json:"comment,omitempty"`
-	Key             []byte    `json:"key"`
+	CipherAlgorithm string `json:"cipherAlgorithm"`
+	Comment         string `json:"comment,omitempty"`
+	Key             []byte `json:"key"`
 }
 
 type SSHKey struct {

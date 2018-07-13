@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/mittwald/spacectl/spacefile"
+	"github.com/spf13/cobra"
 )
 
 var spacesValidateCmd = &cobra.Command{

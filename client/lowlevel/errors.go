@@ -4,7 +4,7 @@ import "fmt"
 
 type ErrUnexpectedStatusCode struct {
 	StatusCode int
-	Message string
+	Message    string
 }
 
 func (e ErrUnexpectedStatusCode) Error() string {

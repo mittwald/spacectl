@@ -2,16 +2,16 @@ package client
 
 import (
 	"fmt"
-	"github.com/mittwald/spacectl/client/lowlevel"
-	"github.com/mittwald/spacectl/client/software"
-	"github.com/mittwald/spacectl/client/teams"
+	"github.com/mittwald/spacectl/client/backups"
 	"github.com/mittwald/spacectl/client/invites"
-	"log"
-	"io/ioutil"
+	"github.com/mittwald/spacectl/client/lowlevel"
+	"github.com/mittwald/spacectl/client/payment"
+	"github.com/mittwald/spacectl/client/software"
 	"github.com/mittwald/spacectl/client/spaces"
 	"github.com/mittwald/spacectl/client/sshkeys"
-	"github.com/mittwald/spacectl/client/backups"
-	"github.com/mittwald/spacectl/client/payment"
+	"github.com/mittwald/spacectl/client/teams"
+	"io/ioutil"
+	"log"
 )
 
 type SpacesClient interface {
@@ -27,9 +27,9 @@ type SpacesClient interface {
 }
 
 type SpacesClientConfig struct {
-	Token string
+	Token     string
 	APIServer string
-	Logger *log.Logger
+	Logger    *log.Logger
 }
 
 type spacesClient struct {
