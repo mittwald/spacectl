@@ -1,8 +1,9 @@
 package spaces
 
 import (
-	"github.com/mittwald/spacectl/client/lowlevel"
 	"time"
+
+	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/payment"
 )
 
@@ -36,14 +37,16 @@ type Stage struct {
 	Links   lowlevel.LinkList `json:"_links"`
 	Actions lowlevel.LinkList `json:"_actions"`
 
-	Name              string      `json:"name"`
-	Application       SoftwareRef `json:"application"`
-	Cronjobs          []Cronjob   `json:"cronjobs"`
-	Version           VersionRef  `json:"version"`
-	VersionConstraint string      `json:"versionConstraint"`
-	UserData          interface{} `json:"userData"`
-	DNSNames          []string    `json:"dnsNames"`
-	Running           bool        `json:"running"`
+	Name              string                 `json:"name"`
+	Application       SoftwareRef            `json:"application"`
+	Cronjobs          []Cronjob              `json:"cronjobs"`
+	Version           VersionRef             `json:"version"`
+	VersionConstraint string                 `json:"versionConstraint"`
+	UserData          interface{}            `json:"userData"`
+	DNSNames          []string               `json:"dnsNames"`
+	Status            string                 `json:"status"`
+	Running           bool                   `json:"running"`
+	Initialization    InitializationProgress `json:"initializationProgress"`
 }
 
 type StageRef struct {
@@ -58,6 +61,16 @@ type StageDeclaration struct {
 	Cronjobs          []Cronjob            `json:"cronjobs"`
 	VersionConstraint string               `json:"versionConstraint"`
 	UserData          interface{}          `json:"userData"`
+}
+
+type InitializationProgress struct {
+	Status string   `json:"status"`
+	Step   InitStep `json:"step"`
+}
+
+type InitStep struct {
+	CurrentStep string   `json:"currentStep"`
+	TotalSteps  []string `json:"totalSteps"`
 }
 
 type Space struct {
