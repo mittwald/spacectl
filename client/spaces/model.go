@@ -5,7 +5,6 @@ import (
 
 	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/payment"
-	"time"
 )
 
 type SpaceName struct {
