@@ -13,7 +13,7 @@ import (
 
 var spaceOpenFlags struct {
 	SpaceIDOrName string
-	Stage string
+	Stage         string
 }
 
 // openCmd represents the open command

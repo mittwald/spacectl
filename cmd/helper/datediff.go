@@ -1,10 +1,10 @@
 package helper
 
 import (
-	"time"
-	"math"
 	"fmt"
+	"math"
 	"strings"
+	"time"
 )
 
 func HumanReadableDateDiff(t1, t2 time.Time) string {
@@ -35,7 +35,7 @@ func HumanReadableDateDiff(t1, t2 time.Time) string {
 		components = append(components, fmt.Sprintf("%dm", int(minutes)))
 	}
 
-	components = append(components, fmt.Sprintf("%ds", diff / time.Second))
+	components = append(components, fmt.Sprintf("%ds", diff/time.Second))
 
 	if len(components) > 2 {
 		return strings.Join(components[0:2], "")

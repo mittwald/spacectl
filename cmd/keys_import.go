@@ -18,7 +18,7 @@ var keyImportFlags struct {
 var keyImportCmd = &cobra.Command{
 	Use:   "import <key-file>",
 	Short: "Import an existing SSH public key",
-	Long: `This command imports an existing SSH public key`,
+	Long:  `This command imports an existing SSH public key`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			RootCmd.SilenceUsage = false

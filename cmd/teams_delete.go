@@ -3,10 +3,10 @@ package cmd
 import (
 	"fmt"
 
+	"bytes"
+	"errors"
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
-	"errors"
-	"bytes"
 )
 
 var teamDeleteFlags struct {

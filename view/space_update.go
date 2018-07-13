@@ -1,19 +1,19 @@
 package view
 
 import (
-	"github.com/mittwald/spacectl/client/spaces"
-	"io"
 	"fmt"
 	"github.com/gosuri/uitable"
-	"time"
+	"github.com/mittwald/spacectl/client/spaces"
 	"github.com/mittwald/spacectl/cmd/helper"
+	"io"
+	"time"
 )
 
 type SpaceApplicationUpdateView interface {
 	SpaceApplicationUpdate(space *spaces.Space, update *spaces.ApplicationUpdate, out io.Writer)
 }
 
-type TabularSpaceApplicationUpdateView struct {}
+type TabularSpaceApplicationUpdateView struct{}
 
 func (t TabularSpaceApplicationUpdateView) SpaceApplicationUpdate(space *spaces.Space, update *spaces.ApplicationUpdate, out io.Writer) {
 	fmt.Fprintln(out, "GENERAL INFO")
@@ -32,7 +32,7 @@ func (t TabularSpaceApplicationUpdateView) SpaceApplicationUpdate(space *spaces.
 	}
 
 	table.AddRow("  ID:", space.ID)
-	table.AddRow("  Started:", startedRelative+ " ago")
+	table.AddRow("  Started:", startedRelative+" ago")
 	table.AddRow("  Started At:", update.StartedAt.String())
 	table.AddRow("  Completed:", completedRelative)
 	table.AddRow("  Completed At:", completed)

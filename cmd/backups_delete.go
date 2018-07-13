@@ -1,11 +1,11 @@
 package cmd
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
-	"bytes"
-	"fmt"
 )
 
 var backupsDeleteFlags struct {

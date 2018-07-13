@@ -1,10 +1,10 @@
 package spacefile
 
 import (
-	"io/ioutil"
 	"fmt"
-	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/hcl"
+	"io/ioutil"
 	"os"
 )
 

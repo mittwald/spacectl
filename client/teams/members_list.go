@@ -6,7 +6,7 @@ func (t *teamsClient) ListMembers(teamID string) ([]Membership, error) {
 	var memberships []Membership
 	var team Team
 
-	err := t.client.Get("/teams/" + teamID, &team)
+	err := t.client.Get("/teams/"+teamID, &team)
 	if err != nil {
 		return nil, err
 	}

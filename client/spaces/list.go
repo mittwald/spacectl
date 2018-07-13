@@ -1,9 +1,9 @@
 package spaces
 
 import (
+	"errors"
 	"fmt"
 	"github.com/mittwald/spacectl/client/teams"
-	"errors"
 )
 
 func (c *spacesClient) List() ([]Space, error) {
@@ -25,7 +25,7 @@ func (c *spacesClient) ListByTeam(teamID string) ([]Space, error) {
 		return nil, errors.New("team ID must not be empty")
 	}
 
-	err := c.client.Get("/teams/" + teamID, &team)
+	err := c.client.Get("/teams/"+teamID, &team)
 	if err != nil {
 		return nil, err
 	}

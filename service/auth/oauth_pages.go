@@ -24,9 +24,6 @@ const confirmationPage = `
 						You can now close this browser window and start using SpaceCTL.
 					</p>
                 </div>
-                <div class="card-footer">
-                    <button class="btn-lg btn-primary btn-block" onclick="window.close()">Close this window</button>
-                </div>
             </div>
         </div>
     </div>
@@ -56,7 +53,8 @@ const errorPage = `
 						An error occurred while retrieving your token from the SPACES identity server.
 						Here's what the identity server says:
 					</p>
-					<pre>{{ .err }}</pre>
+					<pre>{{ .error }}</pre>
+					<pre>{{ .error_description }}</pre>
                 </div>
             </div>
         </div>

@@ -1,16 +1,16 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"errors"
 	"github.com/mittwald/spacectl/view"
+	"github.com/spf13/cobra"
 	"os"
 )
 
 var keysShowCmd = &cobra.Command{
-	Use:     "get <key-id>",
-	Short:   "Get specific SSH key",
-	Long:    `This command gets a specific SSH key.`,
+	Use:   "get <key-id>",
+	Short: "Get specific SSH key",
+	Long:  `This command gets a specific SSH key.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			RootCmd.SilenceUsage = false
