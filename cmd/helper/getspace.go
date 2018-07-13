@@ -13,7 +13,7 @@ import (
 
 func GetSpaceFromContext(args []string, spaceFileName string, flagValue *string, api client.SpacesClient) (*spaces.Space, error) {
 	providedSpaceID := ""
-	if flagValue != nil {
+	if *flagValue != "" {
 		providedSpaceID = *flagValue
 	} else if args != nil && len(args) >= 1 {
 		providedSpaceID = args[0]
