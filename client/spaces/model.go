@@ -70,7 +70,7 @@ type InitializationProgress struct {
 
 type InitStep struct {
 	CurrentStep string   `json:"currentStep"`
-	TotalStep   []string `json:"totalSteps"`
+	TotalSteps  []string `json:"totalSteps"`
 }
 
 type Space struct {
