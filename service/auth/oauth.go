@@ -5,11 +5,12 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"github.com/mittwald/spacectl/system/browser"
-	"golang.org/x/oauth2"
 	"html/template"
 	"net/http"
 	"time"
+
+	"github.com/mittwald/spacectl/system/browser"
+	"golang.org/x/oauth2"
 )
 
 type OAuthAuthenticationService struct {
@@ -59,7 +60,10 @@ func (a *OAuthAuthenticationService) Authenticate() (*AuthenticationResult, erro
 			if err != nil {
 				errChan <- err
 				rw.WriteHeader(500)
-				t.Execute(rw, map[string]string{"error": err.Error()})
+				t.Execute(rw, map[string]string{
+					"error":             req.URL.Query().Get("error"),
+					"error_description": req.URL.Query().Get("error_description"),
+				})
 				return
 			}
 

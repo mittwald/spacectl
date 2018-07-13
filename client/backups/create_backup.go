@@ -2,6 +2,7 @@ package backups
 
 import (
 	"fmt"
+
 	"github.com/mittwald/spacectl/client/errors"
 	"github.com/mittwald/spacectl/client/spaces"
 )
@@ -18,6 +19,13 @@ func (c *backupClient) Create(spaceID string, stageName string, keep bool, descr
 	err := c.client.Get(stageURL, &stage)
 	if err != nil {
 		return nil, errors.ErrNested{Inner: err, Msg: "could not access stage"}
+	}
+
+	if stage.Initialization.Status != "completed" {
+		return nil, errors.ErrNested{
+			Msg:   "stage is not initialized",
+			Inner: fmt.Errorf("initialization: %s", stage.Initialization.Status),
+		}
 	}
 
 	backupsLink, err := stage.Links.GetLinkByRel("backups")

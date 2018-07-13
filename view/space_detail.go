@@ -2,12 +2,13 @@ package view
 
 import (
 	"fmt"
-	"github.com/gosuri/uitable"
-	"github.com/mittwald/spacectl/client/spaces"
-	"github.com/mittwald/spacectl/cmd/helper"
 	"io"
 	"strings"
 	"time"
+
+	"github.com/gosuri/uitable"
+	"github.com/mittwald/spacectl/client/spaces"
+	"github.com/mittwald/spacectl/cmd/helper"
 )
 
 type SpaceDetailView interface {
@@ -60,21 +61,15 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 
 	stageTable := uitable.New()
 	stageTable.Wrap = true
-	stageTable.AddRow("  NAME", "APPLICATION", "VERSION SPEC", "ACTUAL VERSION", "RUNNING", "DNS NAMES")
+	stageTable.AddRow("  NAME", "APPLICATION", "VERSION SPEC", "ACTUAL VERSION", "STATUS", "DNS NAMES")
 
 	for _, s := range space.Stages {
-		running := "no"
-
-		if s.Running {
-			running = "yes"
-		}
-
 		stageTable.AddRow(
 			"  "+s.Name,
 			s.Application.ID,
 			s.VersionConstraint,
 			s.Version.Number,
-			running,
+			s.Status,
 			strings.Join(s.DNSNames, "\n"),
 		)
 	}

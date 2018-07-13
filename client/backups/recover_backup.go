@@ -41,7 +41,7 @@ func (c *backupClient) Recover(backupID string, stage string, files RecoverySpec
 		Metadata:  metadata.buildRequest(),
 	}
 
-	err = recoverLink.Execute(c.client, req, res)
+	err = recoverLink.Execute(c.client, req, &res)
 	if err != nil {
 		return nil, errors.ErrNested{Inner: err, Msg: "could not start backup recovery"}
 	}
