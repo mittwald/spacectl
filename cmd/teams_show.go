@@ -5,9 +5,6 @@ import (
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
 	"os"
-
-	"github.com/mittwald/spacectl/view"
-	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
