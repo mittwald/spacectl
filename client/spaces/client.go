@@ -11,7 +11,7 @@ type SpacesClient interface {
 	Declare(teamID string, declaration *SpaceDeclaration) (*Space, error)
 	GetByID(spaceID string) (*Space, error)
 	GetByTeamAndName(teamIDOrName string, spaceIDOrName string) (*Space, error)
-	Delete(spaceID string) (error)
+	Delete(spaceID string) error
 	UpdateApplication(spaceID, stage, targetStage, version string) (*ApplicationUpdate, error)
 	ListApplicationUpdatesByStage(spaceID, stage string) ([]ApplicationUpdate, error)
 	ListApplicationUpdatesBySpace(spaceID string) ([]ApplicationUpdate, error)
@@ -19,7 +19,7 @@ type SpacesClient interface {
 	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error)
 }
 
-func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) (SpacesClient) {
+func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SpacesClient {
 	return &spacesClient{client, logger}
 }
 

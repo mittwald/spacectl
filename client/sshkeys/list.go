@@ -1,9 +1,9 @@
 package sshkeys
 
 import (
-	"github.com/mittwald/spacectl/client/lowlevel"
-	"fmt"
 	"errors"
+	"fmt"
+	"github.com/mittwald/spacectl/client/lowlevel"
 )
 
 func (c *sshKeyClient) List() ([]SSHKey, error) {

@@ -10,7 +10,7 @@ func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileI
 	var space Space
 	var paymentLink SpacePaymentLink
 
-	err := c.client.Get("/spaces/" + spaceID, &space)
+	err := c.client.Get("/spaces/"+spaceID, &space)
 	if err != nil {
 		return nil, fmt.Errorf("could not load stage: %s", err)
 	}
@@ -21,7 +21,7 @@ func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileI
 	}
 
 	input := SpacePaymentLinkInput{
-		Plan: payment.PlanReferenceInput{ID: planID},
+		Plan:           payment.PlanReferenceInput{ID: planID},
 		PaymentProfile: payment.PaymentProfileReferenceInput{ID: paymentProfileID},
 	}
 
@@ -37,7 +37,7 @@ func (c *spacesClient) GetPaymentLink(spaceID string) (*SpacePaymentLink, error)
 	var space Space
 	var paymentLink SpacePaymentLink
 
-	err := c.client.Get("/spaces/" + spaceID, &space)
+	err := c.client.Get("/spaces/"+spaceID, &space)
 	if err != nil {
 		return nil, fmt.Errorf("could not load stage: %s", err)
 	}

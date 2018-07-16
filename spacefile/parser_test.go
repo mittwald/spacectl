@@ -10,7 +10,7 @@ func errMsg(e error) string {
 	return ""
 }
 
-func getParsedSpacefile(t *testing.T) (*Spacefile) {
+func getParsedSpacefile(t *testing.T) *Spacefile {
 	spacefile, err := ParseSpacefile("./example.hcl")
 
 	require.Nil(t, err, errMsg(err))
@@ -37,7 +37,7 @@ func TestSpacefileCanBeCorrectlyParsed(t *testing.T) {
 	require.Len(t, stage.Databases, 1)
 }
 
-func TestSpacefileHasCronjobs(t *testing.T)  {
+func TestSpacefileHasCronjobs(t *testing.T) {
 	spacefile := getParsedSpacefile(t)
 	stage := spacefile.Spaces[0].Stages[0]
 
