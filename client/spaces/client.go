@@ -1,8 +1,9 @@
 package spaces
 
 import (
-	"github.com/mittwald/spacectl/client/lowlevel"
 	"log"
+
+	"github.com/mittwald/spacectl/client/lowlevel"
 )
 
 type SpacesClient interface {
@@ -17,6 +18,7 @@ type SpacesClient interface {
 	ListApplicationUpdatesBySpace(spaceID string) ([]ApplicationUpdate, error)
 	GetPaymentLink(spaceID string) (*SpacePaymentLink, error)
 	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error)
+	ListCaughtEmails(spaceID string) ([]CaughtEmail, error)
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SpacesClient {
