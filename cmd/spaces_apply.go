@@ -1,10 +1,11 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/mittwald/spacectl/spacefile"
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 // applyCmd represents the apply command
@@ -17,7 +18,7 @@ CAUTION: This command can be potentially destructive.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		logger.Printf("Using Spacefile at %s\n", spaceFile)
 
-		file, err := spacefile.ParseSpacefile(spaceFile)
+		file, err := spacefile.ParseSpacefile(spaceFile, false)
 		if err != nil {
 			return err
 		}

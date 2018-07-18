@@ -3,7 +3,6 @@ package spacefile
 import (
 	"fmt"
 
-	"github.com/Masterminds/semver"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -17,7 +16,7 @@ type StageDef struct {
 	inheritStage *StageDef
 }
 
-func (d *StageDef) Validate() error {
+func (d *StageDef) Validate(offline bool) error {
 	var err *multierror.Error
 
 	if len(d.Applications) > 1 {
@@ -25,9 +24,7 @@ func (d *StageDef) Validate() error {
 	}
 
 	if d.Application() != nil {
-		if _, errSem := semver.NewConstraint(d.Application().Version); errSem != nil {
-			err = multierror.Append(err, fmt.Errorf("version: %s", errSem.Error()))
-		}
+		err = multierror.Append(err, d.Application().Validate(offline))
 	}
 
 	return err.ErrorOrNil()

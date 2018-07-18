@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func ParseSpacefile(filename string) (*Spacefile, error) {
+func ParseSpacefile(filename string, offline bool) (*Spacefile, error) {
 	contents, err := ioutil.ReadFile(filename)
 
 	if os.IsNotExist(err) {
@@ -29,7 +29,7 @@ func ParseSpacefile(filename string) (*Spacefile, error) {
 	var mErr *multierror.Error
 
 	mErr = multierror.Append(mErr, obj.resolveReferences())
-	mErr = multierror.Append(mErr, obj.Validate())
+	mErr = multierror.Append(mErr, obj.Validate(offline))
 
 	if mErr.ErrorOrNil() != nil {
 		return nil, mErr

@@ -28,7 +28,7 @@ func GetSpaceFromContext(args []string, spaceFileName string, flagValue *string,
 		}
 	}
 
-	f, err := spacefile.ParseSpacefile(spaceFileName)
+	f, err := spacefile.ParseSpacefile(spaceFileName, false)
 	if err == nil {
 		spaceDef := f.Spaces[0]
 

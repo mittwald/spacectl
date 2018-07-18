@@ -2,9 +2,10 @@ package view
 
 import (
 	"fmt"
+	"io"
+
 	"github.com/gosuri/uitable"
 	"github.com/mittwald/spacectl/client/software"
-	"io"
 )
 
 type AppsView interface {
@@ -35,6 +36,36 @@ func (t TabularAppsView) List(softwareList []software.Software, out io.Writer) {
 			len(sw.Versions),
 			latest,
 		)
+	}
+
+	fmt.Fprintln(out, table)
+}
+
+type AppView interface {
+	List(appID string, appName string, versionList []software.Version, out io.Writer)
+}
+
+type TabularAppView struct{}
+
+func (t TabularAppView) List(appID string, appName string, versionList []software.Version, out io.Writer) {
+	if appID == "" || appName == "" {
+		fmt.Fprintln(out, "No application found.")
+		return
+	}
+
+	table := uitable.New()
+	table.MaxColWidth = 50
+	table.AddRow("ID", "NAME", "VERSIONS")
+
+	table.AddRow(
+		appID,
+		appName,
+		versionList[0].Number,
+	)
+	versionList = versionList[1:]
+
+	for _, sw := range versionList {
+		table.AddRow("", "", sw.Number)
 	}
 
 	fmt.Fprintln(out, table)

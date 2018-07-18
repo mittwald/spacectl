@@ -27,7 +27,7 @@ var logger *log.Logger = log.New(ioutil.Discard, "spacectl", 0)
 var RootCmd = &cobra.Command{
 	Use:           "spacectl",
 	Short:         "SPACES command line utility",
-	Long:          `spacectl enables you to manage your SPACES hosting enviroment from the command line.`,
+	Long:          `spacectl enables you to manage your SPACES hosting environment from the command line.`,
 	SilenceErrors: true,
 	SilenceUsage:  true,
 }

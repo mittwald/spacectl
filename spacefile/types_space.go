@@ -19,7 +19,7 @@ type SpaceDef struct {
 	stagesByName map[string]*StageDef
 }
 
-func (d *SpaceDef) Validate() error {
+func (d *SpaceDef) Validate(offline bool) error {
 	var err *multierror.Error
 
 	if len(d.DNSLabel) == 0 {
@@ -43,7 +43,7 @@ func (d *SpaceDef) Validate() error {
 	}
 
 	for i := range d.Stages {
-		err = multierror.Append(err, d.Stages[i].Validate())
+		err = multierror.Append(err, d.Stages[i].Validate(offline))
 	}
 
 	return err.ErrorOrNil()
