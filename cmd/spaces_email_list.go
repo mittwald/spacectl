@@ -32,12 +32,13 @@ var spacesEmailListCmd = &cobra.Command{
 
 		table := uitable.New()
 		table.MaxColWidth = 50
-		table.AddRow("DATE", "SENDER", "RECIPIENT", "SUBJECT")
+		table.AddRow("MSG ID", "DATE", "SENDER", "RECIPIENT", "SUBJECT")
 
 		for _, email := range emails {
 			vh := view.CaughtEmailView{CaughtEmail: email}
 
 			table.AddRow(
+				vh.ID,
 				vh.RenderDate(),
 				vh.RenderSender(),
 				vh.RenderRecipients(2),

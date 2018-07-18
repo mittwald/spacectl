@@ -2,7 +2,7 @@ package spaces
 
 import "fmt"
 
-func (c *spacesClient) ListCaughtEmails(spaceID string) ([]CaughtEmail, error) {
+func (c *spacesClient) ListCaughtEmails(spaceID string) (CaughtEmailList, error) {
 	var space Space
 	var emails []CaughtEmail
 

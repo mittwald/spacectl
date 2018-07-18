@@ -56,3 +56,15 @@ func (c *CaughtEmail) Headers(name string) []string {
 
 	return values
 }
+
+type CaughtEmailList []CaughtEmail
+
+func (l CaughtEmailList) ByID(id string) *CaughtEmail {
+	for i := range l {
+		if l[i].ID == id {
+			return &l[i]
+		}
+	}
+
+	return nil
+}
