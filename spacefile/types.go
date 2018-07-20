@@ -14,7 +14,7 @@ type Spacefile struct {
 	Spaces  []SpaceDef `hcl:"space"`
 }
 
-func (f *Spacefile) Validate() error {
+func (f *Spacefile) Validate(offline bool) error {
 	var err *multierror.Error
 
 	if f.Version != "1" {
@@ -30,7 +30,7 @@ func (f *Spacefile) Validate() error {
 	}
 
 	for i := range f.Spaces {
-		err = multierror.Append(err, f.Spaces[i].Validate())
+		err = multierror.Append(err, f.Spaces[i].Validate(offline))
 	}
 
 	return err.ErrorOrNil()

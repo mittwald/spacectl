@@ -11,7 +11,7 @@ func errMsg(e error) string {
 }
 
 func getParsedSpacefile(t *testing.T) *Spacefile {
-	spacefile, err := ParseSpacefile("./example.hcl")
+	spacefile, err := ParseSpacefile("./example.hcl", true)
 
 	require.Nil(t, err, errMsg(err))
 	require.NotNil(t, spacefile)
@@ -23,7 +23,7 @@ func getParsedSpacefile(t *testing.T) *Spacefile {
 }
 
 func TestSpacefileCanBeCorrectlyParsed(t *testing.T) {
-	spacefile, err := ParseSpacefile("./example.hcl")
+	spacefile, err := ParseSpacefile("./example.hcl", true)
 
 	require.Nil(t, err, errMsg(err))
 	require.NotNil(t, spacefile)

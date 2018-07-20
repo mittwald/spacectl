@@ -46,9 +46,11 @@ command to actually apply the declaration within the Spacefile.`,
 			return mErr
 		}
 
+		yellow := color.New(color.FgYellow).Add(color.Bold).SprintfFunc()
+
 		if spaceInitFlags.Label == "" {
 			spaceInitFlags.Label = regexp.MustCompile("[^a-z0-9-]").ReplaceAllString(strings.ToLower(spaceInitFlags.Name), "-")
-			fmt.Printf("Using %s as auto-generated DNS label\n", color.YellowString(spaceInitFlags.Label))
+			fmt.Fprintf(color.Output, "Using %s as auto-generated DNS label\n", yellow(spaceInitFlags.Label))
 		}
 
 		filePath := "./" + spacefile.DefaultFilename
@@ -60,7 +62,7 @@ command to actually apply the declaration within the Spacefile.`,
 				return fmt.Errorf(`The file '%s' already exists in the current directory.
 Use the --force flag (or -f) to overwrite it.`, filePath)
 			} else {
-				fmt.Printf("Overwriting existing Spacefile at %s\n", color.YellowString(filePath))
+				fmt.Fprintf(color.Output, "Overwriting existing Spacefile at %s\n", yellow(filePath))
 			}
 		}
 
@@ -79,8 +81,8 @@ Use the --force flag (or -f) to overwrite it.`, filePath)
 			return fmt.Errorf("Could not generate Spacefile:\n    %s", err)
 		}
 
-		fmt.Printf("Spacefile generated at %s.\n", color.YellowString(filePath))
-		fmt.Printf("Edit your Spacefile at will and use the %s command to actually create the new Space\n", color.YellowString("spacectl spaces apply"))
+		fmt.Fprintf(color.Output, "Spacefile generated at %s.\n", yellow(filePath))
+		fmt.Fprintf(color.Output, "Edit your Spacefile at will and use the %s command to actually create the new Space\n", yellow("spacectl spaces apply"))
 
 		return nil
 	},
