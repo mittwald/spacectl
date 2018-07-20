@@ -46,7 +46,8 @@ func Execute() {
 `)
 
 		color.Red("")
-		color.Red(err.Error())
+		fmt.Fprintf(color.Output, color.RedString(err.Error()))
+		color.Red("")
 		color.Red("")
 
 		color.Blue("NEED HELP?")

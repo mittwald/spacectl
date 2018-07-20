@@ -41,13 +41,13 @@ func (t TabularAppsView) List(softwareList []software.Software, out io.Writer) {
 	fmt.Fprintln(out, table)
 }
 
-type AppView interface {
+type AppVersionView interface {
 	List(appID string, appName string, versionList []software.Version, out io.Writer)
 }
 
-type TabularAppView struct{}
+type TabularAppVersionView struct{}
 
-func (t TabularAppView) List(appID string, appName string, versionList []software.Version, out io.Writer) {
+func (t TabularAppVersionView) List(appID string, appName string, versionList []software.Version, out io.Writer) {
 	if appID == "" || appName == "" {
 		fmt.Fprintln(out, "No application found.")
 		return

@@ -32,7 +32,7 @@ var appsShowCmd = &cobra.Command{
 			return err
 		}
 
-		v := view.TabularAppView{}
+		v := view.TabularAppVersionView{}
 		v.List(app.Identifier, app.Name, app.Versions, os.Stdout)
 
 		return nil

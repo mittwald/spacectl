@@ -54,48 +54,41 @@ func (l SoftwareDefList) Merge(other SoftwareDefList) (SoftwareDefList, error) {
 
 // Validate performs (optional) online validation of software version and name
 func (s SoftwareDef) Validate(offline bool) error {
-	constrait, errSem := semver.NewConstraint(s.Version)
+	constraint, errSem := semver.NewConstraint(s.Version)
 	if errSem != nil {
 		return fmt.Errorf("version: %s", errSem.Error())
 	}
 
-	if !offline {
-		api, err := client.NewSpacesClient(client.SpacesClientConfig{
-			APIServer: viper.GetString("apiServer"),
-			Token:     viper.GetString("token"),
-		})
-		if err != nil {
-			return err
-		}
+	if offline {
+		return nil
+	}
 
-		appList, err := api.Applications().List()
-		if err != nil {
-			return err
-		}
+	api, err := client.NewSpacesClient(client.SpacesClientConfig{
+		APIServer: viper.GetString("apiServer"),
+		Token:     viper.GetString("token"),
+	})
+	if err != nil {
+		return err
+	}
 
-		for _, app := range appList {
-			if app.Identifier == s.Identifier {
-				sw, err := api.Applications().Get(app.Identifier)
-				if err != nil {
-					return err
-				}
+	yellow := color.New(color.FgYellow).Add(color.Bold).SprintfFunc()
 
-				for _, v := range sw.Versions {
-					if semVer, err := semver.NewVersion(v.Number); err == nil {
-						if constrait.Check(semVer) {
-							return nil
-						}
-					}
-				}
+	sw, err := api.Applications().Get(s.Identifier)
+	if err != nil {
+		// fancy error 2
+		softwareHelp := color.BlueString("use ") + yellow("spacectl software apps list") + color.BlueString(" to list available applications")
+		return fmt.Errorf("software %s is not available: %s\n\n%s", s.Identifier, err, softwareHelp)
+	}
 
-				// fancy error
-				versionHelp := color.BlueString("use ") + color.YellowString("spacectl software apps show %s", s.Identifier) + color.BlueString(" to list available applications")
-				return fmt.Errorf("version %s is not available\n\n%s", s.Version, versionHelp)
+	for _, v := range sw.Versions {
+		if semVer, err := semver.NewVersion(v.Number); err == nil {
+			if constraint.Check(semVer) {
+				return nil
 			}
 		}
-		// fancy error 2
-		softwareHelp := color.BlueString("use ") + color.YellowString("spacectl software apps list") + color.BlueString(" to list available applications")
-		return fmt.Errorf("software %s is not available\n\n%s", s.Identifier, softwareHelp)
 	}
-	return nil
+
+	// fancy error
+	versionHelp := color.BlueString("use ") + yellow("spacectl software apps show %s", s.Identifier) + color.BlueString(" to list available versions")
+	return fmt.Errorf("version %s is not available\n\n%s", s.Version, versionHelp)
 }
