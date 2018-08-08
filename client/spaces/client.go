@@ -19,6 +19,7 @@ type SpacesClient interface {
 	GetPaymentLink(spaceID string) (*SpacePaymentLink, error)
 	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error)
 	ListCaughtEmails(spaceID string) (CaughtEmailList, error)
+	GetComputeMetrics(spaceID string, scope string) (ComputeMetricPointList, error)
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SpacesClient {
