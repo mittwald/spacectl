@@ -23,7 +23,7 @@ func (d *SpaceDef) Validate(offline bool) error {
 	var err *multierror.Error
 
 	if len(d.DNSLabel) == 0 {
-		err = multierror.Append(err, errors.New("Empty Space name"))
+		err = multierror.Append(err, errors.New("empty Space name"))
 	}
 
 	if len(d.Name) == 0 {
@@ -31,14 +31,14 @@ func (d *SpaceDef) Validate(offline bool) error {
 	}
 
 	if len(d.Stages) == 0 {
-		err = multierror.Append(err, fmt.Errorf("Space \"%s\" should contain at least one stage", d.DNSLabel))
+		err = multierror.Append(err, fmt.Errorf("space \"%s\" should contain at least one stage", d.DNSLabel))
 	}
 
 	if len(d.TeamID) == 0 {
 		if len(viper.GetString("teamID")) > 0 {
 			d.TeamID = viper.GetString("teamID")
 		} else {
-			err = multierror.Append(err, errors.New("Empty Team name"))
+			err = multierror.Append(err, errors.New("empty Team name"))
 		}
 	}
 
@@ -56,7 +56,7 @@ func (d *SpaceDef) resolveReferences() error {
 
 	for i := range d.Stages {
 		if _, ok := d.stagesByName[d.Stages[i].Name]; ok {
-			err = multierror.Append(err, fmt.Errorf("Duplicate stage declared: '%s'", d.Stages[i].Name))
+			err = multierror.Append(err, fmt.Errorf("duplicate stage declared: '%s'", d.Stages[i].Name))
 		}
 
 		d.stagesByName[d.Stages[i].Name] = &d.Stages[i]
@@ -69,7 +69,7 @@ func (d *SpaceDef) resolveReferences() error {
 
 		parent, ok := d.stagesByName[d.Stages[i].Inherit]
 		if !ok {
-			err = multierror.Append(err, fmt.Errorf("Stage '%s' in Space '%s' inherits non-existent stage '%s'", d.Stages[i].Name, d.DNSLabel, d.Stages[i].Inherit))
+			err = multierror.Append(err, fmt.Errorf("stage '%s' in Space '%s' inherits non-existent stage '%s'", d.Stages[i].Name, d.DNSLabel, d.Stages[i].Inherit))
 		} else {
 			d.Stages[i].inheritStage = parent
 		}

@@ -2,10 +2,11 @@ package spacefile
 
 import (
 	"fmt"
-	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/hcl"
 	"io/ioutil"
 	"os"
+
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/hcl"
 )
 
 func ParseSpacefile(filename string, offline bool) (*Spacefile, error) {
@@ -16,7 +17,7 @@ func ParseSpacefile(filename string, offline bool) (*Spacefile, error) {
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("Could not read Spacefile at %s: %s", filename, err)
+		return nil, fmt.Errorf("could not read Spacefile at %s: %s", filename, err)
 	}
 
 	obj := Spacefile{}

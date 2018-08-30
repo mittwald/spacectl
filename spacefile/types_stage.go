@@ -20,7 +20,7 @@ func (d *StageDef) Validate(offline bool) error {
 	var err *multierror.Error
 
 	if len(d.Applications) > 1 {
-		err = multierror.Append(err, fmt.Errorf("Stage '%s' should not contain more than one application", d.Name))
+		err = multierror.Append(err, fmt.Errorf("stage '%s' should not contain more than one application", d.Name))
 	}
 
 	if d.Application() != nil {
@@ -47,6 +47,10 @@ func (d *StageDef) resolveUserData() error {
 	for i := range d.Applications {
 		d.Applications[i].UserData, err = unfuckHCL(d.Applications[i].UserData, "")
 		mErr = multierror.Append(mErr, err)
+
+		if d.Applications[i].UserData == nil {
+			d.Applications[i].UserData = map[string]string{}
+		}
 	}
 
 	return mErr.ErrorOrNil()
@@ -54,7 +58,7 @@ func (d *StageDef) resolveUserData() error {
 
 func (d *StageDef) resolveInheritance(level int) error {
 	if level > 4 {
-		return fmt.Errorf("Could not resolve stage dependencies after %d levels. Please check that there is no cyclic inheritance", level)
+		return fmt.Errorf("could not resolve stage dependencies after %d levels. Please check that there is no cyclic inheritance", level)
 	}
 
 	if d.inheritStage == nil {

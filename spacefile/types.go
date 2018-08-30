@@ -18,15 +18,15 @@ func (f *Spacefile) Validate(offline bool) error {
 	var err *multierror.Error
 
 	if f.Version != "1" {
-		err = multierror.Append(err, fmt.Errorf("Unsupported version: %s", f.Version))
+		err = multierror.Append(err, fmt.Errorf("unsupported version: %s", f.Version))
 	}
 
 	if len(f.Spaces) == 0 {
-		err = multierror.Append(err, errors.New("Spacefile does not contain a space definition"))
+		err = multierror.Append(err, errors.New("spacefile does not contain a space definition"))
 	}
 
 	if len(f.Spaces) > 1 {
-		err = multierror.Append(err, errors.New("Spacefile should not contain more than one space definition"))
+		err = multierror.Append(err, errors.New("spacefile should not contain more than one space definition"))
 	}
 
 	for i := range f.Spaces {
