@@ -14,7 +14,7 @@ type TLSVirtualHostDef struct {
 	Certificate string `hcl:"certificateID"`
 }
 
-func (v VirtualHostDef) ToDeclaration() (spaces.VirtualHost, error) {
+func (v VirtualHostDef) ToDeclaration() spaces.VirtualHost {
 	d := spaces.VirtualHost{
 		Hostname: v.Hostname,
 	}
@@ -25,5 +25,5 @@ func (v VirtualHostDef) ToDeclaration() (spaces.VirtualHost, error) {
 	} else {
 		d.TLS.Type = "none"
 	}
-	return d, nil
+	return d
 }

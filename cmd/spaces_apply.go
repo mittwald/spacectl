@@ -46,10 +46,7 @@ CAUTION: This command can be potentially destructive.`,
 
 			// check definition for virtualhosts and declare them
 			for _, vhostDecl := range stageDef.VirtualHosts {
-				vhost, err := vhostDecl.ToDeclaration()
-				if err != nil {
-					return err
-				}
+				vhost := vhostDecl.ToDeclaration()
 
 				_, err = api.Spaces().UpdateVirtualHost(declaredSpace.ID, stageDecl.Name, vhost)
 				if err != nil {
