@@ -34,6 +34,30 @@ CAUTION: This command can be potentially destructive.`,
 			return err
 		}
 
+		// get declared stages and find their definition
+		for _, stageDecl := range declaredSpace.Stages {
+			stageDef := spc.GetStageByName(stageDecl.Name)
+			if stageDef == nil {
+				continue
+			}
+			if len(stageDef.VirtualHosts) == 0 {
+				continue
+			}
+
+			// check definition for virtualhosts and declare them
+			for _, vhostDecl := range stageDef.VirtualHosts {
+				vhost, err := vhostDecl.ToDeclaration()
+				if err != nil {
+					return err
+				}
+
+				_, err = api.Spaces().UpdateVirtualHost(declaredSpace.ID, stageDecl.Name, vhost)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
 		updates, err := api.Spaces().ListApplicationUpdatesBySpace(declaredSpace.ID)
 		if err != nil {
 			return err

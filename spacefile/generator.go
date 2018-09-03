@@ -1,9 +1,10 @@
 package spacefile
 
 import (
-	"github.com/mittwald/spacectl/client/software"
 	"io"
 	"text/template"
+
+	"github.com/mittwald/spacectl/client/software"
 )
 
 const SpacefileTemplate = `version = "1"
@@ -41,6 +42,12 @@ space "{{ .SpaceDNSLabel }}" {
     //     workingDirectory = "/var/www"
     //   }
     //   timezone = "Europe/Berlin"
+    // }
+
+    // virtualHost test.spaces.de {
+    //   tls {
+    //     type = "letsencrypt"
+    //   }
     // }
   }
 

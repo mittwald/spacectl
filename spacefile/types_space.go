@@ -82,3 +82,12 @@ func (d *SpaceDef) resolveReferences() error {
 
 	return err.ErrorOrNil()
 }
+
+func (d *SpaceDef) GetStageByName(stageName string) *StageDef {
+	for _, stage := range d.Stages {
+		if stage.Name == stageName {
+			return &stage
+		}
+	}
+	return nil
+}

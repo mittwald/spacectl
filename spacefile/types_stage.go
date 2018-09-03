@@ -7,12 +7,12 @@ import (
 )
 
 type StageDef struct {
-	Name         string          `hcl:",key"`
-	Inherit      string          `hcl:"inherit"`
-	Applications SoftwareDefList `hcl:"application"`
-	Databases    SoftwareDefList `hcl:"database"`
-	Cronjobs     CronjobDefList  `hcl:"cron"`
-
+	Name         string             `hcl:",key"`
+	Inherit      string             `hcl:"inherit"`
+	Applications SoftwareDefList    `hcl:"application"`
+	Databases    SoftwareDefList    `hcl:"database"`
+	Cronjobs     CronjobDefList     `hcl:"cron"`
+	VirtualHosts VirtualHostDefList `hcl:"virtualHost"`
 	inheritStage *StageDef
 }
 
@@ -25,6 +25,17 @@ func (d *StageDef) Validate(offline bool) error {
 
 	if d.Application() != nil {
 		err = multierror.Append(err, d.Application().Validate(offline))
+	}
+
+	for _, vhost := range d.VirtualHosts {
+		if vhost.TLS == nil {
+			continue
+		}
+		if vhost.TLS.Type == "certificate" {
+			if vhost.TLS.Certificate == "" {
+				err = multierror.Append(err, fmt.Errorf("no certificate given for vhost %s", vhost.Hostname))
+			}
+		}
 	}
 
 	return err.ErrorOrNil()
