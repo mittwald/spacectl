@@ -2,6 +2,7 @@ package spaces
 
 import (
 	"fmt"
+	"net/url"
 
 	"github.com/mittwald/spacectl/client/errors"
 )
@@ -10,7 +11,8 @@ import (
 func (c *spacesClient) ListVirtualHostsByStage(spaceID, stage string) (VirtualHostList, error) {
 	var existingVHosts VirtualHostList
 
-	err := c.client.Get("/spaces/"+spaceID+"/stages/"+stage+"/virtualhosts", &existingVHosts)
+	listPath := fmt.Sprintf("/spaces/%s/stages/%s/virtualhosts", url.PathEscape(spaceID), url.PathEscape(stage))
+	err := c.client.Get(listPath, &existingVHosts)
 	if err != nil {
 		return nil, errors.ErrNested{Inner: err, Msg: fmt.Sprintf("could not access virtualhosts for space: %s, stage: %s", spaceID, stage)}
 	}
@@ -20,17 +22,9 @@ func (c *spacesClient) ListVirtualHostsByStage(spaceID, stage string) (VirtualHo
 
 // UpdateVirtualHost updates or creates the VirtualHost from the given model
 func (c *spacesClient) UpdateVirtualHost(spaceID, stage string, vhost VirtualHost) (*VirtualHost, error) {
-	hosts, err := c.ListVirtualHostsByStage(spaceID, stage)
-	if err != nil {
-		return nil, err
-	}
-
 	var newVirtualHost VirtualHost
-	if hosts.Exists(vhost.Hostname) {
-		err = c.client.Put("/spaces/"+spaceID+"/stages/"+stage+"/virtualhosts/"+vhost.Hostname, vhost, &newVirtualHost)
-	} else {
-		err = c.client.Post("/spaces/"+spaceID+"/stages/"+stage+"/virtualhosts", vhost, &newVirtualHost)
-	}
+	createPath := fmt.Sprintf("/spaces/%s/stages/%s/virtualhosts", url.PathEscape(spaceID), url.PathEscape(stage))
+	err := c.client.Put(createPath+"/"+url.PathEscape(vhost.Hostname), vhost, &newVirtualHost)
 	if err != nil {
 		return nil, errors.ErrNested{Inner: err, Msg: fmt.Sprintf("could not create/update virtualHost %s", vhost.Hostname)}
 	}
@@ -41,7 +35,8 @@ func (c *spacesClient) UpdateVirtualHost(spaceID, stage string, vhost VirtualHos
 // DeleteVirtualHost deletes the VirtualHost with the given hostname
 func (c *spacesClient) DeleteVirtualHost(spaceID, stage, hostname string) error {
 	var target Empty
-	err := c.client.Delete("/spaces/"+spaceID+"/stages/"+stage+"/virtualhosts/"+hostname, &target)
+	deletePath := fmt.Sprintf("/spaces/%s/stages/%s/virtualhosts/%s", url.PathEscape(spaceID), url.PathEscape(stage), url.PathEscape(hostname))
+	err := c.client.Delete(deletePath, &target)
 	if err != nil {
 		return errors.ErrNested{Inner: err, Msg: fmt.Sprintf("could not delete virtualHost %s", hostname)}
 	}
