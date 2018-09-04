@@ -39,6 +39,7 @@ type Stage struct {
 
 	Name              string                 `json:"name"`
 	Application       SoftwareRef            `json:"application"`
+	Databases         []SoftwareVersionRef   `json:"databases"`
 	Cronjobs          []Cronjob              `json:"cronjobs"`
 	Version           VersionRef             `json:"version"`
 	VersionConstraint string                 `json:"versionConstraint"`

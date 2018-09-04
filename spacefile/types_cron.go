@@ -35,3 +35,23 @@ func (c CronjobDef) ToDeclaration() (spaces.Cronjob, error) {
 
 	return d, nil
 }
+
+// CronjobFromDeclaration returns a CronjobDef for the spacefile
+// from a API Cronjob Declaration
+func CronjobFromDeclaration(decl *spaces.Cronjob) CronjobDef {
+	def := CronjobDef{
+		Identifier: decl.ID,
+		Schedule: decl.Schedule,
+		AllowParallel: decl.AllowParallel,
+		Timezone: decl.Timezone,
+	}
+
+	job := CommandCronjobDef{
+		Command: decl.Job.Command,
+		Arguments: decl.Job.Arguments,
+		WorkingDirectory: decl.Job.WorkingDirectory,
+	}
+
+	def.Command = &job
+	return def
+}
