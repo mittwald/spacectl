@@ -66,7 +66,7 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 	for _, s := range space.Stages {
 		stageTable.AddRow(
 			"  "+s.Name,
-			s.Application.ID,
+			s.Application.Software.ID,
 			s.VersionConstraint,
 			s.Version.Number,
 			s.Status,

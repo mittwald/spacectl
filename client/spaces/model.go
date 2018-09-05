@@ -38,7 +38,7 @@ type Stage struct {
 	Actions lowlevel.LinkList `json:"_actions"`
 
 	Name              string                 `json:"name"`
-	Application       SoftwareRef            `json:"application"`
+	Application       SoftwareVersionRef     `json:"application"`
 	Databases         []SoftwareVersionRef   `json:"databases"`
 	Cronjobs          []Cronjob              `json:"cronjobs"`
 	Version           VersionRef             `json:"version"`

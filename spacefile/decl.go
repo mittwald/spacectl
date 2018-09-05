@@ -69,8 +69,9 @@ func FromSpace(decl *spaces.Space) *SpaceDef {
 
 		appDefs := make(SoftwareDefList, 1) // there can only be one
 		appDefs[0] = SoftwareDef{
-			Identifier: app.ID,
-			UserData: st.UserData,
+			Identifier: app.Software.ID,
+			Version:    app.VersionConstraint,
+			UserData:   st.UserData,
 		}
 
 		cronjobDefs := make(CronjobDefList, len(st.Cronjobs))
@@ -82,25 +83,26 @@ func FromSpace(decl *spaces.Space) *SpaceDef {
 		for i := range st.Databases {
 			databaseDefs[i] = SoftwareDef{
 				Identifier: st.Databases[i].Software.ID,
-				Version: st.Databases[i].VersionConstraint,
-				UserData: st.Databases[i].UserData,
+				Version:    st.Databases[i].VersionConstraint,
+				UserData:   st.Databases[i].UserData,
 			}
 		}
 
 		stageDef := StageDef{
-			Name: st.Name,
+			Name:         st.Name,
 			Applications: appDefs,
-			Cronjobs: cronjobDefs,
-			Databases: databaseDefs,
+			Cronjobs:     cronjobDefs,
+			Databases:    databaseDefs,
 		}
 
 		stages[i] = stageDef
 	}
 
 	def := SpaceDef{
+		TeamID:   decl.Team.DNSLabel,
 		DNSLabel: decl.Name.DNSName,
-		Name: decl.Name.HumanReadableName,
-		Stages: stages,
+		Name:     decl.Name.HumanReadableName,
+		Stages:   stages,
 	}
 
 	return &def
