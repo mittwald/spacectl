@@ -20,6 +20,9 @@ type SpacesClient interface {
 	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error)
 	ListCaughtEmails(spaceID string) (CaughtEmailList, error)
 	GetComputeMetrics(spaceID string, scope string) (ComputeMetricPointList, error)
+	ListVirtualHostsByStage(spaceID, stage string) (VirtualHostList, error)
+	UpdateVirtualHost(spaceID, stage string, vhost VirtualHost) (*VirtualHost, error)
+	DeleteVirtualHost(spaceID, stage, hostname string) error
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SpacesClient {

@@ -7,7 +7,6 @@ import (
 // ToSpaceDeclaration converts the SpaceDef object used in the Spacefile
 // to a SpaceDeclaration used for the Spaces API calls
 func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
-	var err error
 	stages := make([]spaces.StageDeclaration, len(s.Stages))
 
 	for i := range s.Stages {
@@ -20,10 +19,7 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 
 		cronjobDecls := make([]spaces.Cronjob, len(st.Cronjobs))
 		for i := range st.Cronjobs {
-			cronjobDecls[i], err = st.Cronjobs[i].ToDeclaration()
-			if err != nil {
-				return nil, err
-			}
+			cronjobDecls[i] = st.Cronjobs[i].ToDeclaration()
 		}
 
 		databaseDecls := make([]spaces.SoftwareVersionRef, len(st.Databases))
