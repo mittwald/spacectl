@@ -2,19 +2,19 @@ language: go
 go:
 - 1.11
 env:
-- GOOS=linux GOARCH=amd64
-- GOOS=linux GOARCH=386
-- GOOS=windows GOARCH=amd64 EXT=exe
-- GOOS=windows GOARCH=386 EXT=exe
-- GOOS=darwin GOARCH=amd64
-- GOOS=darwin GOARCH=386
+- BUILD_GOOS=linux BUILD_GOARCH=amd64
+- BUILD_GOOS=linux BUILD_GOARCH=386
+- BUILD_GOOS=windows BUILD_GOARCH=amd64 EXT=".exe"
+- BUILD_GOOS=windows BUILD_GOARCH=386 EXT=".exe"
+- BUILD_GOOS=darwin BUILD_GOARCH=amd64
+- BUILD_GOOS=darwin BUILD_GOARCH=386
 install: true
 script:
 - go vet $(go list ./... | grep -v /vendor/)
 - go test ./...
 - GOOS=linux go generate
 - env
-- CGO_ENABLED=0 go build -o spacectl-${GOOS}-${GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
+- CGO_ENABLED=0 GOOS=${BUILD_GOOS} GOARCH=${BUILD_GOARCH} go build -o spacectl-${BUILD_GOOS}-${BUILD_GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
 deploy:
   provider: releases
   api_key:
