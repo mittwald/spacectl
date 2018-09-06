@@ -15,11 +15,20 @@ func main() {
 	defer out.Close()
 
 	tag := os.Getenv("CI_BUILD_TAG")
+
+	if tag == "" {
+		tag = os.Getenv("TRAVIS_TAG")
+	}
+
 	if tag == "" {
 		tag = "nightly"
 	}
 
 	hash := os.Getenv("CI_COMMIT_SHA")
+	if hash == "" {
+		hash = os.Getenv("TRAVIS_COMMIT")
+	}
+
 	if hash == "" {
 		hash = "<local>"
 	}
