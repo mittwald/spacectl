@@ -6,14 +6,14 @@ type CronjobDef struct {
 	Identifier    string             `hcl:",key"`
 	Schedule      string             `hcl:"schedule"`
 	AllowParallel bool               `hcl:"allowParallel"`
-	Command       *CommandCronjobDef `hcl:"command"`
-	Timezone      string             `hcl:"timezone"`
+	Command       *CommandCronjobDef `hcl:"command" hcle:"omitempty"`
+	Timezone      string             `hcl:"timezone" hcle:"omitempty"`
 }
 
 type CommandCronjobDef struct {
-	Command          string   `hcl:"command"`
-	Arguments        []string `hcl:"arguments"`
-	WorkingDirectory string   `hcl:"workingDirectory"`
+	Command          string   `hcl:"command" hcle:"omitempty"`
+	Arguments        []string `hcl:"arguments" hcle:"omitempty"`
+	WorkingDirectory string   `hcl:"workingDirectory" hcle:"omitempty"`
 }
 
 type CronjobDefList []CronjobDef
@@ -40,15 +40,15 @@ func (c CronjobDef) ToDeclaration() (spaces.Cronjob, error) {
 // from a API Cronjob Declaration
 func CronjobFromDeclaration(decl *spaces.Cronjob) CronjobDef {
 	def := CronjobDef{
-		Identifier: decl.ID,
-		Schedule: decl.Schedule,
+		Identifier:    decl.ID,
+		Schedule:      decl.Schedule,
 		AllowParallel: decl.AllowParallel,
-		Timezone: decl.Timezone,
+		Timezone:      decl.Timezone,
 	}
 
 	job := CommandCronjobDef{
-		Command: decl.Job.Command,
-		Arguments: decl.Job.Arguments,
+		Command:          decl.Job.Command,
+		Arguments:        decl.Job.Arguments,
 		WorkingDirectory: decl.Job.WorkingDirectory,
 	}
 

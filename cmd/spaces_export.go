@@ -25,7 +25,10 @@ var spacesExportCmd = &cobra.Command{
 			return err
 		}
 
-		spaceDef := spacefile.FromSpace(space)
+		spaceDef := spacefile.Spacefile{
+			Version: "1",
+			Spaces:  []spacefile.SpaceDef{*spacefile.FromSpace(space)},
+		}
 
 		hcl, err := hclencoder.Encode(&spaceDef)
 		if err != nil {
