@@ -18,7 +18,7 @@ type CommandCronjobDef struct {
 
 type CronjobDefList []CronjobDef
 
-func (c CronjobDef) ToDeclaration() (spaces.Cronjob, error) {
+func (c CronjobDef) ToDeclaration() spaces.Cronjob {
 	d := spaces.Cronjob{
 		ID:            c.Identifier,
 		AllowParallel: c.AllowParallel,
@@ -33,7 +33,7 @@ func (c CronjobDef) ToDeclaration() (spaces.Cronjob, error) {
 		d.Job.Arguments = c.Command.Arguments
 	}
 
-	return d, nil
+	return d
 }
 
 // CronjobFromDeclaration returns a CronjobDef for the spacefile
