@@ -3,6 +3,8 @@ package cmd
 import (
 	"os"
 
+	"github.com/mittwald/spacectl/client/spaces"
+
 	"github.com/mittwald/spacectl/spacefile"
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
@@ -40,18 +42,27 @@ CAUTION: This command can be potentially destructive.`,
 			if stageDef == nil {
 				continue
 			}
+
 			if len(stageDef.VirtualHosts) == 0 {
-				continue
+				// check definition for virtualhosts and declare them
+				for _, vhostDecl := range stageDef.VirtualHosts {
+					vhost := vhostDecl.ToDeclaration()
+
+					_, err = api.Spaces().UpdateVirtualHost(declaredSpace.ID, stageDecl.Name, vhost)
+					if err != nil {
+						return err
+					}
+				}
 			}
 
-			// check definition for virtualhosts and declare them
-			for _, vhostDecl := range stageDef.VirtualHosts {
-				vhost := vhostDecl.ToDeclaration()
+			if stageDef.Protection != "" {
+				_, err = api.Spaces().CreateStageProtection(declaredSpace.ID, stageDecl.Name, spaces.StageProtection{ProtectionType: stageDef.Protection})
+			} else {
+				err = api.Spaces().DeleteStageProtection(declaredSpace.ID, stageDecl.Name)
+			}
 
-				_, err = api.Spaces().UpdateVirtualHost(declaredSpace.ID, stageDecl.Name, vhost)
-				if err != nil {
-					return err
-				}
+			if err != nil {
+				return err
 			}
 		}
 
