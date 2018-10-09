@@ -60,7 +60,7 @@ command to actually apply the declaration within the Spacefile.`,
 			if !spaceInitFlags.Force {
 				RootCmd.SilenceUsage = false
 				return fmt.Errorf(`The file '%s' already exists in the current directory.
-Use the --force flag (or -f) to overwrite it.`, filePath)
+Use the --force flag to overwrite it or write to a new file with -f [NEW_FILE].`, filePath)
 			} else {
 				fmt.Fprintf(color.Output, "Overwriting existing Spacefile at %s\n", yellow(filePath))
 			}
