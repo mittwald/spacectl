@@ -14,7 +14,7 @@ import (
 type SoftwareDef struct {
 	Identifier string      `hcl:",key"`
 	Version    string      `hcl:"version"`
-	UserData   interface{} `hcl:"userData"`
+	UserData   interface{} `hcl:"userData" hcle:"omitempty"`
 }
 
 type SoftwareDefList []SoftwareDef

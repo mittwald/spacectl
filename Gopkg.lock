@@ -149,6 +149,12 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/rodaine/hclencoder"
+  packages = ["."]
+  revision = "166e1137dd1417b8da5af3b955072e9bd8da9a15"
+
+[[projects]]
   name = "github.com/spf13/afero"
   packages = [
     ".",
@@ -270,6 +276,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "669a6e1ab05f89daae8eb09335382392ad1f145622dd887029518e0701743999"
+  inputs-digest = "7aff87dcd20305ad3156a2ed4d61a0b9c7ccc21ff5b765a7324583e14456ec1d"
   solver-name = "gps-cdcl"
   solver-version = 1
