@@ -1,13 +1,17 @@
 language: go
 go:
-- 1.11
+- "1.10.x"
+- "1.11.x"
 env:
-- BUILD_GOOS=linux BUILD_GOARCH=amd64
-- BUILD_GOOS=linux BUILD_GOARCH=386
-- BUILD_GOOS=windows BUILD_GOARCH=amd64 EXT=".exe"
-- BUILD_GOOS=windows BUILD_GOARCH=386 EXT=".exe"
-- BUILD_GOOS=darwin BUILD_GOARCH=amd64
-- BUILD_GOOS=darwin BUILD_GOARCH=386
+  global:
+    - GO111MODULE=on # Go 1.11 will use go mod when this is set
+  matrix:
+    - BUILD_GOOS=linux BUILD_GOARCH=amd64
+    - BUILD_GOOS=linux BUILD_GOARCH=386
+    - BUILD_GOOS=windows BUILD_GOARCH=amd64 EXT=".exe"
+    - BUILD_GOOS=windows BUILD_GOARCH=386 EXT=".exe"
+    - BUILD_GOOS=darwin BUILD_GOARCH=amd64
+    - BUILD_GOOS=darwin BUILD_GOARCH=386
 install: true
 script:
 - go vet $(go list ./... | grep -v /vendor/)
