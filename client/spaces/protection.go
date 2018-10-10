@@ -2,6 +2,7 @@ package spaces
 
 import (
 	"fmt"
+	"github.com/mittwald/spacectl/client/lowlevel"
 	"net/url"
 
 	"github.com/mittwald/spacectl/client/errors"
@@ -14,6 +15,10 @@ func (c *spacesClient) GetStageProtection(spaceID, stage string) (*StageProtecti
 	listPath := fmt.Sprintf("/spaces/%s/stages/%s/protection", url.PathEscape(spaceID), url.PathEscape(stage))
 	err := c.client.Get(listPath, &protection)
 	if err != nil {
+		statusErr, ok := err.(lowlevel.ErrUnexpectedStatusCode)
+		if ok && statusErr.StatusCode == 404 { // returns 404 if no protection exists
+			return &protection, nil
+		}
 		return nil, errors.ErrNested{Inner: err, Msg: fmt.Sprintf("could not access protection for space: %s, stage: %s", spaceID, stage)}
 	}
 
