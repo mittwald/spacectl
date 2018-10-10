@@ -43,15 +43,13 @@ CAUTION: This command can be potentially destructive.`,
 				continue
 			}
 
-			if len(stageDef.VirtualHosts) == 0 {
-				// check definition for virtualhosts and declare them
-				for _, vhostDecl := range stageDef.VirtualHosts {
-					vhost := vhostDecl.ToDeclaration()
+			// check definition for virtualhosts and declare them
+			for _, vhostDecl := range stageDef.VirtualHosts {
+				vhost := vhostDecl.ToDeclaration()
 
-					_, err = api.Spaces().UpdateVirtualHost(declaredSpace.ID, stageDecl.Name, vhost)
-					if err != nil {
-						return err
-					}
+				_, err = api.Spaces().UpdateVirtualHost(declaredSpace.ID, stageDecl.Name, vhost)
+				if err != nil {
+					return err
 				}
 			}
 

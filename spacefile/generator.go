@@ -50,7 +50,7 @@ space "{{ .SpaceDNSLabel }}" {
     //   }
     // }
 
-	// protection = "oauth"
+    // protection = "oauth"
   }
 
   // You can add additional stages to your Space definition
