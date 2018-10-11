@@ -9,6 +9,7 @@ import (
 type StageDef struct {
 	Name         string             `hcl:",key"`
 	Inherit      string             `hcl:"inherit" hcle:"omitempty"`
+	Protection   string             `hcl:"protection" hcle:"omitempty"`
 	Applications SoftwareDefList    `hcl:"application"`
 	Databases    SoftwareDefList    `hcl:"database"`
 	Cronjobs     CronjobDefList     `hcl:"cron"`
@@ -91,6 +92,10 @@ func (d *StageDef) resolveInheritance(level int) error {
 	d.Databases, err = d.Databases.Merge(d.inheritStage.Databases)
 	if err != nil {
 		return err
+	}
+
+	if d.Protection == "" {
+		d.Protection = d.inheritStage.Protection
 	}
 
 	d.Name = originalName

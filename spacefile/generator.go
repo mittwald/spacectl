@@ -49,6 +49,8 @@ space "{{ .SpaceDNSLabel }}" {
     //     type = "letsencrypt"
     //   }
     // }
+
+    // protection = "oauth"
   }
 
   // You can add additional stages to your Space definition

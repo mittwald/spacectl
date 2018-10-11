@@ -23,6 +23,9 @@ type SpacesClient interface {
 	ListVirtualHostsByStage(spaceID, stage string) (VirtualHostList, error)
 	UpdateVirtualHost(spaceID, stage string, vhost VirtualHost) (*VirtualHost, error)
 	DeleteVirtualHost(spaceID, stage, hostname string) error
+	GetStageProtection(spaceID, stage string) (*StageProtection, error)
+	CreateStageProtection(spaceID, stage string, inputProtection StageProtection) (*StageProtection, error)
+	DeleteStageProtection(spaceID, stage string) error
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SpacesClient {

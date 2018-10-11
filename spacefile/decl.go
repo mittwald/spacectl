@@ -1,6 +1,8 @@
 package spacefile
 
 import (
+	"github.com/mittwald/spacectl/client"
+	"github.com/mittwald/spacectl/client/errors"
 	"github.com/mittwald/spacectl/client/spaces"
 )
 
@@ -56,7 +58,9 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 
 // FromSpaceDeclaration converts a Space Declaration returned by the API
 // to a SpaceDef object that can be returned as a spacefile
-func FromSpace(decl *spaces.Space) *SpaceDef {
+// it also makes additional api requests to gather information not contained in
+// the SpaceDeclaration
+func FromSpace(decl *spaces.Space, api client.SpacesClient) (*SpaceDef, error) {
 	stages := make([]StageDef, len(decl.Stages))
 
 	for i := range decl.Stages {
@@ -84,11 +88,17 @@ func FromSpace(decl *spaces.Space) *SpaceDef {
 			}
 		}
 
+		protection, err := api.Spaces().GetStageProtection(decl.ID, st.Name)
+		if err != nil {
+			return nil, errors.ErrNested{Inner: err, Msg: "could not get stage protection"}
+		}
+
 		stageDef := StageDef{
 			Name:         st.Name,
 			Applications: appDefs,
 			Cronjobs:     cronjobDefs,
 			Databases:    databaseDefs,
+			Protection:   protection.ProtectionType,
 		}
 
 		stages[i] = stageDef
@@ -101,5 +111,5 @@ func FromSpace(decl *spaces.Space) *SpaceDef {
 		Stages:   stages,
 	}
 
-	return &def
+	return &def, nil
 }
