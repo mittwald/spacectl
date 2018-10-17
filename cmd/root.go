@@ -50,7 +50,7 @@ func Execute() {
 		color.Red("")
 
 		color.Blue("NEED HELP?")
-		color.Blue("  * For support, contact support@spaces.de.")
+		color.Blue("  * For support, contact spaces-service@mittwald.de.")
 		color.Blue("  * Report bugs with this tool at https://github.com/mittwald/spacectl")
 		color.Blue("")
 
