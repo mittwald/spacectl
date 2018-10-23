@@ -23,6 +23,10 @@ func unfuckHCL(in interface{}, path string) (interface{}, error) {
 
 		in = mapped[0]
 	case []map[string]interface{}:
+		if len(mapped) == 0 {
+			return nil, nil
+		}
+
 		for key := range mapped {
 			for subKey := range mapped[key] {
 				mapped[0][subKey], err = unfuckHCL(mapped[key][subKey], path+".0."+subKey)

@@ -65,6 +65,15 @@ func (d *StageDef) resolveUserData() error {
 		}
 	}
 
+	for i := range d.Databases {
+		d.Databases[i].UserData, err = unfuckHCL(d.Databases[i].UserData, "")
+		mErr = multierror.Append(mErr, err)
+
+		if d.Databases[i].UserData == nil {
+			d.Databases[i].UserData = map[string]string{}
+		}
+	}
+
 	return mErr.ErrorOrNil()
 }
 
