@@ -2,6 +2,7 @@ package spacefile
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/viper"
@@ -54,7 +55,7 @@ func (l SoftwareDefList) Merge(other SoftwareDefList) (SoftwareDefList, error) {
 
 // Validate performs (optional) online validation of software version and name
 func (s SoftwareDef) Validate(offline bool) error {
-	constraint, errSem := semver.NewConstraint(s.Version)
+	constraint, errSem := semver.NewConstraint(strings.Replace(s.Version, " ", ", ", 1))
 	if errSem != nil {
 		return fmt.Errorf("version: %s", errSem.Error())
 	}
