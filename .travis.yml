@@ -10,11 +10,10 @@ env:
 - BUILD_GOOS=darwin BUILD_GOARCH=386
 install: true
 script:
-- go vet $(go list ./... | grep -v /vendor/)
-- go test ./...
-- GOOS=linux go generate
-- env
-- CGO_ENABLED=0 GOOS=${BUILD_GOOS} GOARCH=${BUILD_GOARCH} go build -o spacectl-${BUILD_GOOS}-${BUILD_GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
+- GO111MODULE=on go vet $(go list ./... | grep -v /vendor/)
+- GO111MODULE=on go test ./...
+- GO111MODULE=on GOOS=linux go generate
+- GO111MODULE=on CGO_ENABLED=0 GOOS=${BUILD_GOOS} GOARCH=${BUILD_GOARCH} go build -o spacectl-${BUILD_GOOS}-${BUILD_GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
 deploy:
   provider: releases
   api_key:
@@ -25,3 +24,4 @@ deploy:
   on:
     tags: true
     repo: mittwald/spacectl
+    go: 1.11

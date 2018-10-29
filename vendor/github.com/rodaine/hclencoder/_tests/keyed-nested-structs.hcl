@@ -1,3 +1,0 @@
-Foo "bar" {
-  Fizz = "buzz"
-}
