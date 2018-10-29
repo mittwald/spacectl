@@ -42,7 +42,7 @@ func Execute() {
      (  )      <  Houston, we have a problem... |
  *   (  )       \_______________________________/
     /|/\|\         *                                 *
-   /_||||_\                 *\n`)
+   /_||||_\                 *`)
 
 		color.Red("")
 		fmt.Fprintf(color.Output, color.RedString(err.Error()))
