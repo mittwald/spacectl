@@ -10,6 +10,7 @@ type TeamsClient interface {
 	InviteByEmail(teamID string, email string, message string, role string) (Invite, error)
 	InviteByUID(teamID string, uid string, message string, role string) (Invite, error)
 	ListMembers(teamID string) ([]Membership, error)
+	ListRoles(teamID string) ([]TeamRole, error)
 }
 
 func NewTeamsClient(client *lowlevel.SpacesLowlevelClient) TeamsClient {

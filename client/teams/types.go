@@ -33,3 +33,7 @@ type Membership struct {
 	User MembershipUser `json:"user"`
 	Role string         `json:"role"`
 }
+
+type TeamRole struct {
+	Identifier string `json:"identifier"`
+}

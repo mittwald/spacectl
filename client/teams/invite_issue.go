@@ -23,8 +23,8 @@ func (t *teamsClient) InviteByEmail(teamID string, email string, message string,
 		return invite, errors.New("email must not be empty")
 	}
 
-	if role != "" && role != "member" && role != "owner" {
-		return invite, errors.New("role must be either \"member\" or \"owner\"")
+	if role == "" {
+		return invite, errors.New("role must be set")
 	}
 
 	req := inviteRequest{
@@ -51,8 +51,8 @@ func (t *teamsClient) InviteByUID(teamID string, uid string, message string, rol
 		return invite, errors.New("UID must not be empty")
 	}
 
-	if role != "" && role != "member" && role != "owner" {
-		return invite, errors.New("role must be either \"member\" or \"owner\"")
+	if role == "" {
+		return invite, errors.New("role must be set")
 	}
 
 	req := inviteRequest{
