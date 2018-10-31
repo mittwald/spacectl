@@ -7,6 +7,7 @@ type Cronjob struct {
 	Schedule      string     `json:"schedule"`
 	AllowParallel bool       `json:"allowParallel"`
 	Job           CronjobJob `json:"job"`
+	ReadOnly      bool `json:"readonly"`
 	Timezone      string     `json:"timezone"`
 }
 
