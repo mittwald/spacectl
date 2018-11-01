@@ -27,6 +27,9 @@ type SpacesClient interface {
 	CreateStageProtection(spaceID, stage string, inputProtection StageProtection) (*StageProtection, error)
 	DeleteStageProtection(spaceID, stage string) error
 	ListDatabaseUsersByStage(spaceID, stage string) (DatabaseUserList, error)
+	GetDatabaseUser(spaceID, stage, username string) (*DatabaseUser, error)
+	CreateDatabaseUser(spaceID, stage string, dbUser DatabaseUserInput) (*DatabaseUser, error)
+	DeleteDatabaseUser(spaceID, stage, name, dbType string) error
 }
 
 func NewSpacesClient(client *lowlevel.SpacesLowlevelClient, logger *log.Logger) SpacesClient {

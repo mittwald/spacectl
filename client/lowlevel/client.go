@@ -106,6 +106,10 @@ func (c *SpacesLowlevelClient) Delete(path string, target interface{}) error {
 	return c.request("DELETE", path, nil, target)
 }
 
+func (c *SpacesLowlevelClient) DeleteBody(path string, body interface{}, target interface{}) error {
+	return c.request("DELETE", path, body, target)
+}
+
 func (c *SpacesLowlevelClient) GetCanonicalURL(path string) (string, error) {
 	url := c.endpoint + c.pathWithVersion(path)
 	req, err := http.NewRequest("HEAD", url, nil)
