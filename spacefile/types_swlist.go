@@ -2,6 +2,7 @@ package spacefile
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/fatih/color"
@@ -53,9 +54,17 @@ func (l SoftwareDefList) Merge(other SoftwareDefList) (SoftwareDefList, error) {
 	return merged, nil
 }
 
+// sanitizes semver declarations like this: >=5.7.0 <6.0.0
+// to go supported semver, which requires a comma between versions
+func sanitizeSemver(ver string) string {
+	sepVersion := regexp.MustCompile(`(\s+)([0-9])`) // make sure no other whitespace exists
+	ver = sepVersion.ReplaceAllString(ver, "$2")
+	return strings.Replace(ver, " ", ", ", 1) // replace whitespace
+}
+
 // Validate performs (optional) online validation of software version and name
 func (s SoftwareDef) Validate(offline bool) error {
-	constraint, errSem := semver.NewConstraint(strings.Replace(s.Version, " ", ", ", 1))
+	constraint, errSem := semver.NewConstraint(sanitizeSemver(s.Version))
 	if errSem != nil {
 		return fmt.Errorf("version: %s", errSem.Error())
 	}
