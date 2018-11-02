@@ -2,8 +2,9 @@ package spaces
 
 import (
 	"fmt"
-	"github.com/mittwald/spacectl/client/lowlevel"
 	"net/url"
+
+	"github.com/mittwald/spacectl/client/lowlevel"
 
 	"github.com/mittwald/spacectl/client/errors"
 )
@@ -40,9 +41,8 @@ func (c *spacesClient) CreateStageProtection(spaceID, stage string, inputProtect
 
 // DeleteStageProtection disables the Stage Protection for the given stage
 func (c *spacesClient) DeleteStageProtection(spaceID, stage string) error {
-	var target Empty
 	deletePath := fmt.Sprintf("/spaces/%s/stages/%s/protection", url.PathEscape(spaceID), url.PathEscape(stage))
-	err := c.client.Delete(deletePath, &target)
+	err := c.client.Delete(deletePath, nil)
 	if err != nil {
 		return errors.ErrNested{Inner: err, Msg: fmt.Sprintf("could not delete protection for space: %s, stage: %s", spaceID, stage)}
 	}
