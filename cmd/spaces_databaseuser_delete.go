@@ -16,7 +16,7 @@ var databaseUserDeleteFlags struct {
 
 var spacesDatabaseuserDeleteCmd = &cobra.Command{
 	Use:     "delete --space <space-id> --stage <stage> --type <type> --username <username>",
-	Aliases: []string{"del", "d"},
+	Aliases: []string{"rm"},
 	Short:   "Deletes a database user",
 	Long:    `Deletes a new user`,
 	RunE: func(cmd *cobra.Command, args []string) error {
