@@ -1,6 +1,11 @@
 package cmd
 
 import (
+	"bytes"
+	"fmt"
+	"github.com/fatih/color"
+	"github.com/mittwald/spacectl/service/costestimator"
+	"github.com/mittwald/spacectl/view/confirm"
 	"os"
 
 	"github.com/mittwald/spacectl/client/spaces"
@@ -9,6 +14,11 @@ import (
 	"github.com/mittwald/spacectl/view"
 	"github.com/spf13/cobra"
 )
+
+var spaceApplyFlags struct {
+	AcceptTOS   bool
+	AcceptCosts bool
+}
 
 // applyCmd represents the apply command
 var spacesApplyCmd = &cobra.Command{
@@ -29,6 +39,69 @@ CAUTION: This command can be potentially destructive.`,
 		decl, err := spc.ToSpaceDeclaration()
 		if err != nil {
 			return err
+		}
+
+		if !spaceApplyFlags.AcceptCosts {
+			plans, err := api.Payment().ListPlans()
+			if err != nil {
+				return err
+			}
+
+			storage, err := spc.StorageBytes()
+			if err != nil {
+				return err
+			}
+
+			estimator := costestimator.New(plans)
+			estimatorParams := costestimator.Params{
+				PlanID: spc.Payment.PlanID,
+				Stages: len(spc.Stages),
+				StagesOnDemand: spc.CountOnDemandStages(),
+				Storage: storage,
+			}
+
+			estimation, err := estimator.Estimate(estimatorParams)
+			if err != nil {
+				return err
+			}
+
+			buf := bytes.Buffer{}
+
+			v := view.CostEstimationView{Estimation: *estimation}
+			v.Render(&buf)
+
+			c := confirm.Confirmation{
+				Title: "Caution",
+				Message: "Creating this Space will cause monthly costs (use the --accept-costs flag to skip this prompt).",
+				Body: &buf,
+				Color: color.New(color.FgYellow),
+			}
+
+			confirmed, err := c.DoPrompt(color.Output)
+			if err != nil {
+				return err
+			}
+			if confirmed == false {
+				return nil
+			}
+
+			fmt.Println("")
+		}
+
+		if !spaceApplyFlags.AcceptTOS {
+			c := confirm.Confirmation{
+				Title: "Caution",
+				Message: "Please accept to the Terms of Service before continuing (use the --accept-tos flag to skip this prompt).\nYou can find the current terms of service here: https://s3.eu-central-1.amazonaws.com/static.spaces.de/public/ABG_Mittwald_Final_Nov_2018.pdf",
+				Color: color.New(color.FgYellow),
+			}
+
+			confirmed, err := c.DoPrompt(color.Output)
+			if err != nil {
+				return err
+			}
+			if confirmed == false {
+				return nil
+			}
 		}
 
 		declaredSpace, err := api.Spaces().Declare(spc.TeamID, decl)
@@ -83,4 +156,7 @@ CAUTION: This command can be potentially destructive.`,
 
 func init() {
 	spacesCmd.AddCommand(spacesApplyCmd)
+
+	spacesApplyCmd.Flags().BoolVar(&spaceApplyFlags.AcceptCosts, "accept-costs", false, "Agree to all occuring costs without being prompted")
+	spacesApplyCmd.Flags().BoolVar(&spaceApplyFlags.AcceptTOS, "accept-tos", false, "Agree to terms of Service without being promted")
 }

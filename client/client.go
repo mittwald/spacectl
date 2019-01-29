@@ -23,7 +23,7 @@ type SpacesClient interface {
 	SSHKeys() sshkeys.SSHKeyClient
 	Applications() software.SoftwareClient
 	Databases() software.SoftwareClient
-	Payment() payment.PaymentClient
+	Payment() payment.Client
 }
 
 type SpacesClientConfig struct {
@@ -85,6 +85,6 @@ func (c *spacesClient) Databases() software.SoftwareClient {
 	return software.NewSoftwareClient(c.client, "databases")
 }
 
-func (c *spacesClient) Payment() payment.PaymentClient {
-	return payment.NewPaymentClient(c.client)
+func (c *spacesClient) Payment() payment.Client {
+	return payment.NewClient(c.client)
 }

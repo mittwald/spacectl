@@ -43,7 +43,7 @@ func (t TabularSpaceDetailView) SpaceDetail(space *spaces.Space, updates []space
 	} else {
 		p := &paymentLink.Plan
 		pr := &paymentLink.PaymentProfile
-		table.AddRow("    Plan:", fmt.Sprintf("%s (%s): %.2f %s/%s", p.Name, p.ID, p.BasePrice.Value, p.BasePrice.Currency, p.BasePrice.Unit))
+		table.AddRow("    Plan:", fmt.Sprintf("%s (%s): %.2f %s/%s", p.Name, p.ID, p.BasePrice.Value, p.BasePrice.Currency.Unit(), p.BasePrice.Unit.String()))
 		table.AddRow("    Payment profile:")
 		table.AddRow("      ID:", pr.ID)
 

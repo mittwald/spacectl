@@ -2,22 +2,6 @@ package payment
 
 import "time"
 
-type BasePrice struct {
-	Value    float32 `json:"value"`
-	Currency string  `json:"currency"`
-	Unit     string  `json:"unit,omitempty"`
-}
-
-type Plan struct {
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	BasePrice *BasePrice `json:"basePrice"`
-}
-
-type PlanReferenceInput struct {
-	ID string `json:"id"`
-}
-
 type PaymentProfileContactAddress struct {
 	Street      string `json:"street"`
 	HouseNumber string `json:"houseNumber"`

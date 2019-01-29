@@ -1,8 +1,10 @@
 module github.com/mittwald/spacectl
 
 require (
+	code.cloudfoundry.org/bytefmt v0.0.0-20180906201452-2aa6f33b730c
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/Masterminds/semver v1.4.2
+	github.com/cloudfoundry/bytefmt v0.0.0-20180906201452-2aa6f33b730c
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/fatih/color v1.7.0
 	github.com/fsnotify/fsnotify v1.4.7 // indirect
@@ -37,7 +39,7 @@ require (
 	golang.org/x/oauth2 v0.0.0-20180620175406-ef147856a6dd
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
 	golang.org/x/sys v0.0.0-20180709060233-1b2967e3c290 // indirect
-	golang.org/x/text v0.3.0 // indirect
+	golang.org/x/text v0.3.0
 	google.golang.org/appengine v1.1.0 // indirect
 	gopkg.in/jarcoal/httpmock.v1 v1.0.0-20180719183105-8007e27cdb32
 	gopkg.in/yaml.v2 v2.2.1 // indirect

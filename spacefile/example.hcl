@@ -4,6 +4,19 @@ space "test-space" {
   name = "Mein Test Space"
   team = "helmich"
 
+  payment {
+    paymentProfile = "UUID"
+    plan = "spaces.flex/v1"
+  }
+
+  resource storage {
+    quantity = 50
+  }
+
+  resource stages {
+    quantity = 1
+  }
+
   stage production {
     application typo3 {
       version = "8.7.2"
@@ -33,6 +46,7 @@ space "test-space" {
 
   stage development {
     inherit = "production"
+    onDemand = true
     application typo3 {
       version = "~8.7"
     }

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"code.cloudfoundry.org/bytefmt"
 	"fmt"
 
 	"errors"
@@ -16,10 +17,15 @@ import (
 )
 
 var spaceInitFlags struct {
-	Force    bool
-	Name     string
-	Label    string
-	Software string
+	Force            bool
+	Name             string
+	Label            string
+	Software         string
+	PaymentProfileID string
+
+	Plan    string
+	Storage string
+	Scaling int
 }
 
 var spacesInitCmd = &cobra.Command{
@@ -42,6 +48,18 @@ command to actually apply the declaration within the Spacefile.`,
 			mErr = multierror.Append(mErr, errors.New("must provide name (--name or -n)"))
 		}
 
+		if spaceInitFlags.Scaling <= 0 {
+			mErr = multierror.Append(mErr, errors.New("--scaling must be 1 or larger when set"))
+		}
+
+		if spaceInitFlags.PaymentProfileID == "" {
+			mErr = multierror.Append(mErr, errors.New("must provide payment profile (--payment-profile or -p)"))
+		}
+
+		if _, err := bytefmt.ToBytes(spaceInitFlags.Storage); err != nil {
+			mErr = multierror.Append(mErr, fmt.Errorf("--storage must contain valid byte size: %s", err.Error()))
+		}
+
 		if mErr != nil {
 			return mErr
 		}
@@ -55,8 +73,7 @@ command to actually apply the declaration within the Spacefile.`,
 
 		filePath := "./" + spacefile.DefaultFilename
 
-		_, err := os.Stat(filePath)
-		if !os.IsNotExist(err) {
+		if _, err := os.Stat(filePath); !os.IsNotExist(err) {
 			if !spaceInitFlags.Force {
 				RootCmd.SilenceUsage = false
 				return fmt.Errorf(`The file '%s' already exists in the current directory.
@@ -76,7 +93,17 @@ Use the --force flag to overwrite it or write to a new file with -f [NEW_FILE].`
 			return fmt.Errorf("Could not open '%s' for writing:\n    %s", filePath, err)
 		}
 
-		err = spacefile.Generate(teamID, spaceInitFlags.Name, spaceInitFlags.Label, sw, fh)
+		err = spacefile.Generate(
+			teamID,
+			spaceInitFlags.Name,
+			spaceInitFlags.Label,
+			sw,
+			spaceInitFlags.PaymentProfileID,
+			spaceInitFlags.Plan,
+			spaceInitFlags.Storage,
+			spaceInitFlags.Scaling,
+			fh,
+		)
 		if err != nil {
 			return fmt.Errorf("Could not generate Spacefile:\n    %s", err)
 		}
@@ -95,6 +122,11 @@ func init() {
 	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.Name, "name", "n", "", "Name of the new Space")
 	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.Label, "dns-label", "l", "", "DNS label of the new Space. Must be unique within the team.")
 	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.Software, "software", "s", "typo3", "Software to initialize this Space with")
+	spacesInitCmd.Flags().StringVarP(&spaceInitFlags.PaymentProfileID, "payment-profile", "p", "", "ID of the payment profile to connect")
+
+	spacesInitCmd.Flags().StringVar(&spaceInitFlags.Plan, "plan", "spaces.flex/v1", "Plan to use")
+	spacesInitCmd.Flags().StringVar(&spaceInitFlags.Storage, "storage", "20Gi", "Storage to allocate")
+	spacesInitCmd.Flags().IntVar(&spaceInitFlags.Scaling, "scaling", 1, "Number of Pods to allow")
 
 	spacesInitCmd.MarkFlagRequired("name")
 }
