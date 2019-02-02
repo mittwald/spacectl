@@ -1,8 +1,10 @@
 package spacefile
 
 import (
+	"fmt"
 	"github.com/mittwald/spacectl/client"
 	"github.com/mittwald/spacectl/client/errors"
+	"github.com/mittwald/spacectl/client/payment"
 	"github.com/mittwald/spacectl/client/spaces"
 )
 
@@ -45,12 +47,43 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 		stages[i] = stageDecl
 	}
 
+	prep := payment.SpaceResourcePreprovisioningInput{}
+
+	bytes, err := s.StorageBytes()
+	if err != nil {
+		return nil, err
+	}
+	if bytes > 0 {
+		prep.Storage = &payment.SpaceResourcePreprovisioningInputItem{Quantity: bytes}
+	}
+
+	if stages := len(s.Stages) - s.CountOnDemandStages(); stages > 0 {
+		prep.Stages = &payment.SpaceResourcePreprovisioningInputItem{Quantity: uint64(stages)}
+	}
+
+	if pods := s.Resource("scaling"); pods != nil {
+		cnt, ok := pods.Quantity.(int)
+		if !ok {
+			return nil, fmt.Errorf("scaling quantity must be int, is %T", pods.Quantity)
+		}
+		prep.Scaling = &payment.SpaceResourcePreprovisioningInputItem{Quantity: uint64(cnt)}
+	}
+
 	decl := spaces.SpaceDeclaration{
 		Name: spaces.SpaceName{
 			DNSName:           s.DNSLabel,
 			HumanReadableName: s.Name,
 		},
 		Stages: stages,
+		PaymentLink: spaces.SpacePaymentLinkInput{
+			Plan: payment.PlanReferenceInput{
+				ID: s.Payment.PlanID,
+			},
+			PaymentProfile: payment.PaymentProfileReferenceInput{
+				ID: s.Payment.PaymentProfileID,
+			},
+			Preprovisionings: &prep,
+		},
 	}
 
 	return &decl, nil

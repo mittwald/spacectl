@@ -9,6 +9,7 @@ import (
 type StageDef struct {
 	Name         string             `hcl:",key"`
 	Inherit      string             `hcl:"inherit" hcle:"omitempty"`
+	OnDemand     bool               `hcl:"onDemand"`
 	Protection   string             `hcl:"protection" hcle:"omitempty"`
 	Applications SoftwareDefList    `hcl:"application"`
 	Databases    SoftwareDefList    `hcl:"database"`

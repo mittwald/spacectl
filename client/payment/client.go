@@ -2,11 +2,12 @@ package payment
 
 import "github.com/mittwald/spacectl/client/lowlevel"
 
-type PaymentClient interface {
+type Client interface {
 	ListPlans() ([]Plan, error)
+	ListPaymentProfiles() ([]PaymentProfile, error)
 }
 
-func NewPaymentClient(client *lowlevel.SpacesLowlevelClient) PaymentClient {
+func NewClient(client *lowlevel.SpacesLowlevelClient) Client {
 	return &paymentClient{client}
 }
 

@@ -87,8 +87,9 @@ type Space struct {
 }
 
 type SpaceDeclaration struct {
-	Name   SpaceName          `json:"name"`
-	Stages []StageDeclaration `json:"stages"`
+	Name        SpaceName             `json:"name"`
+	PaymentLink SpacePaymentLinkInput `json:""`
+	Stages      []StageDeclaration    `json:"stages"`
 }
 
 type ApplicationUpdate struct {
@@ -124,8 +125,9 @@ type SpacePaymentLink struct {
 }
 
 type SpacePaymentLinkInput struct {
-	Plan           payment.PlanReferenceInput           `json:"plan"`
-	PaymentProfile payment.PaymentProfileReferenceInput `json:"paymentProfile"`
+	Plan             payment.PlanReferenceInput                 `json:"plan"`
+	PaymentProfile   payment.PaymentProfileReferenceInput       `json:"paymentProfile"`
+	Preprovisionings *payment.SpaceResourcePreprovisioningInput `json:"preprovisionings,omitempty"`
 }
 
 func (s Space) StagesCount() int {

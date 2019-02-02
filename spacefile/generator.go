@@ -16,6 +16,19 @@ space "{{ .SpaceDNSLabel }}" {
   name = "{{ .SpaceName }}"
   team = "{{ .TeamName }}"
 
+  payment {
+    paymentProfile = "{{ .PaymentProfileID }}"
+    plan = "{{ .Plan }}"
+  }
+
+  resource storage {
+    quantity = "{{ .Resources.Storage }}"
+  }
+
+  resource scaling {
+    quantity = {{ .Resources.Scaling }}
+  }
+
   stage production {
     application {{ .Software.Identifier }} {
 
@@ -63,19 +76,43 @@ space "{{ .SpaceDNSLabel }}" {
 }
 `
 
-type templateData struct {
-	TeamName      string
-	SpaceName     string
-	SpaceDNSLabel string
-	Software      *software.Software
+type templateDataResources struct {
+	Storage string
+	Scaling int
 }
 
-func Generate(teamName string, spaceName string, spaceDNSLabel string, software *software.Software, out io.Writer) error {
+type templateData struct {
+	TeamName         string
+	SpaceName        string
+	SpaceDNSLabel    string
+	Software         *software.Software
+	PaymentProfileID string
+	Plan             string
+	Resources        templateDataResources
+}
+
+func Generate(
+	teamName string,
+	spaceName string,
+	spaceDNSLabel string,
+	software *software.Software,
+	paymentProfileID string,
+	plan string,
+	storage string,
+	scaling int,
+	out io.Writer,
+) error {
 	t := template.Must(template.New("spacefile").Parse(SpacefileTemplate))
 	return t.Execute(out, templateData{
 		teamName,
 		spaceName,
 		spaceDNSLabel,
 		software,
+		paymentProfileID,
+		plan,
+		templateDataResources{
+			storage,
+			scaling,
+		},
 	})
 }

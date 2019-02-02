@@ -24,7 +24,7 @@ var plansListCmd = &cobra.Command{
 		table.AddRow("ID", "NAME", "PRICE")
 
 		for _, plan := range plans {
-			table.AddRow(plan.ID, plan.Name, fmt.Sprintf("%6.2f %s/%s", plan.BasePrice.Value, plan.BasePrice.Currency, plan.BasePrice.Unit))
+			table.AddRow(plan.ID, plan.Name, fmt.Sprintf("%6.2f %s/%s", plan.BasePrice.Value, plan.BasePrice.Currency.Unit(), plan.BasePrice.Unit.String()))
 		}
 
 		fmt.Println(table)
