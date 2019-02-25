@@ -57,3 +57,8 @@ type PaymentProfile struct {
 type PaymentProfileReferenceInput struct {
 	ID string `json:"id"`
 }
+
+type PaymentProfileConnectRequest struct {
+	CustomerNumber string `json:"customerNumber"`
+	Password       string `json:"password"`
+}
