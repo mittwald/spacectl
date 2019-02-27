@@ -47,7 +47,7 @@ func (c *spacesClient) GetPaymentLink(spaceID string) (*SpacePaymentLink, error)
 		return nil, fmt.Errorf("could not access payment connection: %s", err.Error())
 	}
 
-	err = link.Get(c.client, &link)
+	err = link.Get(c.client, &paymentLink)
 	if err != nil {
 		statusErr, ok := err.(lowlevel.ErrUnexpectedStatusCode)
 		if ok && statusErr.StatusCode == 404 {
