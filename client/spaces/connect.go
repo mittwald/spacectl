@@ -2,11 +2,14 @@ package spaces
 
 import (
 	"fmt"
+	"github.com/cloudfoundry/bytefmt"
 	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/payment"
 )
 
-func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error) {
+type ConnectOption func (in *SpacePaymentLinkInput) error
+
+func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string, opts ...ConnectOption) (*SpacePaymentLink, error) {
 	var space Space
 	var paymentLink SpacePaymentLink
 
@@ -20,9 +23,18 @@ func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileI
 		return nil, fmt.Errorf("could not access payment connection: %s", err.Error())
 	}
 
+	preprov := payment.SpaceResourcePreprovisioningInput{}
+
 	input := SpacePaymentLinkInput{
-		Plan:           payment.PlanReferenceInput{ID: planID},
-		PaymentProfile: payment.PaymentProfileReferenceInput{ID: paymentProfileID},
+		Plan:             payment.PlanReferenceInput{ID: planID},
+		PaymentProfile:   payment.PaymentProfileReferenceInput{ID: paymentProfileID},
+		Preprovisionings: &preprov,
+	}
+
+	for i := range opts {
+		if err := opts[i](&input); err != nil {
+			return nil, err
+		}
 	}
 
 	err = link.Put(c.client, &input, &paymentLink)
@@ -31,6 +43,47 @@ func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileI
 	}
 
 	return &paymentLink, nil
+}
+
+func WithStorage(storageBytes uint64) ConnectOption {
+	return func(i *SpacePaymentLinkInput) error {
+		i.Preprovisionings.Storage = &payment.SpaceResourcePreprovisioningInputItem{
+			Quantity: storageBytes,
+		}
+		return nil
+	}
+}
+
+func WithStorageStr(storage string) ConnectOption {
+	return func(i *SpacePaymentLinkInput) error {
+		b, err := bytefmt.ToBytes(storage)
+		if err != nil {
+			return err
+		}
+
+		i.Preprovisionings.Storage = &payment.SpaceResourcePreprovisioningInputItem{
+			Quantity: b,
+		}
+		return nil
+	}
+}
+
+func WithStages(stages uint64) ConnectOption {
+	return func(i *SpacePaymentLinkInput) error {
+		i.Preprovisionings.Stages = &payment.SpaceResourcePreprovisioningInputItem{
+			Quantity: stages,
+		}
+		return nil
+	}
+}
+
+func WithPods(pods uint64) ConnectOption {
+	return func(i *SpacePaymentLinkInput) error {
+		i.Preprovisionings.Stages = &payment.SpaceResourcePreprovisioningInputItem{
+			Quantity: pods,
+		}
+		return nil
+	}
 }
 
 func (c *spacesClient) GetPaymentLink(spaceID string) (*SpacePaymentLink, error) {
