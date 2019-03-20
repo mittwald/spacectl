@@ -17,7 +17,7 @@ type SpacesClient interface {
 	ListApplicationUpdatesByStage(spaceID, stage string) ([]ApplicationUpdate, error)
 	ListApplicationUpdatesBySpace(spaceID string) ([]ApplicationUpdate, error)
 	GetPaymentLink(spaceID string) (*SpacePaymentLink, error)
-	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string) (*SpacePaymentLink, error)
+	ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string, opts ...ConnectOption) (*SpacePaymentLink, error)
 	ListCaughtEmails(spaceID string) (CaughtEmailList, error)
 	GetComputeMetrics(spaceID string, scope string) (ComputeMetricPointList, error)
 	ListVirtualHostsByStage(spaceID, stage string) (VirtualHostList, error)
