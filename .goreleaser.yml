@@ -24,3 +24,14 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+brew:
+  github:
+    owner: mittwald
+    name: homebrew-spaces
+  commit_author:
+    name: Martin Helmich
+    email: m.helmich@mittwald.de
+  # Your app's homepage.
+  homepage: "https://www.spaces.de/"
+  # Your app's description.
+  description: "CLI client for Mittwald SPACES"
