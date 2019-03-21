@@ -3,6 +3,10 @@ language: go
 go:
 - 1.11
 
+env:
+  - CGO_ENABLED=0
+  - GO111MODULE=on
+
 script:
   - bash <(wget -qO- https://git.io/goreleaser) --snapshot --skip-publish --rm-dist
 
