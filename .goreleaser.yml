@@ -1,0 +1,22 @@
+before:
+  hooks:
+    - go vet ./...
+    - go test ./...
+    - go mod download
+    - go generate ./...
+builds:
+- env:
+  - CGO_ENABLED=0
+  - GO111MODULE=on
+  ldflags:
+    - -s -w -X github.com/mittwald/spacectl/buildinfo.Version={{.Tag}} -X github.com/mittwald/spacectl/buildinfo.Hash={{.ShortCommit}} -X github.com/mittwald/spacectl/buildinfo.BuildDate={{.Date}}
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
