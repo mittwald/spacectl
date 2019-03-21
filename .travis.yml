@@ -4,7 +4,6 @@ go:
 - 1.11
 
 script:
-  - curl -sL  | bash
   - bash <(wget -qO- https://git.io/goreleaser) --snapshot --skip-publish --rm-dist
 
 deploy:
