@@ -1,27 +1,16 @@
 language: go
+
 go:
 - 1.11
-env:
-- BUILD_GOOS=linux BUILD_GOARCH=amd64
-- BUILD_GOOS=linux BUILD_GOARCH=386
-- BUILD_GOOS=windows BUILD_GOARCH=amd64 EXT=".exe"
-- BUILD_GOOS=windows BUILD_GOARCH=386 EXT=".exe"
-- BUILD_GOOS=darwin BUILD_GOARCH=amd64
-- BUILD_GOOS=darwin BUILD_GOARCH=386
-install: true
+
 script:
-- GO111MODULE=on go vet $(go list ./... | grep -v /vendor/)
-- GO111MODULE=on go test ./...
-- GO111MODULE=on GOOS=linux go generate
-- GO111MODULE=on CGO_ENABLED=0 GOOS=${BUILD_GOOS} GOARCH=${BUILD_GOARCH} go build -o spacectl-${BUILD_GOOS}-${BUILD_GOARCH}${EXT} -ldflags "-s" -a -installsuffix cgo
+  - curl -sL  | bash
+  - bash <(wget -qO- https://git.io/goreleaser) --snapshot --skip-publish --rm-dist
+
 deploy:
-  provider: releases
-  api_key:
-    secure: LpQ5I32v+IqOF/LZ4YchPZFVQ2FiBwW3vi9Uoh0sHnqFBWmCuzkuR+4nuVP3tEtCjNt8m1MVkeU0xh4ABSdpXMARA0OcSM/SMPzuhrdgUfqS46kwpvI9YSbbf8l5aQURq6s2aL5Ru0CiLENDUtrH9SsB9fIkygNNchl0x03TRdljsiEYZhHFI4gEgIyyrTowrhwmkoInGzf1YpGC4VcDKWNa8m0B31kHCMzw4UJujcD/H9zgaqWFtyFgonFFKG5rZzpNZjOw004hYPwFJ9fHtZaJe2cI3hJ4KSv2YAUVg2cSK1CuJanq7iDGUtN7yqpByC84KoFCVONMotGXPVjj/s83mRm+c4GYIGPodTWE0j9uFQi8Kqd2RbCcct4PJeONM6CTtZEgH03qO3lwwaKW4nMcYicbguvs2nuhj20hbYdH3kqBZinsehHZ2ZhaahE2QpsMWDmDBv63s5KXxYray8gh5GFGwcHx101UbGyeTTq2ZfftQfzDSfYwqS4vWmytEVLwv6jJuQPGw6MAo/tLIZ256Mf38zdfF1ebbmyb5NyEAMsornDnv+biu2yw0zs/dDOgZLGQZg+4XNy+rjyxPM3Y9PUliUnjZSBF3e7OOzwlYP+RudpzSiTLSPKXPArEPgoldJhBq0pSW9pGT62HCGZgLCowgz8uqns3Dq16J38=
-  file: spacectl-*
-  file_glob: true
+- provider: script
   skip_cleanup: true
+  script: bash <(wget -qO- https://git.io/goreleaser)
   on:
     tags: true
-    repo: mittwald/spacectl
-    go: 1.11
+    condition: $TRAVIS_OS_NAME = linux
