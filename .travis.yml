@@ -4,8 +4,9 @@ go:
 - 1.11
 
 env:
-  - CGO_ENABLED=0
-  - GO111MODULE=on
+  global:
+    - GO111MODULE=on
+    - CGO_ENABLED=0
 
 script:
   - bash <(wget -qO- https://git.io/goreleaser) --snapshot --skip-publish --rm-dist
