@@ -61,7 +61,7 @@ func init() {
 	spacesConnectCmd.Flags().StringVar(&spaceConnectFlags.PaymentProfileID, "profile", "", "Payment profile ID")
 
 	spacesConnectCmd.Flags().Uint64Var(&spaceConnectFlags.Stages, "stages", 0, "amount of preprovisioned stages")
-	spacesConnectCmd.Flags().StringVar(&spaceConnectFlags.Storage, "storage", "20G", "amount of preprovisioned storage")
+	spacesConnectCmd.Flags().StringVar(&spaceConnectFlags.Storage, "storage", "10G", "amount of preprovisioned storage")
 	spacesConnectCmd.Flags().Uint64Var(&spaceConnectFlags.Pods, "pods", 0, "amount of preprovisioned pods")
 
 	spacesConnectCmd.MarkFlagRequired("plan")
