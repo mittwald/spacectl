@@ -1,10 +1,11 @@
 package spaces
 
 import (
+	"code.cloudfoundry.org/bytefmt"
 	"fmt"
-	"github.com/cloudfoundry/bytefmt"
 	"github.com/mittwald/spacectl/client/lowlevel"
 	"github.com/mittwald/spacectl/client/payment"
+	"strings"
 )
 
 type ConnectOption func (in *SpacePaymentLinkInput) error
@@ -47,6 +48,10 @@ func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileI
 
 func WithStorage(storageBytes uint64) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
+		if i.Preprovisionings == nil {
+			i.Preprovisionings = &payment.SpaceResourcePreprovisioningInput{}
+		}
+
 		i.Preprovisionings.Storage = &payment.SpaceResourcePreprovisioningInputItem{
 			Quantity: storageBytes,
 		}
@@ -56,9 +61,17 @@ func WithStorage(storageBytes uint64) ConnectOption {
 
 func WithStorageStr(storage string) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
+		if strings.TrimRight(storage, "TGMKIB") == "0" {
+			return nil
+		}
+
 		b, err := bytefmt.ToBytes(storage)
 		if err != nil {
 			return err
+		}
+
+		if i.Preprovisionings == nil {
+			i.Preprovisionings = &payment.SpaceResourcePreprovisioningInput{}
 		}
 
 		i.Preprovisionings.Storage = &payment.SpaceResourcePreprovisioningInputItem{
