@@ -92,7 +92,7 @@ func WithStages(stages uint64) ConnectOption {
 
 func WithPods(pods uint64) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
-		i.Preprovisionings.Stages = &payment.SpaceResourcePreprovisioningInputItem{
+		i.Preprovisionings.Scaling = &payment.SpaceResourcePreprovisioningInputItem{
 			Quantity: pods,
 		}
 		return nil
