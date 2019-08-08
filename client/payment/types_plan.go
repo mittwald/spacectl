@@ -45,9 +45,9 @@ func (p BasePrice) ConvertUnit(to Unit) (BasePrice, error) {
 			return p, nil
 		case UnitGibibytes:
 			return BasePrice{
-				Value: p.Value / (1 << 30),
+				Value:    p.Value / (1 << 30),
 				Currency: p.Currency,
-				Unit: UnitBytes,
+				Unit:     UnitBytes,
 				Interval: p.Interval,
 			}, nil
 		}
@@ -70,8 +70,14 @@ type PlanFeatures struct {
 	Scaling PlanFeatureScaling `json:"scaling"`
 }
 
+type PlanFeatureBackupOption struct {
+	MinimumInterval Quantity  `json:"minimumInterval"`
+	BasePrice       BasePrice `json:"basePrice"`
+}
+
 type PlanFeatureBackup struct {
-	MinimumInterval Quantity `json:"minimumInterval"`
+	MinimumInterval Quantity                  `json:"minimumInterval"`
+	Options         []PlanFeatureBackupOption `json:"options,omitempty"`
 }
 
 type Exceedances struct {

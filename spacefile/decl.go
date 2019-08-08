@@ -48,6 +48,7 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 	}
 
 	prep := payment.SpaceResourcePreprovisioningInput{}
+	opts := payment.SpaceOptionInput{}
 
 	bytes, err := s.StorageBytes()
 	if err != nil {
@@ -69,6 +70,14 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 		prep.Scaling = &payment.SpaceResourcePreprovisioningInputItem{Quantity: uint64(cnt)}
 	}
 
+	if opt := s.Option("backupIntervalMinutes"); opt != nil {
+		val, ok := opt.Value.(int)
+		if !ok {
+			return nil, fmt.Errorf("backup interval must be int, is %T", opt.Value)
+		}
+		opts.BackupIntervalMinutes = uint64(val)
+	}
+
 	decl := spaces.SpaceDeclaration{
 		Name: spaces.SpaceName{
 			DNSName:           s.DNSLabel,
@@ -83,6 +92,7 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 				ID: s.Payment.PaymentProfileID,
 			},
 			Preprovisionings: &prep,
+			Options:          &opts,
 		},
 	}
 

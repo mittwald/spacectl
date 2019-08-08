@@ -16,6 +16,7 @@ type SpaceDef struct {
 	TeamID    string        `hcl:"team"`
 	Payment   PaymentDef    `hcl:"payment"`
 	Resources []ResourceDef `hcl:"resource"`
+	Options   []OptionDef   `hcl:"option"`
 	Stages    []StageDef    `hcl:"stage"`
 
 	stagesByName    map[string]*StageDef
@@ -130,7 +131,7 @@ func (d *SpaceDef) CountOnDemandStages() int {
 
 	for i := range d.Stages {
 		if d.Stages[i].OnDemand {
-			c ++
+			c++
 		}
 	}
 
@@ -141,6 +142,16 @@ func (d *SpaceDef) Resource(r string) *ResourceDef {
 	for i := range d.Resources {
 		if d.Resources[i].Resource == r {
 			return &d.Resources[i]
+		}
+	}
+
+	return nil
+}
+
+func (d *SpaceDef) Option(r string) *OptionDef {
+	for i := range d.Options {
+		if d.Options[i].Option == r {
+			return &d.Options[i]
 		}
 	}
 
