@@ -125,9 +125,11 @@ type SpacePaymentLink struct {
 }
 
 type SpacePaymentLinkInput struct {
-	Plan             payment.PlanReferenceInput                 `json:"plan"`
-	PaymentProfile   payment.PaymentProfileReferenceInput       `json:"paymentProfile"`
-	Preprovisionings *payment.SpaceResourcePreprovisioningInput `json:"preprovisionings,omitempty"`
+	Plan              payment.PlanReferenceInput                 `json:"plan"`
+	PaymentProfile    payment.PaymentProfileReferenceInput       `json:"paymentProfile"`
+	Preprovisionings  *payment.SpaceResourcePreprovisioningInput `json:"preprovisionings,omitempty"`
+	Options           *payment.SpaceOptionInput                  `json:"options,omitempty"`
+	SkipTestingPeriod bool                                       `json:"skipTestingPeriod"`
 }
 
 func (s Space) StagesCount() int {

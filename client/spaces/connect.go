@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type ConnectOption func (in *SpacePaymentLinkInput) error
+type ConnectOption func(in *SpacePaymentLinkInput) error
 
 func (c *spacesClient) ConnectWithPaymentProfile(spaceID string, paymentProfileID string, planID string, opts ...ConnectOption) (*SpacePaymentLink, error) {
 	var space Space
@@ -95,6 +95,20 @@ func WithPods(pods uint64) ConnectOption {
 		i.Preprovisionings.Scaling = &payment.SpaceResourcePreprovisioningInputItem{
 			Quantity: pods,
 		}
+		return nil
+	}
+}
+
+func WithoutTestingPeriod() ConnectOption {
+	return func(i *SpacePaymentLinkInput) error {
+		i.SkipTestingPeriod = false
+		return nil
+	}
+}
+
+func WithBackupIntervalMinutes(interval uint64) ConnectOption {
+	return func(i *SpacePaymentLinkInput) error {
+		i.Options.BackupIntervalMinutes = interval
 		return nil
 	}
 }
