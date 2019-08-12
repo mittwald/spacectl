@@ -23,9 +23,10 @@ var spaceInitFlags struct {
 	Software         string
 	PaymentProfileID string
 
-	Plan    string
-	Storage string
-	Scaling int
+	Plan                  string
+	Storage               string
+	Scaling               int
+	BackupIntervalMinutes int
 }
 
 var spacesInitCmd = &cobra.Command{
@@ -102,6 +103,7 @@ Use the --force flag to overwrite it or write to a new file with -f [NEW_FILE].`
 			spaceInitFlags.Plan,
 			spaceInitFlags.Storage,
 			spaceInitFlags.Scaling,
+			spaceInitFlags.BackupIntervalMinutes,
 			fh,
 		)
 		if err != nil {
@@ -127,6 +129,7 @@ func init() {
 	spacesInitCmd.Flags().StringVar(&spaceInitFlags.Plan, "plan", "spaces.flex/v1", "Plan to use")
 	spacesInitCmd.Flags().StringVar(&spaceInitFlags.Storage, "storage", "20Gi", "Storage to allocate")
 	spacesInitCmd.Flags().IntVar(&spaceInitFlags.Scaling, "scaling", 1, "Number of Pods to allow")
+	spacesInitCmd.Flags().IntVar(&spaceInitFlags.BackupIntervalMinutes, "backup-interval-minutes", 0, "Minimum backup interval in minutes")
 
 	spacesInitCmd.MarkFlagRequired("name")
 }

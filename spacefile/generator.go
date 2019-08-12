@@ -21,13 +21,33 @@ space "{{ .SpaceDNSLabel }}" {
     plan = "{{ .Plan }}"
   }
 
+  // This option sets the amount of pre-provisioned storage space allocated for
+  // your project. Note that this is not a hard limit -- exceedance will be
+  // billed according to on-demand rates.
+  // CAUTION: This option may cause additional charges to apply.
   resource storage {
     quantity = "{{ .Resources.Storage }}"
   }
 
+  // This option sets the maximum number of application Pods that may be started
+  // for your project.
+  // CAUTION: This option may cause additional charges to apply.
   resource scaling {
     quantity = {{ .Resources.Scaling }}
   }
+
+  // You can use this option to set the minimal allowed backup interval for the
+  // Space.
+  // CAUTION: This option may cause additional charges to apply.
+  {{- if ne .Options.BackupIntervalMinutes 0 }}
+  option backupIntervalMinutes {
+    value = {{ .Options.BackupIntervalMinutes }}
+  }
+  {{- else }}
+  // option backupIntervalMinutes {
+  //   value = 60
+  // }
+  {{- end }}
 
   stage production {
     application {{ .Software.Identifier }} {
@@ -81,6 +101,10 @@ type templateDataResources struct {
 	Scaling int
 }
 
+type templateDataOptions struct {
+	BackupIntervalMinutes int
+}
+
 type templateData struct {
 	TeamName         string
 	SpaceName        string
@@ -89,6 +113,7 @@ type templateData struct {
 	PaymentProfileID string
 	Plan             string
 	Resources        templateDataResources
+	Options          templateDataOptions
 }
 
 func Generate(
@@ -100,6 +125,7 @@ func Generate(
 	plan string,
 	storage string,
 	scaling int,
+	backupInterval int,
 	out io.Writer,
 ) error {
 	t := template.Must(template.New("spacefile").Parse(SpacefileTemplate))
@@ -113,6 +139,9 @@ func Generate(
 		templateDataResources{
 			storage,
 			scaling,
+		},
+		templateDataOptions{
+			backupInterval,
 		},
 	})
 }

@@ -57,7 +57,9 @@ CAUTION: This command can be potentially destructive.`,
 				PlanID: spc.Payment.PlanID,
 				Stages: len(spc.Stages),
 				StagesOnDemand: spc.CountOnDemandStages(),
+				Scaling: decl.PaymentLink.Preprovisionings.Scaling.Quantity,
 				Storage: storage,
+				BackupIntervalMinutes: decl.PaymentLink.Options.BackupIntervalMinutes,
 			}
 
 			estimation, err := estimator.Estimate(estimatorParams)

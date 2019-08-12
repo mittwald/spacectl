@@ -77,6 +77,39 @@ func (e *estimator) Estimate(params Params) (*Estimation, error) {
 		}
 	}
 
+	if params.Scaling > 0 {
+		scalingCost := plan.Features.Scaling.Exceedance.PreProvision.BasePrice.Value * float64(params.Scaling)
+		totalCost += scalingCost
+
+		res.LineItems = append(res.LineItems, EstimationLineItem{
+			Quantity: Quantity{Value: int(params.Scaling), Unit: NewUnit("pods")},
+			Subject: "Additional web server costs (billed monthly in-advance)",
+			MonthlyCost: totalCurrency.Amount(scalingCost),
+		})
+	}
+
+	if params.BackupIntervalMinutes > 0 {
+		var matchingOption *payment.PlanFeatureBackupOption
+
+		for i := range plan.Features.Backups.Options {
+			if plan.Features.Backups.Options[i].MinimumInterval.Value == params.BackupIntervalMinutes {
+				matchingOption = &plan.Features.Backups.Options[i]
+			}
+		}
+
+		if matchingOption == nil {
+			return nil, fmt.Errorf("there is no available option for %d minutes of minimum backup interval", params.BackupIntervalMinutes)
+		}
+
+		totalCost += matchingOption.BasePrice.Value
+
+		res.LineItems = append(res.LineItems, EstimationLineItem{
+			Quantity: Quantity{Value: int(params.BackupIntervalMinutes / 60), Unit: NewUnit("hours")},
+			Subject: "Shortened backup interval",
+			MonthlyCost: totalCurrency.Amount(matchingOption.BasePrice.Value),
+		})
+	}
+
 	res.MonthlyTotalCost = totalCurrency.Amount(totalCost)
 	res.OnDemandCharges.Stages.Amount = plan.Features.Stages.Exceedance.OnDemand.BasePrice.CurrencyAmount()
 	res.OnDemandCharges.Stages.Unit = NewUnit(plan.Features.Stages.Exceedance.OnDemand.BasePrice.Unit.String())

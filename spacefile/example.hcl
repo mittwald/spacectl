@@ -17,6 +17,10 @@ space "test-space" {
     quantity = 1
   }
 
+  option backupIntervalMinutes {
+    value = 60
+  }
+
   stage production {
     application typo3 {
       version = "8.7.2"
