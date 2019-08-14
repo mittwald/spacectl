@@ -18,6 +18,7 @@ type Software struct {
 	Identifier string            `json:"identifier"`
 	Name       string            `json:"name"`
 	Versions   []Version         `json:"versions"`
+	Type       string            `json:"type"`
 }
 
 func (s *Software) LatestVersion() *Version {

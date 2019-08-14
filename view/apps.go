@@ -22,7 +22,7 @@ func (t TabularAppsView) List(softwareList []software.Software, out io.Writer) {
 
 	table := uitable.New()
 	table.MaxColWidth = 50
-	table.AddRow("ID", "NAME", "VERSIONS", "LATEST VERSION")
+	table.AddRow("ID", "NAME", "VERSIONS", "LATEST VERSION", "TYPE")
 
 	for _, sw := range softwareList {
 		latest := "None"
@@ -35,6 +35,7 @@ func (t TabularAppsView) List(softwareList []software.Software, out io.Writer) {
 			sw.Name,
 			len(sw.Versions),
 			latest,
+			sw.Type,
 		)
 	}
 
