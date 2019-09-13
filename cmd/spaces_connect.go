@@ -13,9 +13,9 @@ var spaceConnectFlags struct {
 	PlanID           string
 	PaymentProfileID string
 
-	Stages                uint64
+	Stages                int64
 	Storage               string
-	Pods                  uint64
+	Pods                  int64
 	SkipTestingPeriod     bool
 	BackupIntervalMinutes uint64
 }
@@ -36,12 +36,12 @@ var spacesConnectCmd = &cobra.Command{
 			opts = append(opts, spaces.WithStorageStr(spaceConnectFlags.Storage))
 		}
 
-		if spaceConnectFlags.Stages != 0 {
-			opts = append(opts, spaces.WithStages(spaceConnectFlags.Stages))
+		if spaceConnectFlags.Stages >= 0 {
+			opts = append(opts, spaces.WithStages(uint64(spaceConnectFlags.Stages)))
 		}
 
-		if spaceConnectFlags.Pods != 0 {
-			opts = append(opts, spaces.WithPods(spaceConnectFlags.Pods))
+		if spaceConnectFlags.Pods >= 0 {
+			opts = append(opts, spaces.WithPods(uint64(spaceConnectFlags.Pods)))
 		}
 
 		if spaceConnectFlags.SkipTestingPeriod {
@@ -72,9 +72,9 @@ func init() {
 	flags.StringVar(&spaceConnectFlags.PlanID, "plan", "", "Plan ID to use")
 	flags.StringVar(&spaceConnectFlags.PaymentProfileID, "profile", "", "Payment profile ID")
 
-	flags.Uint64Var(&spaceConnectFlags.Stages, "stages", 0, "amount of preprovisioned stages (CAUTION: Additional charges will apply!)")
+	flags.Int64Var(&spaceConnectFlags.Stages, "stages", -1, "amount of preprovisioned stages (CAUTION: Additional charges will apply!)")
 	flags.StringVar(&spaceConnectFlags.Storage, "storage", "10G", "amount of preprovisioned storage (CAUTION: Additional charges will apply!)")
-	flags.Uint64Var(&spaceConnectFlags.Pods, "pods", 0, "amount of preprovisioned pods (CAUTION: Additional charges will apply!)")
+	flags.Int64Var(&spaceConnectFlags.Pods, "pods", -1, "amount of preprovisioned pods (CAUTION: Additional charges will apply!)")
 	flags.BoolVar(&spaceConnectFlags.SkipTestingPeriod, "skip-testing-period", false, "skip testing period")
 	flags.Uint64Var(&spaceConnectFlags.BackupIntervalMinutes, "backup-interval-minutes", 0, "desired minimum backup interval in minutes (CAUTION: Additional charges will apply!)")
 
