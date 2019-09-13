@@ -61,17 +61,20 @@ func WithStorage(storageBytes uint64) ConnectOption {
 
 func WithStorageStr(storage string) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
+		if i.Preprovisionings == nil {
+			i.Preprovisionings = &payment.SpaceResourcePreprovisioningInput{}
+		}
+
 		if strings.TrimRight(storage, "TGMKIB") == "0" {
+			i.Preprovisionings.Storage = &payment.SpaceResourcePreprovisioningInputItem{
+				Quantity: 0,
+			}
 			return nil
 		}
 
 		b, err := bytefmt.ToBytes(storage)
 		if err != nil {
 			return err
-		}
-
-		if i.Preprovisionings == nil {
-			i.Preprovisionings = &payment.SpaceResourcePreprovisioningInput{}
 		}
 
 		i.Preprovisionings.Storage = &payment.SpaceResourcePreprovisioningInputItem{
