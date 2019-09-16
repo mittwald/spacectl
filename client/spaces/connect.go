@@ -86,6 +86,10 @@ func WithStorageStr(storage string) ConnectOption {
 
 func WithStages(stages uint64) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
+		if i.Preprovisionings == nil {
+			i.Preprovisionings = &payment.SpaceResourcePreprovisioningInput{}
+		}
+
 		i.Preprovisionings.Stages = &payment.SpaceResourcePreprovisioningInputItem{
 			Quantity: stages,
 		}
@@ -95,6 +99,10 @@ func WithStages(stages uint64) ConnectOption {
 
 func WithPods(pods uint64) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
+		if i.Preprovisionings == nil {
+			i.Preprovisionings = &payment.SpaceResourcePreprovisioningInput{}
+		}
+
 		i.Preprovisionings.Scaling = &payment.SpaceResourcePreprovisioningInputItem{
 			Quantity: pods,
 		}
@@ -111,6 +119,10 @@ func WithoutTestingPeriod() ConnectOption {
 
 func WithBackupIntervalMinutes(interval uint64) ConnectOption {
 	return func(i *SpacePaymentLinkInput) error {
+		if i.Options == nil {
+			i.Options  = &payment.SpaceOptionInput{}
+		}
+
 		i.Options.BackupIntervalMinutes = interval
 		return nil
 	}
