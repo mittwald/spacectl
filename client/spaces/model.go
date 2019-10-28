@@ -18,9 +18,14 @@ type SoftwareRef struct {
 }
 
 type SoftwareVersionRef struct {
-	Software          SoftwareRef `json:"software"`
-	VersionConstraint string      `json:"versionConstraint"`
-	UserData          interface{} `json:"userData,omitempty"`
+	Software          SoftwareRef      `json:"software"`
+	VersionConstraint string           `json:"versionConstraint"`
+	UserData          interface{}      `json:"userData,omitempty"`
+	Storage           *SoftwareStorage `json:"storage,omitempty"`
+}
+
+type SoftwareStorage struct {
+	SizeGB uint64 `json:"sizeGB,omitempty"`
 }
 
 type VersionRef struct {

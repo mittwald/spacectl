@@ -34,6 +34,9 @@ space "test-space" {
 
     database mysql {
       version = "5.7.*"
+      storage {
+        size = "32GB"
+      }
     }
 
     cron typo3 {
