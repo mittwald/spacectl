@@ -2,10 +2,12 @@ package spacefile
 
 import (
 	"fmt"
+	"github.com/cloudfoundry/bytefmt"
 	"github.com/mittwald/spacectl/client"
 	"github.com/mittwald/spacectl/client/errors"
 	"github.com/mittwald/spacectl/client/payment"
 	"github.com/mittwald/spacectl/client/spaces"
+	"math"
 )
 
 // ToSpaceDeclaration converts the SpaceDef object used in the Spacefile
@@ -27,11 +29,22 @@ func (s *SpaceDef) ToSpaceDeclaration() (*spaces.SpaceDeclaration, error) {
 		}
 
 		databaseDecls := make([]spaces.SoftwareVersionRef, len(st.Databases))
-		for i := range st.Databases {
-			databaseDecls[i] = spaces.SoftwareVersionRef{
-				Software:          spaces.SoftwareRef{ID: st.Databases[i].Identifier},
-				VersionConstraint: st.Databases[i].Version,
-				UserData:          st.Databases[i].UserData,
+		for j := range st.Databases {
+			databaseDecls[j] = spaces.SoftwareVersionRef{
+				Software:          spaces.SoftwareRef{ID: st.Databases[j].Identifier},
+				VersionConstraint: st.Databases[j].Version,
+				UserData:          st.Databases[j].UserData,
+			}
+
+			if st.Databases[j].Storage.Size != "" {
+				sizeBytes, err := bytefmt.ToBytes(st.Databases[j].Storage.Size)
+				if err != nil {
+					return nil, fmt.Errorf("cannot parse storage size %s (stage %d, database %d): %s", st.Databases[j].Storage.Size, i, j, err.Error())
+				}
+
+				databaseDecls[j].Storage = &spaces.SoftwareStorage{
+					SizeGB: uint64(math.Ceil(float64(sizeBytes) / (1 << 30))),
+				}
 			}
 		}
 

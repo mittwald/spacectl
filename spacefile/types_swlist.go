@@ -11,10 +11,15 @@ import (
 	"github.com/mittwald/spacectl/client"
 )
 
+type SoftwareStorageDef struct {
+	Size string `hcl:"size"`
+}
+
 type SoftwareDef struct {
-	Identifier string      `hcl:",key"`
-	Version    string      `hcl:"version"`
-	UserData   interface{} `hcl:"userData" hcle:"omitempty"`
+	Identifier string             `hcl:",key"`
+	Version    string             `hcl:"version"`
+	UserData   interface{}        `hcl:"userData" hcle:"omitempty"`
+	Storage    SoftwareStorageDef `hcl:"storage"`
 }
 
 type SoftwareDefList []SoftwareDef

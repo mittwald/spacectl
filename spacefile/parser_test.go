@@ -53,3 +53,11 @@ func TestSpacefileHasCronjobs(t *testing.T) {
 	require.Equal(t, []string{"typo3:scheduler"}, cron.Command.Arguments)
 	require.Equal(t, "/var/www/typo3", cron.Command.WorkingDirectory)
 }
+
+
+func TestSpacefileHasDatabaseStorage(t *testing.T) {
+	spacefile := getParsedSpacefile(t)
+	stage := spacefile.Spaces[0].Stages[0]
+
+	require.Equal(t, "32GB", stage.Databases[0].Storage.Size)
+}
