@@ -130,11 +130,6 @@ func FromSpace(decl *spaces.Space, api client.SpacesClient) (*SpaceDef, error) {
 			UserData:   st.UserData,
 		}
 
-		cronjobDefs := make(CronjobDefList, len(st.Cronjobs))
-		for i := range st.Cronjobs {
-			cronjobDefs[i] = CronjobFromDeclaration(&st.Cronjobs[i])
-		}
-
 		databaseDefs := make(SoftwareDefList, len(st.Databases))
 		for i := range st.Databases {
 			databaseDefs[i] = SoftwareDef{
@@ -152,7 +147,6 @@ func FromSpace(decl *spaces.Space, api client.SpacesClient) (*SpaceDef, error) {
 		stageDef := StageDef{
 			Name:         st.Name,
 			Applications: appDefs,
-			Cronjobs:     cronjobDefs,
 			Databases:    databaseDefs,
 			Protection:   protection.ProtectionType,
 		}

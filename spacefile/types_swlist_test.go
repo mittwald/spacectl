@@ -1,9 +1,15 @@
 package spacefile
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
+
+func TestSemverSanitize(t *testing.T) {
+	ver := "<= 1.2.3 >= 2.4.5"
+	require.Equal(t, sanitizeSemver(ver), "<=1.2.3, >=2.4.5")
+}
 
 func TestNewSoftwareIsAdded(t *testing.T) {
 	base := SoftwareDefList{SoftwareDef{Identifier: "typo3", Version: "1.2.3"}}
